@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">Văn bản</string>
     <string name="artist_signature_caption">Hiện tên nghệ sĩ dưới chữ ký</string>
     <string name="artist_invert">Đảo màu</string>
+    <string name="artist_font_settings">Kiểu chữ nghệ sĩ</string>
+    <string name="artist_font_hint">Mặc định dùng chữ tiêu chuẩn. Lựa chọn riêng của nghệ sĩ ưu tiên; logo và ảnh chữ ký độc lập.</string>
+    <string name="artist_font_fixed">Kiểu chữ cố định</string>
+    <string name="artist_font_random">Ngẫu nhiên mỗi lần truy cập</string>
+    <string name="artist_font_smart">Kiểu chữ thông minh</string>
+    <string name="artist_font_original">Kiểu tự động gốc của Prism</string>
+    <string name="artist_font_fallback">Kiểu chữ mặc định và dự phòng</string>
+    <string name="artist_font_genres_hint">Cùng 16 thể loại playlist từ Deezer và iTunes. Rap thuộc Hip-hop; Salsa, Cumbia và Norteño hiện thuộc Pop. Thể loại chưa biết dùng kiểu chữ mặc định.</string>
+    <string name="artist_font_add_group">Thêm nhóm mới</string>
+    <string name="artist_font_used">Đã dùng trong nhóm khác</string>
 </resources>

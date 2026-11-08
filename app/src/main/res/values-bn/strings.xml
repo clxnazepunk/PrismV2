@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">লেখা</string>
     <string name="artist_signature_caption">স্বাক্ষরের নিচে শিল্পীর নাম দেখান</string>
     <string name="artist_invert">রং উল্টান</string>
+    <string name="artist_font_settings">শিল্পীর টাইপোগ্রাফি</string>
+    <string name="artist_font_hint">ডিফল্ট সাধারণ ফন্ট। শিল্পীর নিজস্ব পছন্দ অগ্রাধিকার পায়; লোগো ও স্বাক্ষরের ছবি আলাদা।</string>
+    <string name="artist_font_fixed">নির্দিষ্ট ফন্ট</string>
+    <string name="artist_font_random">প্রতি ভিজিটে এলোমেলো</string>
+    <string name="artist_font_smart">স্মার্ট টাইপোগ্রাফি</string>
+    <string name="artist_font_original">Prism-এর মূল স্বয়ংক্রিয় শৈলী</string>
+    <string name="artist_font_fallback">ডিফল্ট ও বিকল্প ফন্ট</string>
+    <string name="artist_font_genres_hint">Deezer ও iTunes থেকে প্লেলিস্টের একই ১৬টি ঘরানা ব্যবহৃত হয়। Rap হলো Hip-hop; Salsa, Cumbia ও Norteño এখন Pop। অজানা ঘরানায় ডিফল্ট ফন্ট।</string>
+    <string name="artist_font_add_group">নতুন গোষ্ঠী যোগ করুন</string>
+    <string name="artist_font_used">অন্য গোষ্ঠীতে ব্যবহৃত</string>
 </resources>

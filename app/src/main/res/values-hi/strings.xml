@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">पाठ</string>
     <string name="artist_signature_caption">हस्ताक्षर के नीचे कलाकार का नाम दिखाएँ</string>
     <string name="artist_invert">रंग उलटें</string>
+    <string name="artist_font_settings">कलाकार टाइपोग्राफी</string>
+    <string name="artist_font_hint">डिफ़ॉल्ट सामान्य फ़ॉन्ट है। कलाकार के व्यक्तिगत विकल्प को प्राथमिकता है; लोगो और हस्ताक्षर चित्र स्वतंत्र हैं।</string>
+    <string name="artist_font_fixed">निश्चित फ़ॉन्ट</string>
+    <string name="artist_font_random">हर विज़िट पर यादृच्छिक</string>
+    <string name="artist_font_smart">स्मार्ट टाइपोग्राफी</string>
+    <string name="artist_font_original">Prism की मूल स्वचालित शैली</string>
+    <string name="artist_font_fallback">डिफ़ॉल्ट और वैकल्पिक फ़ॉन्ट</string>
+    <string name="artist_font_genres_hint">Deezer और iTunes से प्लेलिस्ट वाली 16 शैलियाँ। Rap को Hip-hop और Salsa, Cumbia व Norteño को Pop में रखा जाता है। अज्ञात शैली पर डिफ़ॉल्ट फ़ॉन्ट।</string>
+    <string name="artist_font_add_group">नया समूह जोड़ें</string>
+    <string name="artist_font_used">दूसरे समूह में उपयोग हो रहा है</string>
 </resources>

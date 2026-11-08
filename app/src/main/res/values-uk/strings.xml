@@ -5024,4 +5024,14 @@
     <string name="artist_native_text">Текст</string>
     <string name="artist_signature_caption">Показувати ім’я виконавця під підписом</string>
     <string name="artist_invert">Інвертувати колір</string>
+    <string name="artist_font_settings">Шрифти виконавців</string>
+    <string name="artist_font_hint">Типово стандартний шрифт. Індивідуальний вибір має пріоритет; логотипи та зображення підпису незалежні.</string>
+    <string name="artist_font_fixed">Фіксований шрифт</string>
+    <string name="artist_font_random">Випадковий за кожного відвідування</string>
+    <string name="artist_font_smart">Розумні шрифти</string>
+    <string name="artist_font_original">Початковий автоматичний стиль Prism</string>
+    <string name="artist_font_fallback">Типовий і запасний шрифт</string>
+    <string name="artist_font_genres_hint">Ті самі 16 жанрів списків із Deezer та iTunes. Rap належить до Hip-hop; Salsa, Cumbia й Norteño наразі до Pop. Невідомий жанр використовує типовий шрифт.</string>
+    <string name="artist_font_add_group">Додати групу</string>
+    <string name="artist_font_used">Уже використовується в іншій групі</string>
 </resources>

@@ -224,8 +224,11 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
     }
     val (typeReady, genre) = typeInfo
     val signatures by c.artistPrefs.signatures.collectAsState()
-    val type = remember(page.id, genre, signatures[page.id]) {
-        ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers), signatures[page.id])
+    val typography by c.artistPrefs.typography.collectAsState()
+    val randomFont = remember(page.id) { kotlin.random.Random.nextInt() }
+    val type = remember(page.id, genre, signatures[page.id], typography, randomFont) {
+        val key = signatures[page.id] ?: typography.fontKey(genre, randomFont, ArtistTypography.all.map { it.key })
+        ArtistTypography.byKey(key) ?: ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers))
     }
 
     // Favourite: starred here, or already subscribed on YouTube Music.
@@ -350,7 +353,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
             LazyColumn(state = list, contentPadding = PaddingValues(bottom = bottomPadding + 32.dp)) {
                 item("hero") {
                     Hero(
-                        page, type, typeReady, heroHeight, { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset else 0 },
+                        page, type, true, heroHeight, { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset else 0 },
                         favorite = favorite,
                         onInfo = { showInfo = true },
                         onPlay = playTop,
@@ -420,7 +423,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
         }
 
         if (showInfo) InfoSheet(page, genre, favorite, onFavorite = toggleFavorite, onShare = { showInfo = false; sharing = true }) { showInfo = false }
-        if (showSignature) SignatureSheet(page, genre) { showSignature = false }
+        if (showSignature) SignatureSheet(page, genre, randomFont) { showSignature = false }
     }
     // The page's own color (1.7.2): any color, or back to the photo's.
     if (pageColor) {
@@ -939,11 +942,15 @@ private fun InfoSheet(page: ArtistPage, genre: String?, favorite: Boolean, onFav
 
 /** Pick how this artist's name is set on their page (or leave it to Prism). Kept on this phone. */
 @Composable
-private fun SignatureSheet(page: ArtistPage, genre: String?, onDismiss: () -> Unit) {
+private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val signatures by c.artistPrefs.signatures.collectAsState()
     val chosen = signatures[page.id]
-    val auto = remember(page.id, genre) { ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers)) }
+    val typography by c.artistPrefs.typography.collectAsState()
+    val auto = remember(page.id, genre, typography, randomFont) {
+        ArtistTypography.byKey(typography.fontKey(genre, randomFont, ArtistTypography.all.map { it.key }))
+            ?: ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers))
+    }
     PrismSheet(onDismiss = onDismiss) {
         Column(Modifier.padding(horizontal = 22.dp)) {
             Text(tr(R.string.artist_identity), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)

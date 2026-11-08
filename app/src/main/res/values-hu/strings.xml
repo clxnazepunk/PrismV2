@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Szöveg</string>
     <string name="artist_signature_caption">Előadó neve az aláírás alatt</string>
     <string name="artist_invert">Szín invertálása</string>
+    <string name="artist_font_settings">Előadók betűtípusa</string>
+    <string name="artist_font_hint">Alapból szabványos betűtípus. Az egyéni választás elsőbbséget élvez; a logó és az aláírás képe független.</string>
+    <string name="artist_font_fixed">Rögzített betűtípus</string>
+    <string name="artist_font_random">Véletlen minden látogatáskor</string>
+    <string name="artist_font_smart">Intelligens tipográfia</string>
+    <string name="artist_font_original">Eredeti automatikus Prism-stílus</string>
+    <string name="artist_font_fallback">Alapértelmezett és tartalék betűtípus</string>
+    <string name="artist_font_genres_hint">A lejátszási listák 16 műfaja Deezer és iTunes alapján. Rap: Hip-hop; Salsa, Cumbia és Norteño jelenleg Pop. Ismeretlen műfajnál alapértelmezett betűtípus.</string>
+    <string name="artist_font_add_group">Új csoport hozzáadása</string>
+    <string name="artist_font_used">Másik csoport már használja</string>
 </resources>

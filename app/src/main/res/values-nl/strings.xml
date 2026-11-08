@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Tekst</string>
     <string name="artist_signature_caption">Artiestennaam onder handtekening tonen</string>
     <string name="artist_invert">Kleur omkeren</string>
+    <string name="artist_font_settings">Artiestentypografie</string>
+    <string name="artist_font_hint">Standaardlettertype als basis. Individuele keuzes gaan voor; logo en handtekeningafbeelding zijn onafhankelijk.</string>
+    <string name="artist_font_fixed">Vast lettertype</string>
+    <string name="artist_font_random">Willekeurig bij elk bezoek</string>
+    <string name="artist_font_smart">Slimme typografie</string>
+    <string name="artist_font_original">Oorspronkelijke automatische Prism-stijl</string>
+    <string name="artist_font_fallback">Standaard- en vervangend lettertype</string>
+    <string name="artist_font_genres_hint">Dezelfde 16 playlistgenres, geschat via Deezer en iTunes. Rap valt onder Hip-hop; Salsa, Cumbia en Norteño nu onder Pop. Onbekende genres krijgen het standaardlettertype.</string>
+    <string name="artist_font_add_group">Nieuwe groep toevoegen</string>
+    <string name="artist_font_used">Al gebruikt in een andere groep</string>
 </resources>

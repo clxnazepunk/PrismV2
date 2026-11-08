@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">ข้อความ</string>
     <string name="artist_signature_caption">แสดงชื่อศิลปินใต้ลายเซ็น</string>
     <string name="artist_invert">กลับสี</string>
+    <string name="artist_font_settings">แบบอักษรศิลปิน</string>
+    <string name="artist_font_hint">ใช้แบบอักษรมาตรฐานเป็นค่าเริ่มต้น การเลือกเฉพาะศิลปินมีความสำคัญกว่า โลโก้และภาพลายเซ็นแยกจากกัน</string>
+    <string name="artist_font_fixed">แบบอักษรคงที่</string>
+    <string name="artist_font_random">สุ่มทุกครั้งที่เข้าชม</string>
+    <string name="artist_font_smart">แบบอักษรอัจฉริยะ</string>
+    <string name="artist_font_original">รูปแบบอัตโนมัติดั้งเดิมของ Prism</string>
+    <string name="artist_font_fallback">แบบอักษรเริ่มต้นและสำรอง</string>
+    <string name="artist_font_genres_hint">ใช้ 16 แนวเพลงเดียวกับเพลย์ลิสต์จาก Deezer และ iTunes โดย Rap อยู่ใน Hip-hop ส่วน Salsa, Cumbia และ Norteño อยู่ใน Pop หากไม่ทราบแนวเพลงจะใช้แบบอักษรเริ่มต้น</string>
+    <string name="artist_font_add_group">เพิ่มกลุ่มใหม่</string>
+    <string name="artist_font_used">ใช้ในกลุ่มอื่นแล้ว</string>
 </resources>

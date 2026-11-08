@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Metin</string>
     <string name="artist_signature_caption">İmzanın altında sanatçı adını göster</string>
     <string name="artist_invert">Rengi ters çevir</string>
+    <string name="artist_font_settings">Sanatçı tipografisi</string>
+    <string name="artist_font_hint">Varsayılan standart yazı tipidir. Kişisel sanatçı seçimi önceliklidir; logo ve imza resimleri bağımsızdır.</string>
+    <string name="artist_font_fixed">Sabit yazı tipi</string>
+    <string name="artist_font_random">Her ziyarette rastgele</string>
+    <string name="artist_font_smart">Akıllı tipografi</string>
+    <string name="artist_font_original">Prism özgün otomatik stili</string>
+    <string name="artist_font_fallback">Varsayılan ve yedek yazı tipi</string>
+    <string name="artist_font_genres_hint">Deezer ve iTunes kaynaklı aynı 16 çalma listesi türü. Rap, Hip-hop; Salsa, Cumbia ve Norteño şu an Pop içindedir. Bilinmeyen tür varsayılanı kullanır.</string>
+    <string name="artist_font_add_group">Yeni grup ekle</string>
+    <string name="artist_font_used">Başka grupta kullanılıyor</string>
 </resources>

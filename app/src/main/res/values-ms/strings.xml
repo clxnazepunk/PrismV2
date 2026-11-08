@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">Teks</string>
     <string name="artist_signature_caption">Tunjukkan nama artis di bawah tandatangan</string>
     <string name="artist_invert">Songsangkan warna</string>
+    <string name="artist_font_settings">Tipografi artis</string>
+    <string name="artist_font_hint">Fon standard secara lalai. Pilihan individu diutamakan; logo dan imej tandatangan berasingan.</string>
+    <string name="artist_font_fixed">Fon tetap</string>
+    <string name="artist_font_random">Rawak setiap lawatan</string>
+    <string name="artist_font_smart">Tipografi pintar</string>
+    <string name="artist_font_original">Gaya automatik asal Prism</string>
+    <string name="artist_font_fallback">Fon lalai dan sandaran</string>
+    <string name="artist_font_genres_hint">16 genre senarai main yang sama daripada Deezer dan iTunes. Rap dalam Hip-hop; Salsa, Cumbia dan Norteño kini dalam Pop. Genre tidak diketahui menggunakan fon lalai.</string>
+    <string name="artist_font_add_group">Tambah kumpulan baharu</string>
+    <string name="artist_font_used">Sudah digunakan kumpulan lain</string>
 </resources>

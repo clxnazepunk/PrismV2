@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Text</string>
     <string name="artist_signature_caption">Künstlernamen unter der Unterschrift anzeigen</string>
     <string name="artist_invert">Farbe umkehren</string>
+    <string name="artist_font_settings">Künstlertypografie</string>
+    <string name="artist_font_hint">Standardmäßig Standardschrift. Individuelle Künstlerwahl hat Vorrang; Logos und Unterschriftsbilder sind unabhängig.</string>
+    <string name="artist_font_fixed">Feste Schrift</string>
+    <string name="artist_font_random">Zufällig bei jedem Besuch</string>
+    <string name="artist_font_smart">Intelligente Typografie</string>
+    <string name="artist_font_original">Ursprünglicher automatischer Prism-Stil</string>
+    <string name="artist_font_fallback">Standard- und Ersatzschrift</string>
+    <string name="artist_font_genres_hint">Die gleichen 16 Playlist-Genres, geschätzt mit Deezer und iTunes. Rap zählt zu Hip-hop; Salsa, Cumbia und Norteño derzeit zu Pop. Unbekannte Genres nutzen die Standardschrift.</string>
+    <string name="artist_font_add_group">Neue Gruppe hinzufügen</string>
+    <string name="artist_font_used">Bereits in anderer Gruppe verwendet</string>
 </resources>

@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">文字</string>
     <string name="artist_signature_caption">在簽名下顯示藝人姓名</string>
     <string name="artist_invert">反轉顏色</string>
+    <string name="artist_font_settings">藝人字體</string>
+    <string name="artist_font_hint">預設使用標準字體。藝人單獨設定優先，標誌和簽名圖片互不影響。</string>
+    <string name="artist_font_fixed">固定字體</string>
+    <string name="artist_font_random">每次造訪隨機</string>
+    <string name="artist_font_smart">智慧字體</string>
+    <string name="artist_font_original">Prism原有自動樣式</string>
+    <string name="artist_font_fallback">預設及備用字體</string>
+    <string name="artist_font_genres_hint">使用與歌單相同的16類曲風，依據Deezer和iTunes估計。Rap歸入Hip-hop；Salsa、Cumbia和Norteño目前歸入Pop。未知或未分組曲風使用預設字體。</string>
+    <string name="artist_font_add_group">新增分組</string>
+    <string name="artist_font_used">已用於其他分組</string>
 </resources>

@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Teksto</string>
     <string name="artist_signature_caption">Ipakita ang pangalan sa ilalim ng lagda</string>
     <string name="artist_invert">Baligtarin ang kulay</string>
+    <string name="artist_font_settings">Tipograpiya ng artista</string>
+    <string name="artist_font_hint">Karaniwang font bilang default. Nauuna ang pinili para sa artista; hiwalay ang logo at larawang lagda.</string>
+    <string name="artist_font_fixed">Nakapirming font</string>
+    <string name="artist_font_random">Random sa bawat pagbisita</string>
+    <string name="artist_font_smart">Matalinong tipograpiya</string>
+    <string name="artist_font_original">Orihinal na awtomatikong estilo ng Prism</string>
+    <string name="artist_font_fallback">Default at pamalit na font</string>
+    <string name="artist_font_genres_hint">Gamit ang 16 na genre ng playlist mula sa Deezer at iTunes. Rap ay Hip-hop; Salsa, Cumbia at Norteño ay Pop. Default na font kapag walang grupo o genre.</string>
+    <string name="artist_font_add_group">Magdagdag ng bagong grupo</string>
+    <string name="artist_font_used">Ginagamit na sa ibang grupo</string>
 </resources>

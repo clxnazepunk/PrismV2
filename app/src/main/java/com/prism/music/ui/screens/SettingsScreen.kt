@@ -370,7 +370,7 @@ private fun SettingsPage(
             SettingsSection.APPEARANCE -> appearance()
             SettingsSection.LOOKS -> looksPage()
             SettingsSection.COLOR -> colorPage()
-            SettingsSection.TEXT -> item(key = "text") { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { TypeSettings(); ResetPage(section) } }
+            SettingsSection.TEXT -> item(key = "text") { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { TypeSettings(); ArtistTypographySettings(); ResetPage(section) } }
             SettingsSection.ICONS -> item(key = "icons") {
                 Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { IconSettings(); AppIconSettings(); ShapeSettings(); HomeWidgetsGroup(); ResetPage(section) }
             }

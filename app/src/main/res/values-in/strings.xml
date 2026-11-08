@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">Teks</string>
     <string name="artist_signature_caption">Tampilkan nama artis di bawah tanda tangan</string>
     <string name="artist_invert">Balik warna</string>
+    <string name="artist_font_settings">Tipografi artis</string>
+    <string name="artist_font_hint">Font standar secara bawaan. Pilihan per artis diutamakan; logo dan gambar tanda tangan tetap terpisah.</string>
+    <string name="artist_font_fixed">Font tetap</string>
+    <string name="artist_font_random">Acak setiap kunjungan</string>
+    <string name="artist_font_smart">Tipografi cerdas</string>
+    <string name="artist_font_original">Gaya otomatis asli Prism</string>
+    <string name="artist_font_fallback">Font bawaan dan cadangan</string>
+    <string name="artist_font_genres_hint">16 genre playlist yang sama dari Deezer dan iTunes. Rap masuk Hip-hop; Salsa, Cumbia dan Norteño kini masuk Pop. Genre tidak dikenal memakai font bawaan.</string>
+    <string name="artist_font_add_group">Tambah grup baru</string>
+    <string name="artist_font_used">Sudah digunakan grup lain</string>
 </resources>

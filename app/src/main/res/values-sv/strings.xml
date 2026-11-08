@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Text</string>
     <string name="artist_signature_caption">Visa artistnamn under signaturen</string>
     <string name="artist_invert">Invertera färg</string>
+    <string name="artist_font_settings">Artisternas typografi</string>
+    <string name="artist_font_hint">Standardtypsnitt som förval. Individuella val har företräde; logotyper och signaturbilder är oberoende.</string>
+    <string name="artist_font_fixed">Fast typsnitt</string>
+    <string name="artist_font_random">Slumpmässigt vid varje besök</string>
+    <string name="artist_font_smart">Smart typografi</string>
+    <string name="artist_font_original">Prisms ursprungliga automatiska stil</string>
+    <string name="artist_font_fallback">Standardtypsnitt och reserv</string>
+    <string name="artist_font_genres_hint">Samma 16 spellistegenrer från Deezer och iTunes. Rap hör till Hip-hop; Salsa, Cumbia och Norteño hör för närvarande till Pop. Okänd genre använder standardtypsnitt.</string>
+    <string name="artist_font_add_group">Lägg till ny grupp</string>
+    <string name="artist_font_used">Används redan i annan grupp</string>
 </resources>

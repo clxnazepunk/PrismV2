@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">Κείμενο</string>
     <string name="artist_signature_caption">Όνομα καλλιτέχνη κάτω από την υπογραφή</string>
     <string name="artist_invert">Αντιστροφή χρώματος</string>
+    <string name="artist_font_settings">Γραμματοσειρές καλλιτεχνών</string>
+    <string name="artist_font_hint">Προεπιλεγμένη απλή γραφή. Οι ατομικές επιλογές υπερισχύουν· λογότυπα και εικόνες υπογραφής είναι ανεξάρτητα.</string>
+    <string name="artist_font_fixed">Σταθερή γραμματοσειρά</string>
+    <string name="artist_font_random">Τυχαία σε κάθε επίσκεψη</string>
+    <string name="artist_font_smart">Έξυπνη τυπογραφία</string>
+    <string name="artist_font_original">Αρχικό αυτόματο στιλ Prism</string>
+    <string name="artist_font_fallback">Προεπιλεγμένη και εφεδρική γραμματοσειρά</string>
+    <string name="artist_font_genres_hint">Τα ίδια 16 είδη των λιστών από Deezer και iTunes. Rap στο Hip-hop· Salsa, Cumbia και Norteño στο Pop. Άγνωστα είδη χρησιμοποιούν την προεπιλογή.</string>
+    <string name="artist_font_add_group">Προσθήκη νέας ομάδας</string>
+    <string name="artist_font_used">Χρησιμοποιείται σε άλλη ομάδα</string>
 </resources>

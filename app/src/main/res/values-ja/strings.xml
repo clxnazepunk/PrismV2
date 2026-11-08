@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">文字</string>
     <string name="artist_signature_caption">署名の下にアーティスト名を表示</string>
     <string name="artist_invert">色を反転</string>
+    <string name="artist_font_settings">アーティストの書体</string>
+    <string name="artist_font_hint">初期設定は標準書体です。個別の設定を優先し、ロゴや署名画像は独立しています。</string>
+    <string name="artist_font_fixed">固定書体</string>
+    <string name="artist_font_random">訪問ごとにランダム</string>
+    <string name="artist_font_smart">スマート書体</string>
+    <string name="artist_font_original">Prism本来の自動スタイル</string>
+    <string name="artist_font_fallback">標準および代替の書体</string>
+    <string name="artist_font_genres_hint">DeezerとiTunesから推定するプレイリストと同じ16ジャンルです。RapはHip-hop、Salsa・Cumbia・Norteñoは現在Popに分類されます。不明な場合は標準書体です。</string>
+    <string name="artist_font_add_group">新しいグループを追加</string>
+    <string name="artist_font_used">他のグループで使用中</string>
 </resources>
