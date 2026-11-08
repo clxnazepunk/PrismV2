@@ -1,7 +1,7 @@
 package com.prism.music.data.artists
 
 // Adapted from BitChord's ArtistSignatures.kt, AppleArtistArt.kt and AppleCatalogue.kt.
-// BitChord contributors, GPL-3.0-or-later. See docs/THIRD_PARTY_PORTS.md for pinned sources.
+// BitChord contributors, GNU GPL v3. See docs/THIRD_PARTY_PORTS.md for pinned sources.
 
 import org.json.JSONArray
 import org.json.JSONObject

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import androidx.core.net.toUri
 import androidx.compose.runtime.mutableStateMapOf
 import com.prism.music.data.model.BrowseItem
 import com.prism.music.data.model.PlaylistItem
@@ -30,12 +31,12 @@ class PlaylistCovers(private val context: Context) {
 
     /** Old backups held absolute private paths. Rebind only owned cover files, never arbitrary external images. */
     private fun restoredCover(value: String): String = runCatching {
-        val uri = Uri.parse(value)
+        val uri = value.toUri()
         if (uri.scheme != "file") return@runCatching value
         val old = File(uri.path ?: return@runCatching value)
         if (old.parentFile?.name != "covers" || old.parentFile?.parentFile?.name != "files") return@runCatching value
         val restored = File(dir, old.name)
-        if (restored.isFile && restored.canonicalFile.parentFile == dir.canonicalFile) Uri.fromFile(restored).toString() else value
+        if (restored.isFile && restored.canonicalFile.parentFile == dir.canonicalFile) restored.toUri().toString() else value
     }.getOrDefault(value)
 
     fun custom(id: String): String? = covers[id]
