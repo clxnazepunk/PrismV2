@@ -301,6 +301,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var moodFilter by rememberSaveable(page.id) { mutableStateOf<String?>(null) }
     var tagRefresh by remember(page.id) { mutableStateOf(0) }
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
+    val tagBudget = remember(page.id, tagApiKey, tagRefresh) { com.prism.music.data.meta.TagLookupBudget() }
     fun genresOf(id: String): List<String> = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty() +
         detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }).distinct()
     fun displayGenre(id: String): String? = com.prism.music.data.meta.MusicTags.displayGenre(detailTags[id].orEmpty(), genres[id])
@@ -367,7 +368,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
 
     LaunchedEffect(page.id, songs, showGenres, tagApiKey, tagRefresh) {
         if (!showGenres) return@LaunchedEffect
-        c.meta.resolveSongTags(songs) { batch ->
+        c.meta.resolveSongTags(songs, budget = tagBudget) { batch ->
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { detailTags.putAll(batch); genreVersion++ }
         }
     }

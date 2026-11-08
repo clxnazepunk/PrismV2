@@ -694,19 +694,18 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     private val trackTagsLock = Mutex()
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
-    suspend fun resolveSongTags(songs: List<Song>, onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
         val cached = cachedSongTags(songs)
         if (cached.isNotEmpty()) onBatch(cached)
         val apiKey = tagKey().trim()
         if (apiKey.isBlank()) return@withContext
-        var emitted = 0
         var failures = 0
         for (song in songs.distinctBy { it.id }) {
             if (song.primaryArtist.isBlank() || song.title.isBlank()) continue
             val cachedEntry = dao.genre(songTagsKey(song))
             if (cachedEntry != null && System.currentTimeMillis() - cachedEntry.fetchedAt < 7 * 24 * 60 * 60 * 1000L) continue
             // A page can contain thousands of songs. Ask at most 40 uncached songs per explicit refresh/open.
-            if (emitted++ >= 40) break
+            if (!budget.tryTake()) break
             val response = trackTagsLock.withLock {
                 delay(300)
                 val url = "https://ws.audioscrobbler.com/2.0/".toHttpUrl().newBuilder()

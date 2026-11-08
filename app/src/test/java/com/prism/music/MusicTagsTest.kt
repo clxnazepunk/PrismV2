@@ -177,4 +177,27 @@ class MusicTagsTest {
         assertTrue("mood:romantic" in meta.cachedSongTags(listOf(song)).getValue("unicode"))
     }
 
+    @Test fun paginatedPlaylistBatchesShareOneBudgetUntilTheListenerRefreshes(): Unit = runBlocking {
+        val dao = Dao()
+        var requests = 0
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            requests++
+            val title = chain.request().url.queryParameter("track")
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK")
+                .body("""{"toptags":{"@attr":{"artist":"Artist","track":"$title"},"tag":[{"name":"romantic","count":100}]}}""".toResponseBody("application/json".toMediaType())).build()
+        }.build()
+        val meta = MetaRepository(client, dao, tagKey = { "test" }, tagsHttp = client)
+        val first = Song("first", "First", listOf(ArtistRef("Artist")))
+        val second = Song("second", "Second", listOf(ArtistRef("Artist")))
+        val third = Song("third", "Third", listOf(ArtistRef("Artist")))
+        val visit = TagLookupBudget(2)
+        meta.resolveSongTags(listOf(first), budget = visit) {}
+        meta.resolveSongTags(listOf(first, second, third), budget = visit) {}
+        assertEquals(2, requests)
+        meta.resolveSongTags(listOf(first, second, third), budget = visit) {}
+        assertEquals(2, requests)
+        meta.resolveSongTags(listOf(first, second, third), budget = TagLookupBudget(2)) {}
+        assertEquals(3, requests)
+    }
+
 }
