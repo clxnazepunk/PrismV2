@@ -1,0 +1,32 @@
+name: Prepare verified Gradle
+description: Download the pinned Gradle archive from its official release and verify SHA-256
+runs:
+  using: composite
+  steps:
+    - name: Prepare official Gradle distribution
+      shell: bash
+      env:
+        PRISM_GRADLE_SHA256: bafd5ce9cfaea0fbccfdc8439a1ac42fbd4cd9c89dc9a988228d8a2639a58e6c
+      run: |
+        set -euo pipefail
+        export PRISM_GRADLE_ARCHIVE="${GRADLE_USER_HOME:-$HOME/.gradle}/wrapper/dists/prism-gradle-9.8.0-bin.zip"
+        mkdir -p "$(dirname "$PRISM_GRADLE_ARCHIVE")"
+        if ! printf '%s  %s\n' "$PRISM_GRADLE_SHA256" "$PRISM_GRADLE_ARCHIVE" | sha256sum --check --status; then
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 240 \
+            --header 'Accept: application/octet-stream' \
+            --output "$PRISM_GRADLE_ARCHIVE.part" \
+            https://api.github.com/repos/gradle/gradle-distributions/releases/assets/586068844
+          printf '%s  %s\n' "$PRISM_GRADLE_SHA256" "$PRISM_GRADLE_ARCHIVE.part" | sha256sum --check
+          mv "$PRISM_GRADLE_ARCHIVE.part" "$PRISM_GRADLE_ARCHIVE"
+        fi
+        python3 - <<'PY'
+        import os
+        from pathlib import Path
+        wrapper = Path("gradle/wrapper/gradle-wrapper.properties")
+        lines = wrapper.read_text().splitlines()
+        archive = Path(os.environ["PRISM_GRADLE_ARCHIVE"]).as_uri()
+        lines = [f"distributionUrl={archive}" if line.startswith("distributionUrl=") else line for line in lines]
+        lines = [line for line in lines if not line.startswith("distributionSha256Sum=")]
+        lines.append("distributionSha256Sum=" + os.environ["PRISM_GRADLE_SHA256"])
+        wrapper.write_text("\n".join(lines) + "\n")
+        PY
