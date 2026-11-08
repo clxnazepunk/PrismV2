@@ -338,7 +338,7 @@ class Backup(private val c: AppContainer) {
 
         /** Folders (and files) right under files/ by part; anything else counts as Settings. */
         private val FILE_PARTS: Map<String, BackupPart?> = buildMap {
-            listOf("library", "blends", "covers", "offline", "artwork").forEach { put(it, BackupPart.LIBRARY) }
+            listOf("library", "blends", "covers", "offline", "artwork", "artist_identity").forEach { put(it, BackupPart.LIBRARY) }
             // 1.8.1: imports/ holds the library a data download is still bringing over (its plays are in the database).
             listOf("rewind", "waves", "queue.json", "imports").forEach { put(it, BackupPart.HISTORY) }
             put("account", BackupPart.ACCOUNTS)

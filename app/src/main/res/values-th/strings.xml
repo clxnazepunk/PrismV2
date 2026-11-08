@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube ไม่รับการลงชื่อเข้าใช้นี้อีกต่อไป โปรดออกจากระบบแล้วลงชื่อเข้าใช้อีกครั้ง</string>
     <string name="youtube_isnt_sending_256_kbps">ขณะนี้ YouTube ไม่ได้ส่ง 256 kbps ให้บัญชีนี้ เพลงจึงเล่นในคุณภาพปกติ</string>
     <string name="playlist_recommended_songs">เพลงแนะนำ</string>
+    <string name="artist_identity">โลโก้และลายเซ็น</string>
+    <string name="artist_logo">โลโก้ศิลปิน</string>
+    <string name="automatic_artist_images">โลโก้และลายเซ็นอัตโนมัติ</string>
+    <string name="artist_signature_api">API ลายเซ็น</string>
 </resources>

@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube 不再接受這個登入。請登出後重新登入。</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube 目前沒有傳送 256 kbps 給這個帳戶，因此歌曲會以一般音質播放</string>
     <string name="playlist_recommended_songs">推薦歌曲</string>
+    <string name="artist_identity">標誌與簽名</string>
+    <string name="artist_logo">藝人標誌</string>
+    <string name="automatic_artist_images">自動取得標誌與簽名</string>
+    <string name="artist_signature_api">簽名 API</string>
 </resources>

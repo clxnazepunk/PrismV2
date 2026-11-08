@@ -5003,4 +5003,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube nie akceptuje już tego logowania. Wyloguj się i zaloguj ponownie.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube nie wysyła teraz 256 kb/s na to konto, więc utwory grają w zwykłej jakości</string>
     <string name="playlist_recommended_songs">Polecane utwory</string>
+    <string name="artist_identity">Logo i podpis</string>
+    <string name="artist_logo">Logo wykonawcy</string>
+    <string name="automatic_artist_images">Automatyczne logo i podpisy</string>
+    <string name="artist_signature_api">API podpisów</string>
 </resources>

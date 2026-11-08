@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube আর এই সাইন-ইন গ্রহণ করছে না। সাইন আউট করে আবার সাইন ইন করুন।</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube এখন এই অ্যাকাউন্টে 256 kbps পাঠাচ্ছে না, তাই গান সাধারণ মানে বাজছে</string>
     <string name="playlist_recommended_songs">প্রস্তাবিত গান</string>
+    <string name="artist_identity">লোগো ও স্বাক্ষর</string>
+    <string name="artist_logo">শিল্পীর লোগো</string>
+    <string name="automatic_artist_images">স্বয়ংক্রিয় লোগো ও স্বাক্ষর</string>
+    <string name="artist_signature_api">স্বাক্ষর API</string>
 </resources>

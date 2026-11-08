@@ -63,6 +63,7 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
     override fun newImageLoader(context: coil3.PlatformContext): coil3.ImageLoader =
         coil3.ImageLoader.Builder(context)
             .components {
+                add(coil3.svg.SvgDecoder.Factory())
                 // First, so a cover kept on the phone is trimmed the same as one from the network (#92).
                 add(com.prism.music.data.VideoCoverInterceptor { ::container.isInitialized && container.settings.current.squareVideoCovers })
                 add(com.prism.music.data.OfflineArtInterceptor { if (::container.isInitialized) container.artwork else null })
@@ -525,6 +526,7 @@ class AppContainer(val app: Application) {
             settings.flow.map { it.behavior.keptPlaylists.isNotEmpty() }.distinctUntilChanged().collectLatest { any -> if (any) keptPlaylists.watch() }
         }
     }
+    val artistIdentities by lazy { com.prism.music.data.artists.ArtistIdentities(app) }
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
     // Read at start, so the songs' own covers (#305) are there for the media session and Android Auto from the first song.
     init { covers }

@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube כבר לא מקבל את הכניסה הזו. צריך לצאת מהחשבון ולהיכנס שוב.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube לא שולח כרגע 256 kbps לחשבון הזה, ולכן השירים מתנגנים באיכות הרגילה</string>
     <string name="playlist_recommended_songs">שירים מומלצים</string>
+    <string name="artist_identity">לוגו וחתימה</string>
+    <string name="artist_logo">לוגו האמן</string>
+    <string name="automatic_artist_images">סמלים וחתימות אוטומטיים</string>
+    <string name="artist_signature_api">API לחתימות</string>
 </resources>

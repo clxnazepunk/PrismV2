@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube không còn chấp nhận lần đăng nhập này. Hãy đăng xuất rồi đăng nhập lại.</string>
     <string name="youtube_isnt_sending_256_kbps">Hiện YouTube không gửi 256 kbps cho tài khoản này, nên bài hát phát ở chất lượng thông thường</string>
     <string name="playlist_recommended_songs">Bài hát đề xuất</string>
+    <string name="artist_identity">Biểu trưng và chữ ký</string>
+    <string name="artist_logo">Biểu trưng nghệ sĩ</string>
+    <string name="automatic_artist_images">Biểu trưng và chữ ký tự động</string>
+    <string name="artist_signature_api">API chữ ký</string>
 </resources>

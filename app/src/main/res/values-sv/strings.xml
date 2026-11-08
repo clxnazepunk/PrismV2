@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube godkänner inte längre den här inloggningen. Logga ut och logga in igen.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube skickar inte 256 kbit/s till det här kontot just nu, så låtar spelas i vanlig kvalitet</string>
     <string name="playlist_recommended_songs">Rekommenderade låtar</string>
+    <string name="artist_identity">Logotyp och signatur</string>
+    <string name="artist_logo">Artistens logotyp</string>
+    <string name="automatic_artist_images">Automatiska logotyper och signaturer</string>
+    <string name="artist_signature_api">Signatur-API</string>
 </resources>

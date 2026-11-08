@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">O YouTube já não aceita este início de sessão. Termina a sessão e volta a iniciá-la.</string>
     <string name="youtube_isnt_sending_256_kbps">O YouTube não está a enviar 256 kbps para esta conta de momento, por isso as músicas tocam na qualidade habitual</string>
     <string name="playlist_recommended_songs">Músicas recomendadas</string>
+    <string name="artist_identity">Logótipo e assinatura</string>
+    <string name="artist_logo">Logótipo do artista</string>
+    <string name="automatic_artist_images">Logótipos e assinaturas automáticos</string>
+    <string name="artist_signature_api">API de assinaturas</string>
 </resources>

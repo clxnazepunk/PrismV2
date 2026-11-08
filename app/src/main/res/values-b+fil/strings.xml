@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">Hindi na tinatanggap ng YouTube ang sign-in na ito. Mag-sign out at mag-sign in ulit.</string>
     <string name="youtube_isnt_sending_256_kbps">Hindi nagpapadala ang YouTube ng 256 kbps sa account na ito ngayon, kaya sa karaniwang kalidad tumutugtog ang mga kanta</string>
     <string name="playlist_recommended_songs">Mga inirerekomendang kanta</string>
+    <string name="artist_identity">Logo at lagda</string>
+    <string name="artist_logo">Logo ng artist</string>
+    <string name="automatic_artist_images">Awtomatikong logo at mga lagda</string>
+    <string name="artist_signature_api">API ng lagda</string>
 </resources>

@@ -5131,4 +5131,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">لم يعد YouTube يقبل تسجيل الدخول هذا. سجّل الخروج ثم سجّل الدخول مرة أخرى.</string>
     <string name="youtube_isnt_sending_256_kbps">لا يرسل YouTube حاليًا 256 كيلوبت/ث إلى هذا الحساب، لذا تُشغَّل الأغاني بالجودة المعتادة</string>
     <string name="playlist_recommended_songs">أغانٍ موصى بها</string>
+    <string name="artist_identity">الشعار والتوقيع</string>
+    <string name="artist_logo">شعار الفنان</string>
+    <string name="automatic_artist_images">الشعارات والتوقيعات التلقائية</string>
+    <string name="artist_signature_api">واجهة برمجة التوقيعات</string>
 </resources>

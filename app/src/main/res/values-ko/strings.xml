@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube에서 더 이상 이 로그인을 받지 않습니다. 로그아웃한 후 다시 로그인하세요.</string>
     <string name="youtube_isnt_sending_256_kbps">지금은 YouTube가 이 계정에 256kbps를 보내지 않아 곡이 일반 음질로 재생됩니다</string>
     <string name="playlist_recommended_songs">추천곡</string>
+    <string name="artist_identity">로고 및 서명</string>
+    <string name="artist_logo">아티스트 로고</string>
+    <string name="automatic_artist_images">자동 로고 및 서명</string>
+    <string name="artist_signature_api">서명 API</string>
 </resources>
