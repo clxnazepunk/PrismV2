@@ -108,6 +108,9 @@ jobs:
       - run: chmod +x gradlew
       - name: Run lint
         run: ./gradlew --no-daemon --stacktrace :app:lintDebug -PsideBySide=dev
+      - name: Show diagnostics in customized files
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/lint_customizations.py
       - name: Upload lint reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
