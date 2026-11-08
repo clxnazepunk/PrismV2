@@ -4851,4 +4851,15 @@
     <string name="music_moods">Tâm trạng</string>
     <string name="music_tag_api">Khóa API Last.fm (tùy chọn)</string>
     <string name="music_tag_hint">Tâm trạng cần khóa Last.fm tùy chọn trong Cài đặt. Tên bài hát và nghệ sĩ được gửi đi. Chỉ hiển thị thẻ rõ ràng.</string>
+    <string name="artist_remove_background">Xóa nền đồng màu</string>
+    <string name="artist_background_tolerance">Dung sai nền</string>
+    <string name="artist_blend_mode">Chế độ hòa trộn</string>
+    <string name="artist_blend_multiply">Nhân</string>
+    <string name="artist_blend_screen">Lọc sáng</string>
+    <string name="artist_blend_darken">Làm tối</string>
+    <string name="artist_blend_lighten">Làm sáng</string>
+    <string name="artist_blend_normal">Bình thường</string>
+    <string name="artist_background_hint">Xử lý trên máy và có thể hoàn tác. Làm tối giấu trắng, Lọc sáng giấu đen. Nền phức tạp có thể còn lại. Chế độ không hỗ trợ bị tắt.</string>
+    <string name="artist_export_original">Tải bản gốc</string>
+    <string name="artist_export_png">Xuất PNG với điều chỉnh nền</string>
 </resources>

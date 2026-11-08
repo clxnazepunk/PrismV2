@@ -4979,4 +4979,15 @@
     <string name="music_moods">מצבי רוח</string>
     <string name="music_tag_api">מפתח API של Last.fm (אופציונלי)</string>
     <string name="music_tag_hint">מצבי רוח דורשים מפתח Last.fm אופציונלי בהגדרות. שם השיר והאמן נשלחים. מוצגות רק תגיות מפורשות.</string>
+    <string name="artist_remove_background">הסרת רקע אחיד</string>
+    <string name="artist_background_tolerance">סבילות רקע</string>
+    <string name="artist_blend_mode">מצב שילוב</string>
+    <string name="artist_blend_multiply">כפל</string>
+    <string name="artist_blend_screen">מסך</string>
+    <string name="artist_blend_darken">הכהיה</string>
+    <string name="artist_blend_lighten">הבהרה</string>
+    <string name="artist_blend_normal">רגיל</string>
+    <string name="artist_background_hint">מקומי והפיך. הכהיה מסתירה לבן ומסך מסתיר שחור. רקע מורכב עשוי להישאר. מצבים לא נתמכים מושבתים.</string>
+    <string name="artist_export_original">הורדת המקור</string>
+    <string name="artist_export_png">ייצוא PNG עם התאמות רקע</string>
 </resources>

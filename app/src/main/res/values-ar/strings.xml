@@ -5171,4 +5171,15 @@
     <string name="music_moods">الحالات المزاجية</string>
     <string name="music_tag_api">مفتاح Last.fm API اختياري</string>
     <string name="music_tag_hint">تتطلب الحالات المزاجية مفتاح Last.fm اختياريًا في الإعدادات. يُرسل عنوان الأغنية والفنان. تُعرض الوسوم الصريحة فقط.</string>
+    <string name="artist_remove_background">إزالة الخلفية الموحدة</string>
+    <string name="artist_background_tolerance">تسامح الخلفية</string>
+    <string name="artist_blend_mode">وضع المزج</string>
+    <string name="artist_blend_multiply">ضرب</string>
+    <string name="artist_blend_screen">شاشة</string>
+    <string name="artist_blend_darken">تغميق</string>
+    <string name="artist_blend_lighten">تفتيح</string>
+    <string name="artist_blend_normal">عادي</string>
+    <string name="artist_background_hint">محلي وقابل للتراجع. التغميق يخفي الأبيض والشاشة تخفي الأسود. قد تبقى الخلفيات المعقدة. تُعطّل الأوضاع غير المدعومة.</string>
+    <string name="artist_export_original">تنزيل الأصل</string>
+    <string name="artist_export_png">تصدير PNG مع تعديلات الخلفية</string>
 </resources>

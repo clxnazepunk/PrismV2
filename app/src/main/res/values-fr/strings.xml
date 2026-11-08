@@ -4979,4 +4979,15 @@
     <string name="music_moods">Ambiances</string>
     <string name="music_tag_api">Clé API Last.fm (facultative)</string>
     <string name="music_tag_hint">Les ambiances nécessitent une clé Last.fm facultative dans Réglages. Titre et artiste sont envoyés. Seules les étiquettes explicites sont affichées.</string>
+    <string name="artist_remove_background">Retirer le fond uniforme</string>
+    <string name="artist_background_tolerance">Tolérance du fond</string>
+    <string name="artist_blend_mode">Mode de fusion</string>
+    <string name="artist_blend_multiply">Produit</string>
+    <string name="artist_blend_screen">Superposition</string>
+    <string name="artist_blend_darken">Obscurcir</string>
+    <string name="artist_blend_lighten">Éclaircir</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local et réversible. Obscurcir masque le blanc, Superposition le noir. Un fond complexe peut rester. Modes incompatibles désactivés.</string>
+    <string name="artist_export_original">Télécharger l’original</string>
+    <string name="artist_export_png">Exporter un PNG avec les réglages du fond</string>
 </resources>

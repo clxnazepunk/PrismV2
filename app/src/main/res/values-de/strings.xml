@@ -4915,4 +4915,15 @@
     <string name="music_moods">Stimmungen</string>
     <string name="music_tag_api">Last.fm-API-Schlüssel (optional)</string>
     <string name="music_tag_hint">Stimmungen benötigen einen optionalen Last.fm-Schlüssel in den Einstellungen. Titel und Künstler werden gesendet. Nur ausdrückliche Tags werden angezeigt.</string>
+    <string name="artist_remove_background">Einfarbigen Hintergrund entfernen</string>
+    <string name="artist_background_tolerance">Hintergrundtoleranz</string>
+    <string name="artist_blend_mode">Mischmodus</string>
+    <string name="artist_blend_multiply">Multiplizieren</string>
+    <string name="artist_blend_screen">Negativ multiplizieren</string>
+    <string name="artist_blend_darken">Abdunkeln</string>
+    <string name="artist_blend_lighten">Aufhellen</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Lokal und rückgängig machbar. Abdunkeln verbirgt Weiß, Negativ multiplizieren Schwarz. Komplexe Hintergründe können bleiben. Nicht unterstützte Modi sind deaktiviert.</string>
+    <string name="artist_export_original">Original herunterladen</string>
+    <string name="artist_export_png">PNG mit Hintergrundanpassungen exportieren</string>
 </resources>

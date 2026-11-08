@@ -4915,4 +4915,15 @@
     <string name="music_moods">Ruh halleri</string>
     <string name="music_tag_api">Last.fm API anahtarı (isteğe bağlı)</string>
     <string name="music_tag_hint">Ruh halleri için Ayarlar içinde isteğe bağlı Last.fm anahtarı gerekir. Başlık ve sanatçı gönderilir. Yalnızca açık etiketler gösterilir.</string>
+    <string name="artist_remove_background">Tek renkli arka planı kaldır</string>
+    <string name="artist_background_tolerance">Arka plan toleransı</string>
+    <string name="artist_blend_mode">Karışım modu</string>
+    <string name="artist_blend_multiply">Çarpma</string>
+    <string name="artist_blend_screen">Ekran</string>
+    <string name="artist_blend_darken">Koyulaştır</string>
+    <string name="artist_blend_lighten">Aydınlat</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Yerel ve geri alınabilir. Koyulaştır beyazı, Ekran siyahı gizler. Karmaşık arka plan kalabilir. Desteklenmeyen modlar kapalıdır.</string>
+    <string name="artist_export_original">Orijinali indir</string>
+    <string name="artist_export_png">Arka plan ayarlarıyla PNG dışa aktar</string>
 </resources>

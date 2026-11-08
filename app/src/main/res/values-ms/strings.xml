@@ -4851,4 +4851,15 @@
     <string name="music_moods">Suasana</string>
     <string name="music_tag_api">Kunci API Last.fm (pilihan)</string>
     <string name="music_tag_hint">Suasana memerlukan kunci Last.fm pilihan dalam Tetapan. Tajuk dan artis dihantar. Hanya tag jelas dipaparkan.</string>
+    <string name="artist_remove_background">Buang latar seragam</string>
+    <string name="artist_background_tolerance">Toleransi latar</string>
+    <string name="artist_blend_mode">Mod adunan</string>
+    <string name="artist_blend_multiply">Darab</string>
+    <string name="artist_blend_screen">Skrin</string>
+    <string name="artist_blend_darken">Gelapkan</string>
+    <string name="artist_blend_lighten">Cerahkan</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Setempat dan boleh dibatalkan. Gelapkan menyamarkan putih, Skrin hitam. Latar rumit mungkin kekal. Mod tidak disokong dilumpuhkan.</string>
+    <string name="artist_export_original">Muat turun asal</string>
+    <string name="artist_export_png">Eksport PNG dengan pelarasan latar</string>
 </resources>

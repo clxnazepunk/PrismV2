@@ -4851,4 +4851,15 @@
     <string name="music_moods">분위기</string>
     <string name="music_tag_api">Last.fm API 키 (선택)</string>
     <string name="music_tag_hint">분위기에는 설정에서 선택적 Last.fm 키가 필요합니다. 곡명과 아티스트를 전송하며 명시적 태그만 표시합니다.</string>
+    <string name="artist_remove_background">단색 배경 제거</string>
+    <string name="artist_background_tolerance">배경 허용 범위</string>
+    <string name="artist_blend_mode">혼합 모드</string>
+    <string name="artist_blend_multiply">곱하기</string>
+    <string name="artist_blend_screen">스크린</string>
+    <string name="artist_blend_darken">어둡게</string>
+    <string name="artist_blend_lighten">밝게</string>
+    <string name="artist_blend_normal">일반</string>
+    <string name="artist_background_hint">기기 내에서 처리하며 되돌릴 수 있습니다. 어둡게는 흰색, 스크린은 검은색을 숨깁니다. 복잡한 배경은 남을 수 있습니다. 미지원 모드는 비활성화됩니다.</string>
+    <string name="artist_export_original">원본 다운로드</string>
+    <string name="artist_export_png">배경 조정이 적용된 PNG 내보내기</string>
 </resources>

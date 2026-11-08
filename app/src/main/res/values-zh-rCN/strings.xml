@@ -4851,4 +4851,15 @@
     <string name="music_moods">心情</string>
     <string name="music_tag_api">Last.fm API密钥（可选）</string>
     <string name="music_tag_hint">心情需要在设置中提供可选的Last.fm密钥。会发送歌名和艺人，仅显示明确标签。</string>
+    <string name="artist_remove_background">移除纯色背景</string>
+    <string name="artist_background_tolerance">背景容差</string>
+    <string name="artist_blend_mode">混合模式</string>
+    <string name="artist_blend_multiply">正片叠底</string>
+    <string name="artist_blend_screen">滤色</string>
+    <string name="artist_blend_darken">变暗</string>
+    <string name="artist_blend_lighten">变亮</string>
+    <string name="artist_blend_normal">正常</string>
+    <string name="artist_background_hint">在本机处理且可还原。变暗可隐藏白色，滤色可隐藏黑色。复杂背景可能保留。不支持的模式会被禁用。</string>
+    <string name="artist_export_original">下载原图</string>
+    <string name="artist_export_png">导出应用背景调整的PNG</string>
 </resources>

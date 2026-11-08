@@ -4915,4 +4915,15 @@
     <string name="music_moods">मूड</string>
     <string name="music_tag_api">Last.fm API कुंजी (वैकल्पिक)</string>
     <string name="music_tag_hint">मूड के लिए सेटिंग्स में वैकल्पिक Last.fm कुंजी चाहिए। गीत का नाम और कलाकार भेजे जाते हैं। केवल स्पष्ट टैग दिखते हैं।</string>
+    <string name="artist_remove_background">एकसमान पृष्ठभूमि हटाएँ</string>
+    <string name="artist_background_tolerance">पृष्ठभूमि सहनशीलता</string>
+    <string name="artist_blend_mode">मिश्रण मोड</string>
+    <string name="artist_blend_multiply">मल्टिप्लाई</string>
+    <string name="artist_blend_screen">स्क्रीन</string>
+    <string name="artist_blend_darken">गहरा करें</string>
+    <string name="artist_blend_lighten">हल्का करें</string>
+    <string name="artist_blend_normal">सामान्य</string>
+    <string name="artist_background_hint">स्थानीय और वापस बदलने योग्य। गहरा मोड सफेद, स्क्रीन काला छिपाता है। जटिल पृष्ठभूमि रह सकती है। असमर्थित मोड बंद हैं।</string>
+    <string name="artist_export_original">मूल डाउनलोड करें</string>
+    <string name="artist_export_png">पृष्ठभूमि बदलाव सहित PNG निर्यात करें</string>
 </resources>

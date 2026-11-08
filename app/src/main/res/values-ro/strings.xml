@@ -4979,4 +4979,15 @@
     <string name="music_moods">Stări</string>
     <string name="music_tag_api">Cheie API Last.fm (opțională)</string>
     <string name="music_tag_hint">Stările necesită o cheie Last.fm opțională în Setări. Titlul și artistul sunt trimise. Se afișează doar etichete explicite.</string>
+    <string name="artist_remove_background">Elimină fundalul uniform</string>
+    <string name="artist_background_tolerance">Toleranța fundalului</string>
+    <string name="artist_blend_mode">Mod de amestecare</string>
+    <string name="artist_blend_multiply">Multiplicare</string>
+    <string name="artist_blend_screen">Ecran</string>
+    <string name="artist_blend_darken">Întunecare</string>
+    <string name="artist_blend_lighten">Luminare</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local și reversibil. Întunecarea ascunde albul, Ecran negrul. Fundalurile complexe pot rămâne. Modurile incompatibile sunt dezactivate.</string>
+    <string name="artist_export_original">Descarcă originalul</string>
+    <string name="artist_export_png">Exportă PNG cu ajustările fundalului</string>
 </resources>

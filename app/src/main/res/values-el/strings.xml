@@ -4915,4 +4915,15 @@
     <string name="music_moods">Διαθέσεις</string>
     <string name="music_tag_api">Κλειδί API Last.fm (προαιρετικό)</string>
     <string name="music_tag_hint">Οι διαθέσεις χρειάζονται προαιρετικό κλειδί Last.fm στις ρυθμίσεις. Στέλνονται τίτλος και καλλιτέχνης. Εμφανίζονται μόνο ρητές ετικέτες.</string>
+    <string name="artist_remove_background">Αφαίρεση ομοιόμορφου φόντου</string>
+    <string name="artist_background_tolerance">Ανοχή φόντου</string>
+    <string name="artist_blend_mode">Λειτουργία ανάμειξης</string>
+    <string name="artist_blend_multiply">Πολλαπλασιασμός</string>
+    <string name="artist_blend_screen">Οθόνη</string>
+    <string name="artist_blend_darken">Σκούρυνση</string>
+    <string name="artist_blend_lighten">Φώτισμα</string>
+    <string name="artist_blend_normal">Κανονικό</string>
+    <string name="artist_background_hint">Τοπικό και αναστρέψιμο. Η σκούρυνση κρύβει το λευκό, η οθόνη το μαύρο. Σύνθετα φόντα μπορεί να μείνουν. Μη υποστηριζόμενες λειτουργίες απενεργοποιούνται.</string>
+    <string name="artist_export_original">Λήψη πρωτοτύπου</string>
+    <string name="artist_export_png">Εξαγωγή PNG με ρυθμίσεις φόντου</string>
 </resources>

@@ -4851,4 +4851,15 @@
     <string name="music_moods">Suasana hati</string>
     <string name="music_tag_api">Kunci API Last.fm (opsional)</string>
     <string name="music_tag_hint">Suasana hati memerlukan kunci Last.fm opsional di Pengaturan. Judul dan artis dikirim. Hanya tag eksplisit yang ditampilkan.</string>
+    <string name="artist_remove_background">Hapus latar seragam</string>
+    <string name="artist_background_tolerance">Toleransi latar</string>
+    <string name="artist_blend_mode">Mode perpaduan</string>
+    <string name="artist_blend_multiply">Kalikan</string>
+    <string name="artist_blend_screen">Layar</string>
+    <string name="artist_blend_darken">Gelapkan</string>
+    <string name="artist_blend_lighten">Terangkan</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Lokal dan dapat dibatalkan. Gelapkan menyamarkan putih, Layar hitam. Latar rumit mungkin tersisa. Mode tak didukung dinonaktifkan.</string>
+    <string name="artist_export_original">Unduh asli</string>
+    <string name="artist_export_png">Ekspor PNG dengan penyesuaian latar</string>
 </resources>

@@ -4915,4 +4915,15 @@
     <string name="music_moods">Mga damdamin</string>
     <string name="music_tag_api">Last.fm API key (opsyonal)</string>
     <string name="music_tag_hint">Kailangan ng opsyonal na Last.fm key sa Settings para sa moods. Ipinapadala ang pamagat at artista. Tiyak na tag lamang ang ipinapakita.</string>
+    <string name="artist_remove_background">Alisin ang pantay na background</string>
+    <string name="artist_background_tolerance">Tolerance ng background</string>
+    <string name="artist_blend_mode">Blending mode</string>
+    <string name="artist_blend_multiply">Multiply</string>
+    <string name="artist_blend_screen">Screen</string>
+    <string name="artist_blend_darken">Padilimin</string>
+    <string name="artist_blend_lighten">Paliwanagin</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Lokal at naibabalik. Itinatago ng Darken ang puti, ng Screen ang itim. Maaaring manatili ang masalimuot na background. Naka-off ang di-suportadong mode.</string>
+    <string name="artist_export_original">I-download ang orihinal</string>
+    <string name="artist_export_png">I-export ang PNG na may inayos na background</string>
 </resources>

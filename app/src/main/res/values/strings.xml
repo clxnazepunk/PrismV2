@@ -4945,4 +4945,15 @@
     <string name="music_moods">Moods</string>
     <string name="music_tag_api">Last.fm API key (optional)</string>
     <string name="music_tag_hint">Moods need an optional Last.fm key in Settings. Song title and artist are sent there. Only explicit tags are shown.</string>
+    <string name="artist_remove_background">Remove uniform background</string>
+    <string name="artist_background_tolerance">Background tolerance</string>
+    <string name="artist_blend_mode">Blend mode</string>
+    <string name="artist_blend_multiply">Multiply</string>
+    <string name="artist_blend_screen">Screen</string>
+    <string name="artist_blend_darken">Darken</string>
+    <string name="artist_blend_lighten">Lighten</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local and reversible. Darken hides white; Screen hides black. Complex backgrounds may remain. Unsupported modes are disabled.</string>
+    <string name="artist_export_original">Download original</string>
+    <string name="artist_export_png">Export PNG with background adjustments</string>
 </resources>

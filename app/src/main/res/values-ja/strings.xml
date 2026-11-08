@@ -4851,4 +4851,15 @@
     <string name="music_moods">ムード</string>
     <string name="music_tag_api">Last.fm APIキー（任意）</string>
     <string name="music_tag_hint">ムードには設定で任意のLast.fmキーが必要です。曲名とアーティストを送信し、明示されたタグだけを表示します。</string>
+    <string name="artist_remove_background">均一な背景を除去</string>
+    <string name="artist_background_tolerance">背景の許容値</string>
+    <string name="artist_blend_mode">合成モード</string>
+    <string name="artist_blend_multiply">乗算</string>
+    <string name="artist_blend_screen">スクリーン</string>
+    <string name="artist_blend_darken">比較（暗）</string>
+    <string name="artist_blend_lighten">比較（明）</string>
+    <string name="artist_blend_normal">通常</string>
+    <string name="artist_background_hint">端末内で処理し元に戻せます。比較（暗）は白、スクリーンは黒を目立たなくします。複雑な背景は残る場合があります。非対応モードは無効です。</string>
+    <string name="artist_export_original">元の画像を保存</string>
+    <string name="artist_export_png">背景調整を適用したPNGを保存</string>
 </resources>

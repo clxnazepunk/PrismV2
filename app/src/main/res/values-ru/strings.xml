@@ -5043,4 +5043,15 @@
     <string name="music_moods">Настроения</string>
     <string name="music_tag_api">Ключ API Last.fm (необязательно)</string>
     <string name="music_tag_hint">Для настроений нужен необязательный ключ Last.fm в настройках. Передаются название и исполнитель. Только явные теги.</string>
+    <string name="artist_remove_background">Удалить однотонный фон</string>
+    <string name="artist_background_tolerance">Допуск фона</string>
+    <string name="artist_blend_mode">Режим наложения</string>
+    <string name="artist_blend_multiply">Умножение</string>
+    <string name="artist_blend_screen">Экран</string>
+    <string name="artist_blend_darken">Затемнение</string>
+    <string name="artist_blend_lighten">Осветление</string>
+    <string name="artist_blend_normal">Обычный</string>
+    <string name="artist_background_hint">Локально и обратимо. Затемнение скрывает белое, Экран чёрное. Сложный фон может остаться. Неподдерживаемые режимы отключены.</string>
+    <string name="artist_export_original">Скачать оригинал</string>
+    <string name="artist_export_png">Экспорт PNG с настройками фона</string>
 </resources>

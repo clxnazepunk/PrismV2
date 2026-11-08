@@ -4915,4 +4915,15 @@
     <string name="music_moods">মুড</string>
     <string name="music_tag_api">Last.fm API কী (ঐচ্ছিক)</string>
     <string name="music_tag_hint">মুডের জন্য সেটিংসে ঐচ্ছিক Last.fm কী লাগবে। গানের নাম ও শিল্পী পাঠানো হয়। শুধু স্পষ্ট ট্যাগ দেখানো হয়।</string>
+    <string name="artist_remove_background">সমান পটভূমি সরান</string>
+    <string name="artist_background_tolerance">পটভূমির সহনশীলতা</string>
+    <string name="artist_blend_mode">ব্লেন্ড মোড</string>
+    <string name="artist_blend_multiply">মাল্টিপ্লাই</string>
+    <string name="artist_blend_screen">স্ক্রিন</string>
+    <string name="artist_blend_darken">গাঢ় করুন</string>
+    <string name="artist_blend_lighten">হালকা করুন</string>
+    <string name="artist_blend_normal">স্বাভাবিক</string>
+    <string name="artist_background_hint">স্থানীয় ও ফিরিয়ে নেওয়া যায়। গাঢ় মোড সাদা এবং স্ক্রিন কালো আড়াল করে। জটিল পটভূমি থাকতে পারে। অসমর্থিত মোড বন্ধ।</string>
+    <string name="artist_export_original">আসল ছবি ডাউনলোড</string>
+    <string name="artist_export_png">পটভূমি সমন্বয়সহ PNG রপ্তানি</string>
 </resources>

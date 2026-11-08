@@ -5043,4 +5043,15 @@
     <string name="music_moods">Настрої</string>
     <string name="music_tag_api">Ключ API Last.fm (необов’язково)</string>
     <string name="music_tag_hint">Для настроїв потрібен необов’язковий ключ Last.fm у налаштуваннях. Надсилаються назва й виконавець. Лише явні теги.</string>
+    <string name="artist_remove_background">Видалити однотонне тло</string>
+    <string name="artist_background_tolerance">Допуск тла</string>
+    <string name="artist_blend_mode">Режим накладання</string>
+    <string name="artist_blend_multiply">Множення</string>
+    <string name="artist_blend_screen">Екран</string>
+    <string name="artist_blend_darken">Затемнення</string>
+    <string name="artist_blend_lighten">Освітлення</string>
+    <string name="artist_blend_normal">Звичайний</string>
+    <string name="artist_background_hint">Локально й зворотно. Затемнення приховує біле, Екран чорне. Складне тло може залишитися. Непідтримувані режими вимкнені.</string>
+    <string name="artist_export_original">Завантажити оригінал</string>
+    <string name="artist_export_png">Експорт PNG з налаштуваннями тла</string>
 </resources>

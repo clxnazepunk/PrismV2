@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -22,6 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.request.transformations
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.isSupported
+import kotlin.math.roundToInt
 import com.prism.music.R
 import com.prism.music.data.artists.*
 import androidx.compose.ui.draw.clipToBounds
@@ -88,16 +93,19 @@ internal fun ArtistMark(
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
+    val mode = artistBlend(fit.blend)
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
     Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).clickable(onClick = onEdit)) {
         AsyncImage(
-            ImageRequest.Builder(context).data(file).size(1600, 800).build(), label,
+            ImageRequest.Builder(context).data(file).size(if (fit.removeBackground) 1024 else 1600, if (fit.removeBackground) 1024 else 800)
+                .apply { if (fit.removeBackground) transformations(UniformArtistBackground(fit.backgroundTolerance)) }.build(), label,
             Modifier.fillMaxSize().graphicsLayer {
                 scaleX = fit.scale; scaleY = fit.scale
+                blendMode = mode
                 translationX = size.width * fit.x; translationY = (if (fit.headerCoordinates) canvasPixels else size.height) * fit.y
             },
             contentScale = ContentScale.Fit,
-            colorFilter = if (tint) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
+            colorFilter = if (tint && fit.blend == "normal") androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
             onSuccess = { onSuccess() }, onError = { onError() },
         )
     }
@@ -110,6 +118,7 @@ private fun ArtistLayoutEditor(
 ) {
     val slot = if (role == ArtistImageRole.LOGO) 100f else 72f
     var draft by remember(page.id, role) { mutableStateOf(current.forHeader(headerHeight.value, slot)) }
+    var toleranceUi by remember(page.id, role) { mutableStateOf(draft.backgroundTolerance.toFloat()) }
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
@@ -137,8 +146,30 @@ private fun ArtistLayoutEditor(
                     Slider(draft.x, { draft = draft.copy(x = it) }, valueRange = -1f..1f)
                     Text(tr(R.string.artist_vertical))
                     Slider(draft.y, { draft = draft.copy(y = it) }, valueRange = -1f..1f)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(draft.removeBackground, { draft = draft.copy(removeBackground = it) })
+                        Text(tr(R.string.artist_remove_background))
+                    }
+                    if (draft.removeBackground) {
+                        Text(tr(R.string.artist_background_tolerance))
+                        Slider(toleranceUi, { toleranceUi = it }, valueRange = 0f..100f,
+                            onValueChangeFinished = { draft = draft.copy(backgroundTolerance = toleranceUi.roundToInt()) })
+                    }
+                    Text(tr(R.string.artist_blend_mode), style = MaterialTheme.typography.labelLarge)
+                    for (blend in listOf("normal", "multiply", "screen", "darken", "lighten")) Row(verticalAlignment = Alignment.CenterVertically) {
+                        val supported = rawArtistBlend(blend).isSupported()
+                        RadioButton(draft.blend == blend, { draft = draft.copy(blend = blend) }, enabled = supported)
+                        Text(tr(when (blend) {
+                            "multiply" -> R.string.artist_blend_multiply
+                            "screen" -> R.string.artist_blend_screen
+                            "darken" -> R.string.artist_blend_darken
+                            "lighten" -> R.string.artist_blend_lighten
+                            else -> R.string.artist_blend_normal
+                        }), color = if (supported) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Text(tr(R.string.artist_background_hint), style = MaterialTheme.typography.bodySmall)
                     Text(tr(R.string.artist_zoom_hint), style = MaterialTheme.typography.bodySmall)
-                    PrismTextButton(onClick = { draft = ArtistImageLayout(headerCoordinates = true) }) { Text(tr(R.string.reset)) }
+                    PrismTextButton(onClick = { draft = ArtistImageLayout(headerCoordinates = true); toleranceUi = 32f }) { Text(tr(R.string.reset)) }
                 }
             }
         }
@@ -163,6 +194,27 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
     val current = entries[page.id] ?: ArtistIdentity()
     fun change(update: (ArtistIdentity) -> ArtistIdentity) { scope.launch { identities.store.update(page.id, update) } }
     var apiText by remember(api) { mutableStateOf(api) }
+    var exportFile by rememberSaveable { mutableStateOf<String?>(null) }
+    var exportName by rememberSaveable { mutableStateOf("") }
+    var exportLayout by rememberSaveable { mutableStateOf("") }
+    var exportRendered by rememberSaveable { mutableStateOf(false) }
+    val saveDocument = rememberLauncherForActivityResult(ArtistExportDocument()) { destination ->
+        val file = exportFile
+        val layout = runCatching { kotlinx.serialization.json.Json.decodeFromString(ArtistImageLayout.serializer(), exportLayout) }.getOrDefault(ArtistImageLayout())
+        val rendered = exportRendered
+        val name = exportName
+        exportFile = null
+        if (destination != null && file != null) scope.launch {
+            busy = true
+            try {
+                ArtistImageExports.write(context, identities.store, ArtistImageAsset(file, 1f), layout, destination, rendered)
+                Toast.makeText(context, tr(R.string.saved, name), Toast.LENGTH_SHORT).show()
+            }
+            catch (e: CancellationException) { throw e }
+            catch (_: Exception) { Toast.makeText(context, tr(R.string.try_again), Toast.LENGTH_SHORT).show() }
+            finally { busy = false }
+        }
+    }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) scope.launch {
             busy = true
@@ -217,6 +269,24 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
                     }
                 }
             }
+            if (shown != null) {
+                Column {
+                    PrismTextButton(onClick = {
+                        exportFile = shown.file
+                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout)
+                        exportRendered = false
+                        val request = ArtistExportRequest(ArtistImageExports.mime(shown.file), ArtistImageExports.name(page.name, kind, shown.file, false))
+                        exportName = request.name; saveDocument.launch(request)
+                    }, enabled = !busy) { Text(tr(R.string.artist_export_original)) }
+                    PrismTextButton(onClick = {
+                        exportFile = shown.file
+                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout)
+                        exportRendered = true
+                        val request = ArtistExportRequest(ArtistImageExports.mime("export.png"), ArtistImageExports.name(page.name, kind, shown.file, true))
+                        exportName = request.name; saveDocument.launch(request)
+                    }, enabled = !busy) { Text(tr(R.string.artist_export_png)) }
+                }
+            }
             if (shown != null) Row {
                 PrismTextButton(onClick = { adjusting = kind }, enabled = !busy) { Text(tr(R.string.artist_adjust)) }
                 PrismTextButton(onClick = {
@@ -261,3 +331,13 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         Text(tr(R.string.signature_style), style = MaterialTheme.typography.titleMedium)
     }
 }
+
+internal fun rawArtistBlend(id: String): BlendMode = when (id) {
+    "multiply" -> BlendMode.Multiply
+    "screen" -> BlendMode.Screen
+    "darken" -> BlendMode.Darken
+    "lighten" -> BlendMode.Lighten
+    else -> BlendMode.SrcOver
+}
+
+private fun artistBlend(id: String): BlendMode = rawArtistBlend(id).takeIf { it.isSupported() } ?: BlendMode.SrcOver

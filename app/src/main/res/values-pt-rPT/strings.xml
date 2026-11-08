@@ -4979,4 +4979,15 @@
     <string name="music_moods">Estados de espírito</string>
     <string name="music_tag_api">Chave API do Last.fm (opcional)</string>
     <string name="music_tag_hint">Os estados de espírito exigem uma chave opcional do Last.fm nas Definições. Título e artista são enviados. Só são apresentadas etiquetas explícitas.</string>
+    <string name="artist_remove_background">Remover fundo uniforme</string>
+    <string name="artist_background_tolerance">Tolerância do fundo</string>
+    <string name="artist_blend_mode">Modo de mistura</string>
+    <string name="artist_blend_multiply">Multiplicar</string>
+    <string name="artist_blend_screen">Ecrã</string>
+    <string name="artist_blend_darken">Escurecer</string>
+    <string name="artist_blend_lighten">Clarear</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local e reversível. Escurecer disfarça branco, Ecrã disfarça preto. Fundos complexos podem permanecer. Modos incompatíveis são desativados.</string>
+    <string name="artist_export_original">Transferir original</string>
+    <string name="artist_export_png">Exportar PNG com ajustes de fundo</string>
 </resources>

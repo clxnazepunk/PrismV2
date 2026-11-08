@@ -5043,4 +5043,15 @@
     <string name="music_moods">Nastroje</string>
     <string name="music_tag_api">Klucz API Last.fm (opcjonalny)</string>
     <string name="music_tag_hint">Nastroje wymagają opcjonalnego klucza Last.fm w ustawieniach. Tytuł i wykonawca są wysyłani. Wyświetlane są tylko jawne tagi.</string>
+    <string name="artist_remove_background">Usuń jednolite tło</string>
+    <string name="artist_background_tolerance">Tolerancja tła</string>
+    <string name="artist_blend_mode">Tryb mieszania</string>
+    <string name="artist_blend_multiply">Mnożenie</string>
+    <string name="artist_blend_screen">Ekran</string>
+    <string name="artist_blend_darken">Przyciemnianie</string>
+    <string name="artist_blend_lighten">Rozjaśnianie</string>
+    <string name="artist_blend_normal">Normalny</string>
+    <string name="artist_background_hint">Lokalne i odwracalne. Przyciemnianie ukrywa biel, Ekran czerń. Złożone tła mogą pozostać. Nieobsługiwane tryby wyłączone.</string>
+    <string name="artist_export_original">Pobierz oryginał</string>
+    <string name="artist_export_png">Eksportuj PNG z korektą tła</string>
 </resources>

@@ -4851,4 +4851,15 @@
     <string name="music_moods">อารมณ์</string>
     <string name="music_tag_api">คีย์ API Last.fm (ไม่บังคับ)</string>
     <string name="music_tag_hint">อารมณ์ต้องใช้คีย์ Last.fm แบบไม่บังคับในตั้งค่า โดยส่งชื่อเพลงและศิลปิน แสดงเฉพาะแท็กที่ระบุชัดเจน</string>
+    <string name="artist_remove_background">ลบพื้นหลังสีเดียว</string>
+    <string name="artist_background_tolerance">ค่าความคลาดเคลื่อนพื้นหลัง</string>
+    <string name="artist_blend_mode">โหมดผสม</string>
+    <string name="artist_blend_multiply">คูณ</string>
+    <string name="artist_blend_screen">สกรีน</string>
+    <string name="artist_blend_darken">ทำให้มืด</string>
+    <string name="artist_blend_lighten">ทำให้สว่าง</string>
+    <string name="artist_blend_normal">ปกติ</string>
+    <string name="artist_background_hint">ทำบนเครื่องและย้อนกลับได้ โหมดมืดช่วยซ่อนสีขาว สกรีนช่วยซ่อนสีดำ พื้นหลังซับซ้อนอาจยังอยู่ โหมดที่ไม่รองรับถูกปิด</string>
+    <string name="artist_export_original">ดาวน์โหลดต้นฉบับ</string>
+    <string name="artist_export_png">ส่งออก PNG พร้อมการปรับพื้นหลัง</string>
 </resources>

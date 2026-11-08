@@ -4915,4 +4915,15 @@
     <string name="music_moods">مزاج</string>
     <string name="music_tag_api">Last.fm API کلید (اختیاری)</string>
     <string name="music_tag_hint">مزاج کے لیے ترتیبات میں اختیاری Last.fm کلید درکار ہے۔ گانے کا عنوان اور فنکار بھیجے جاتے ہیں۔ صرف واضح ٹیگ دکھتے ہیں۔</string>
+    <string name="artist_remove_background">یکساں پس منظر ہٹائیں</string>
+    <string name="artist_background_tolerance">پس منظر کی برداشت</string>
+    <string name="artist_blend_mode">بلینڈ موڈ</string>
+    <string name="artist_blend_multiply">ضرب</string>
+    <string name="artist_blend_screen">اسکرین</string>
+    <string name="artist_blend_darken">گہرا کریں</string>
+    <string name="artist_blend_lighten">روشن کریں</string>
+    <string name="artist_blend_normal">عام</string>
+    <string name="artist_background_hint">مقامی اور واپس قابل تبدیلی۔ گہرا موڈ سفید، اسکرین سیاہ چھپاتا ہے۔ پیچیدہ پس منظر رہ سکتا ہے۔ غیر معاون موڈ بند ہیں۔</string>
+    <string name="artist_export_original">اصل ڈاؤن لوڈ کریں</string>
+    <string name="artist_export_png">پس منظر کی تبدیلیوں کے ساتھ PNG برآمد کریں</string>
 </resources>

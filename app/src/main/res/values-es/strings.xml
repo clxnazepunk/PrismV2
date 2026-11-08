@@ -4979,4 +4979,15 @@
     <string name="music_moods">Estados de ánimo</string>
     <string name="music_tag_api">Clave de API de Last.fm (opcional)</string>
     <string name="music_tag_hint">Los moods requieren una clave opcional de Last.fm en Ajustes. Se envían el título y el artista. Solo se muestran etiquetas explícitas.</string>
+    <string name="artist_remove_background">Quitar fondo uniforme</string>
+    <string name="artist_background_tolerance">Tolerancia del fondo</string>
+    <string name="artist_blend_mode">Modo de mezcla</string>
+    <string name="artist_blend_multiply">Multiplicar</string>
+    <string name="artist_blend_screen">Trama</string>
+    <string name="artist_blend_darken">Oscurecer</string>
+    <string name="artist_blend_lighten">Aclarar</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local y reversible. Oscurecer disimula el blanco; Trama disimula el negro. Los fondos complejos pueden permanecer. Los modos no compatibles se desactivan.</string>
+    <string name="artist_export_original">Descargar original</string>
+    <string name="artist_export_png">Exportar PNG con ajustes de fondo</string>
 </resources>

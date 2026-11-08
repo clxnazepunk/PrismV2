@@ -4979,4 +4979,15 @@
     <string name="music_moods">Humores</string>
     <string name="music_tag_api">Chave de API do Last.fm (opcional)</string>
     <string name="music_tag_hint">Os humores exigem uma chave opcional do Last.fm em Configurações. Título e artista são enviados. Apenas tags explícitas são exibidas.</string>
+    <string name="artist_remove_background">Remover fundo uniforme</string>
+    <string name="artist_background_tolerance">Tolerância do fundo</string>
+    <string name="artist_blend_mode">Modo de mesclagem</string>
+    <string name="artist_blend_multiply">Multiplicar</string>
+    <string name="artist_blend_screen">Tela</string>
+    <string name="artist_blend_darken">Escurecer</string>
+    <string name="artist_blend_lighten">Clarear</string>
+    <string name="artist_blend_normal">Normal</string>
+    <string name="artist_background_hint">Local e reversível. Escurecer disfarça branco, Tela disfarça preto. Fundos complexos podem permanecer. Modos incompatíveis ficam desativados.</string>
+    <string name="artist_export_original">Baixar original</string>
+    <string name="artist_export_png">Exportar PNG com ajustes de fundo</string>
 </resources>

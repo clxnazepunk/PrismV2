@@ -5043,4 +5043,15 @@
     <string name="music_moods">Nálady</string>
     <string name="music_tag_api">Klíč API Last.fm (volitelný)</string>
     <string name="music_tag_hint">Nálady vyžadují volitelný klíč Last.fm v nastavení. Odesílá se název skladby a interpret. Zobrazují se jen výslovné štítky.</string>
+    <string name="artist_remove_background">Odstranit jednolité pozadí</string>
+    <string name="artist_background_tolerance">Tolerance pozadí</string>
+    <string name="artist_blend_mode">Režim prolnutí</string>
+    <string name="artist_blend_multiply">Násobit</string>
+    <string name="artist_blend_screen">Závoj</string>
+    <string name="artist_blend_darken">Ztmavit</string>
+    <string name="artist_blend_lighten">Zesvětlit</string>
+    <string name="artist_blend_normal">Normální</string>
+    <string name="artist_background_hint">Místní a vratné. Ztmavení skryje bílou, závoj černou. Složité pozadí může zůstat. Nepodporované režimy jsou vypnuté.</string>
+    <string name="artist_export_original">Stáhnout originál</string>
+    <string name="artist_export_png">Exportovat PNG s úpravami pozadí</string>
 </resources>

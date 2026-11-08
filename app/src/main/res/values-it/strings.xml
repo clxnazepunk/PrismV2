@@ -4979,4 +4979,15 @@
     <string name="music_moods">Stati d’animo</string>
     <string name="music_tag_api">Chiave API Last.fm (facoltativa)</string>
     <string name="music_tag_hint">Gli stati d’animo richiedono una chiave Last.fm facoltativa nelle impostazioni. Titolo e artista vengono inviati. Solo etichette esplicite.</string>
+    <string name="artist_remove_background">Rimuovi sfondo uniforme</string>
+    <string name="artist_background_tolerance">Tolleranza sfondo</string>
+    <string name="artist_blend_mode">Metodo di fusione</string>
+    <string name="artist_blend_multiply">Moltiplica</string>
+    <string name="artist_blend_screen">Scolora</string>
+    <string name="artist_blend_darken">Scurisci</string>
+    <string name="artist_blend_lighten">Schiarisci</string>
+    <string name="artist_blend_normal">Normale</string>
+    <string name="artist_background_hint">Locale e reversibile. Scurisci nasconde il bianco, Scolora il nero. Gli sfondi complessi possono restare. Metodi non supportati disattivati.</string>
+    <string name="artist_export_original">Scarica originale</string>
+    <string name="artist_export_png">Esporta PNG con regolazioni sfondo</string>
 </resources>

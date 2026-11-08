@@ -4915,4 +4915,15 @@
     <string name="music_moods">حال‌وهوا</string>
     <string name="music_tag_api">کلید API اختیاری Last.fm</string>
     <string name="music_tag_hint">حال‌وهوا به کلید اختیاری Last.fm در تنظیمات نیاز دارد. عنوان آهنگ و هنرمند ارسال می‌شود. فقط برچسب‌های صریح نمایش می‌یابند.</string>
+    <string name="artist_remove_background">حذف پس‌زمینه یکنواخت</string>
+    <string name="artist_background_tolerance">تلورانس پس‌زمینه</string>
+    <string name="artist_blend_mode">حالت ترکیب</string>
+    <string name="artist_blend_multiply">ضرب</string>
+    <string name="artist_blend_screen">اسکرین</string>
+    <string name="artist_blend_darken">تیره کردن</string>
+    <string name="artist_blend_lighten">روشن کردن</string>
+    <string name="artist_blend_normal">عادی</string>
+    <string name="artist_background_hint">محلی و برگشت‌پذیر. تیره کردن سفید و اسکرین سیاه را پنهان می‌کند. پس‌زمینه پیچیده ممکن است باقی بماند. حالت‌های پشتیبانی‌نشده غیرفعال‌اند.</string>
+    <string name="artist_export_original">دانلود نسخه اصلی</string>
+    <string name="artist_export_png">خروجی PNG با تنظیمات پس‌زمینه</string>
 </resources>

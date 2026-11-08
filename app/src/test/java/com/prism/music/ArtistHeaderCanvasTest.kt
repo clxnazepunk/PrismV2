@@ -68,4 +68,39 @@ class ArtistHeaderCanvasTest {
         assertTrue("Image must stay inside the full page boundary", pixels[0, 0].red < 0.1f)
 
     }
+    @Test fun darkenBlendHidesWhiteMatteOverTheArtistBackground() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
+        bitmap.eraseColor(android.graphics.Color.WHITE)
+        android.graphics.Canvas(bitmap).drawCircle(12f, 12f, 5f, android.graphics.Paint().apply { color = android.graphics.Color.BLACK })
+        val file = File(context.cacheDir, "white-background-mark.png")
+        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        bitmap.recycle()
+        var loaded by mutableStateOf(false)
+        val backdrop = Color(0.3f, 0.5f, 0.8f)
+        compose.setContent {
+            CompositionLocalProvider(LocalDensity provides Density(1f)) {
+                MaterialTheme {
+                    Box(Modifier.size(300.dp).background(backdrop).clipToBounds().testTag("blend-header")) {
+                        Box(Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
+                            ArtistMark(file, "", ArtistImageLayout(4f, 0f, -0.3f, headerCoordinates = true, blend = "darken"),
+                                72.dp, canvasHeight = 300.dp, overflow = true, onSuccess = { loaded = true })
+                        }
+                    }
+                }
+            }
+        }
+        compose.waitUntil(10_000) {
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+            loaded
+        }
+        val image = compose.onNodeWithTag("blend-header").captureToImage()
+        val output = File("build/artist-header-previews").apply { mkdirs() }
+        File(output, "darken-over-background.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
+        val pixels = image.toPixelMap()
+        assertEquals(backdrop.red, pixels[70, 80].red, 0.04f)
+        assertEquals(backdrop.green, pixels[70, 80].green, 0.04f)
+        assertTrue("Dark foreground must remain visible", pixels[150, 174].red < 0.1f)
+    }
+
 }
