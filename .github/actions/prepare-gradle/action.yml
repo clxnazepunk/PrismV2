@@ -9,6 +9,8 @@ runs:
         PRISM_GRADLE_SHA256: bafd5ce9cfaea0fbccfdc8439a1ac42fbd4cd9c89dc9a988228d8a2639a58e6c
       run: |
         set -euo pipefail
+        grep -q 'gradle-9.8.0-bin.zip' gradle/wrapper/gradle-wrapper.properties
+        grep -q 'version "2.4.20"' build.gradle.kts
         export PRISM_GRADLE_ARCHIVE="${GRADLE_USER_HOME:-$HOME/.gradle}/wrapper/dists/prism-gradle-9.8.0-bin.zip"
         mkdir -p "$(dirname "$PRISM_GRADLE_ARCHIVE")"
         if ! printf '%s  %s\n' "$PRISM_GRADLE_SHA256" "$PRISM_GRADLE_ARCHIVE" | sha256sum --check --status; then
@@ -30,3 +32,23 @@ runs:
         lines.append("distributionSha256Sum=" + os.environ["PRISM_GRADLE_SHA256"])
         wrapper.write_text("\n".join(lines) + "\n")
         PY
+
+    - name: Prepare verified Kotlin compiler
+      shell: bash
+      env:
+        PRISM_KOTLIN_SHA256: cf97161430683fb9af96dc6a7017ffae1fe8737b80d12eee11f2fe3e76f8ded8
+        PRISM_KOTLIN_SHA1: 23b042894dcabe39edd0f8bd30b7be0f25fe9933
+      run: |
+        set -euo pipefail
+        compiler_dir="${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/2.4.20/$PRISM_KOTLIN_SHA1"
+        compiler="$compiler_dir/kotlin-compiler-embeddable-2.4.20.jar"
+        mkdir -p "$compiler_dir"
+        if ! printf '%s  %s\n' "$PRISM_KOTLIN_SHA256" "$compiler" | sha256sum --check --status; then
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 180 \
+            --header 'Accept: application/octet-stream' \
+            --output "$compiler.part" \
+            https://api.github.com/repos/JetBrains/kotlin/releases/assets/587891620
+          printf '%s  %s\n' "$PRISM_KOTLIN_SHA256" "$compiler.part" | sha256sum --check
+          printf '%s  %s\n' "$PRISM_KOTLIN_SHA1" "$compiler.part" | sha1sum --check
+          mv "$compiler.part" "$compiler"
+        fi
