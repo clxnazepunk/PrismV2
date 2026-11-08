@@ -423,7 +423,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
         }
 
         if (showInfo) InfoSheet(page, genre, favorite, onFavorite = toggleFavorite, onShare = { showInfo = false; sharing = true }) { showInfo = false }
-        if (showSignature) SignatureSheet(page, genre, randomFont) { showSignature = false }
+        if (showSignature) SignatureSheet(page, genre, randomFont, pageWidth, heroHeight) { showSignature = false }
     }
     // The page's own color (1.7.2): any color, or back to the photo's.
     if (pageColor) {
@@ -461,11 +461,11 @@ private fun latestRelease(s: ArtistSections): AlbumItem? {
 }
 
 @Composable
-private fun Hero(
-    page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean, height: Dp, scroll: () -> Int,
-    favorite: Boolean, onInfo: () -> Unit, onPlay: () -> Unit, onShuffle: () -> Unit, onFavorite: () -> Unit, onSignature: () -> Unit,
+internal fun ArtistHeader(
+    page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean,
+    height: Dp, scroll: () -> Int = { 0 }, onSignature: () -> Unit = {},
+    preview: Pair<com.prism.music.data.artists.ArtistImageRole, com.prism.music.data.artists.ArtistImageLayout>? = null,
 ) {
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(Modifier.fillMaxWidth().height(height)) {
             // The photo frosts over into the backdrop below (a blurred copy of it, lined up exactly).
             Box(Modifier.matchParentSize().clipToBounds().dissolveBottom(0.5f)) {
@@ -489,13 +489,14 @@ private fun Hero(
             ) {
                 Column(
                     Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(bottom = 2.dp).graphicsLayer {
+                        compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.ModulateAlpha
                         val s = scroll().toFloat()
                         translationY = s * 0.5f
                         alpha = (1f - s / (size.height * 2.2f).coerceAtLeast(1f)).coerceIn(0f, 1f)
                     },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    ArtistIdentityName(page, type, typeReady, onSignature)
+                    ArtistIdentityName(page, type, typeReady, onSignature, height, preview)
                     page.subscribers?.let {
                         Text(
                             it, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -505,6 +506,15 @@ private fun Hero(
                 }
             }
         }
+}
+
+@Composable
+private fun Hero(
+    page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean, height: Dp, scroll: () -> Int,
+    favorite: Boolean, onInfo: () -> Unit, onPlay: () -> Unit, onShuffle: () -> Unit, onFavorite: () -> Unit, onSignature: () -> Unit,
+) {
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        ArtistHeader(page, type, typeReady, height, scroll, onSignature)
         Spacer(Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
             HeroButton(PrismIcons.Info, tr(R.string.about, page.name), onClick = onInfo)
@@ -942,7 +952,7 @@ private fun InfoSheet(page: ArtistPage, genre: String?, favorite: Boolean, onFav
 
 /** Pick how this artist's name is set on their page (or leave it to Prism). Kept on this phone. */
 @Composable
-private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, onDismiss: () -> Unit) {
+private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, headerWidth: Dp, headerHeight: Dp, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val signatures by c.artistPrefs.signatures.collectAsState()
     val chosen = signatures[page.id]
@@ -961,7 +971,7 @@ private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, on
         }
         Spacer(Modifier.height(10.dp))
         LazyColumn(Modifier.heightIn(max = 560.dp), contentPadding = PaddingValues(bottom = 28.dp)) {
-            item("artist-images") { ArtistIdentityControls(page) }
+            item("artist-images") { ArtistIdentityControls(page, auto, headerWidth, headerHeight) }
             item("auto") { SignatureOption(page.name, tr(R.string.automatic, auto.label), auto, chosen == null) { c.artistPrefs.setSignature(page.id, null) } }
             items(ArtistTypography.all, key = { it.key }) { t ->
                 SignatureOption(page.name, t.label, t, chosen == t.key) { c.artistPrefs.setSignature(page.id, t.key) }

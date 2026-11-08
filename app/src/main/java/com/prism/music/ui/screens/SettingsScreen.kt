@@ -385,7 +385,7 @@ private fun SettingsPage(
             SettingsSection.DEVICES -> item { DevicesPage() }
             SettingsSection.CONNECT -> item { ConnectSettings() }
             SettingsSection.HOME -> item { HomeLibraryLook() }
-            SettingsSection.LIBRARY -> item { RecommendationsPage() }
+            SettingsSection.LIBRARY -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { RecommendationsPage(); MusicTagSettings() } }
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item { LastFmGroup() }
             SettingsSection.SPOTIFY -> item { SpotifyPage() }

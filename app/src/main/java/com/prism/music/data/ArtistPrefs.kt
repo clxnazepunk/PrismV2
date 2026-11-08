@@ -27,21 +27,29 @@ class ArtistPrefs(context: Context) {
         prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
     )
 
+    private val typographyJson = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
     private fun readTypography() = prefs.getString(TYPE, null)?.let {
-        runCatching { InnerTube.json.decodeFromString(ArtistTypographyConfig.serializer(), it).sanitized() }.getOrNull()
+        runCatching { typographyJson.decodeFromString(ArtistTypographyConfig.serializer(), it).sanitized() }.getOrNull()
     } ?: ArtistTypographyConfig()
 
     val typography = MutableStateFlow(readTypography())
+    val musicTagKey = MutableStateFlow(prefs.getString("music_tag_api_key", "").orEmpty())
+    fun setMusicTagKey(key: String) {
+        val value = key.trim()
+        prefs.edit().putString("music_tag_api_key", value).apply()
+        musicTagKey.value = value
+    }
 
     fun setTypography(value: ArtistTypographyConfig) {
         val next = value.sanitized()
-        prefs.edit().putString(TYPE, InnerTube.json.encodeToString(ArtistTypographyConfig.serializer(), next)).apply()
+        prefs.edit().putString(TYPE, typographyJson.encodeToString(ArtistTypographyConfig.serializer(), next)).apply()
         typography.value = next
     }
 
     /** Reads the saved choices again (after "Bring your Prism" merged a phone's into them, 1.8.0). */
     fun reload() {
         typography.value = readTypography()
+        musicTagKey.value = prefs.getString("music_tag_api_key", "").orEmpty()
         favorites.value = prefs.getString("favorites", null)?.let { runCatching { InnerTube.json.decodeFromString(listSerializer, it) }.getOrNull() } ?: emptyList()
         signatures.value = prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
         colors.value = prefs.all.filterKeys { it.startsWith(COL) }.mapNotNull { (k, v) -> (v as? Int)?.let { k.removePrefix(COL) to it } }.toMap()

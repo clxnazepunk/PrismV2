@@ -6,6 +6,7 @@ runs:
     - name: Prepare official Gradle distribution
       shell: bash
       env:
+        PRISM_DOWNLOAD_TOKEN: ${{ github.token }}
         PRISM_GRADLE_SHA256: bafd5ce9cfaea0fbccfdc8439a1ac42fbd4cd9c89dc9a988228d8a2639a58e6c
       run: |
         set -euo pipefail
@@ -16,6 +17,7 @@ runs:
         if ! printf '%s  %s\n' "$PRISM_GRADLE_SHA256" "$PRISM_GRADLE_ARCHIVE" | sha256sum --check --status; then
           curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 240 \
             --header 'Accept: application/octet-stream' \
+            --header "Authorization: Bearer $PRISM_DOWNLOAD_TOKEN" \
             --output "$PRISM_GRADLE_ARCHIVE.part" \
             https://api.github.com/repos/gradle/gradle-distributions/releases/assets/586068844
           printf '%s  %s\n' "$PRISM_GRADLE_SHA256" "$PRISM_GRADLE_ARCHIVE.part" | sha256sum --check

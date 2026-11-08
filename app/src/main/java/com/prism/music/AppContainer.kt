@@ -345,7 +345,7 @@ class AppContainer(val app: Application) {
     }
     /** Search by a line of the lyrics, from the box itself (1.7.6). */
     val lyricSearch = com.prism.music.data.lyrics.LyricSearch(http, ytm, db.lyricsSearch(), db.songs(), lyrics::textLines)
-    val meta = MetaRepository(http, db.meta())
+    val meta = MetaRepository(http, db.meta(), tagKey = { artistPrefs.musicTagKey.value.ifBlank { BuildConfig.LASTFM_API_KEY } })
     val canvas = com.prism.music.data.canvas.CanvasRepository(http).apply {
         hiddenPrefs = app.getSharedPreferences("canvas_hidden", android.content.Context.MODE_PRIVATE)
         savedPrefs = app.getSharedPreferences("canvas_saved", android.content.Context.MODE_PRIVATE)

@@ -10,6 +10,12 @@ data class ArtistDisplayChoice(val logo: Boolean = true, val signature: Boolean 
         val s = signature && hasSignature
         return ArtistDisplayChoice(l, s, text || (!l && !s))
     }
+    /** Keep the real combined layout when editing a visible mark; isolate only a hidden resource. */
+    fun preview(role: ArtistImageRole): ArtistDisplayChoice = when (role) {
+        ArtistImageRole.LOGO -> if (logo) this else ArtistDisplayChoice(true, false, false)
+        ArtistImageRole.SIGNATURE -> if (signature) this else ArtistDisplayChoice(false, true, false)
+    }
+
     companion object {
         fun automatic(hasLogo: Boolean, hasSignature: Boolean) =
             ArtistDisplayChoice(hasLogo, !hasLogo && hasSignature, !hasLogo && !hasSignature)
@@ -18,10 +24,19 @@ data class ArtistDisplayChoice(val logo: Boolean = true, val signature: Boolean 
 
 /** Independent of source pixel dimensions: even a tiny imported image can fill the header. */
 @Serializable
-data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Float = 0f) {
+data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Float = 0f, val headerCoordinates: Boolean = false,
+    val blend: String = "normal", val removeBackground: Boolean = false, val backgroundTolerance: Int = 32,
+) {
     fun bounded() = ArtistImageLayout(
         scale.takeIf { it.isFinite() }?.coerceIn(0.25f, 12f) ?: 1f,
         x.takeIf { it.isFinite() }?.coerceIn(-1f, 1f) ?: 0f,
         y.takeIf { it.isFinite() }?.coerceIn(-1f, 1f) ?: 0f,
+        headerCoordinates,
+        blend.takeIf { it in setOf("normal", "multiply", "screen", "darken", "lighten") } ?: "normal",
+        removeBackground, backgroundTolerance.coerceIn(0, 100),
     )
+
+    /** Preserve the position of saves made with the original small image slots. */
+    fun forHeader(headerHeight: Float, slotHeight: Float): ArtistImageLayout =
+        if (headerCoordinates) bounded() else copy(y = y * slotHeight / headerHeight.coerceAtLeast(1f), headerCoordinates = true).bounded()
 }
