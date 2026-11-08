@@ -16,10 +16,11 @@ object PlaylistSuggestions {
             !song.isEpisode && !song.isLive
 
     /** Spread the lookups across the playlist, not just its opening track. */
-    fun seeds(songs: List<Song>): List<Song> {
+    fun seeds(songs: List<Song>, round: Int = 0): List<Song> {
         val eligible = songs.filter(::eligible).distinctBy { it.id }
         if (eligible.isEmpty()) return emptyList()
-        return listOf(eligible.first(), eligible[eligible.size / 2], eligible.last())
+        val start = Math.floorMod(round, eligible.size)
+        return listOf(eligible[start], eligible[(start + eligible.size / 2) % eligible.size], eligible[(start + eligible.size - 1) % eligible.size])
             .distinctBy { it.id }.take(MAX_SEEDS)
     }
 
@@ -39,12 +40,13 @@ object PlaylistSuggestions {
      */
     suspend fun load(
         songs: List<Song>, allowed: (Song) -> Boolean = { true },
+        excluded: Set<String> = emptySet(), round: Int = 0,
         radio: suspend (Song) -> List<Song>,
     ): List<Song> {
         val candidates = ArrayList<Song>()
         var failure: Exception? = null
         var answered = false
-        for (seed in seeds(songs.filter(allowed))) {
+        for (seed in seeds(songs.filter(allowed), round)) {
             try {
                 candidates += radio(seed)
                 answered = true
@@ -55,6 +57,6 @@ object PlaylistSuggestions {
             }
         }
         if (!answered && failure != null) throw failure
-        return select(songs, candidates, allowed = allowed)
+        return select(songs, candidates, allowed = { it.id !in excluded && allowed(it) })
     }
 }

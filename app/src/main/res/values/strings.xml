@@ -4904,4 +4904,5 @@
     <string name="youtube_isnt_sending_256_kbps">YouTube isn\'t sending this account 256 kbps right now, so songs play at the usual quality</string>
     <string name="glass_on_more_of_the_screen_detail">Cards, chips, round buttons and the Undo bar</string>
     <string name="glass_on_more_of_the_screen_info">Cards and settings panels get a light falling on them and a brighter edge, chips and round buttons a brighter edge, and Frost reaches them all. They use no live blur, so they cost next to nothing, and they show on pages with a background behind them. The Undo bar is real glass while it\'s up. Performance mode turns this off. More places may follow.</string>
+    <string name="playlist_recommended_songs">Recommended songs</string>
 </resources>

@@ -38,6 +38,9 @@ internal class LocalPlaylistSuggestionsState {
     var loading by mutableStateOf(false)
     var failed by mutableStateOf(false)
     var adding by mutableStateOf<Set<String>>(emptySet())
+    var recentIds: Set<String> = emptySet()
+    var round = 0
+    val continuations = HashMap<String, String?>()
 }
 
 /** First step of playlist recommendations: local lists only, with no remote playlist writes. */
@@ -75,10 +78,14 @@ internal fun LocalPlaylistSuggestions(
             try {
                 val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
                 state.songs = withContext(Dispatchers.IO) {
-                    PlaylistSuggestions.load(snapshot, allowed = ::allowed) { seed ->
-                        c.radio(seed.id, "RDAMVM" + seed.id).songs
+                    PlaylistSuggestions.load(snapshot, allowed = ::allowed, excluded = state.recentIds, round = state.round) { seed ->
+                        val page = c.radio(seed.id, "RDAMVM" + seed.id, continuation = state.continuations[seed.id])
+                        state.continuations[seed.id] = page.continuation
+                        page.songs
                     }
                 }
+                state.round++
+                state.recentIds = (state.recentIds + state.songs.map { it.id }).toList().takeLast(100).toSet()
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
@@ -105,7 +112,12 @@ internal fun LocalPlaylistSuggestions(
 
     LaunchedEffect(playlistId) { if (!state.requested) load() }
     Column {
-        SectionHeader(tr(R.string.more_music))
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            SectionHeader(tr(R.string.playlist_recommended_songs), Modifier.weight(1f))
+            IconButton(onClick = { load() }, enabled = !state.loading, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
+                Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
+            }
+        }
         when {
             state.loading -> LoadingState()
             state.failed -> PrismTextButton(onClick = { load() }, modifier = Modifier.padding(horizontal = 16.dp)) {

@@ -4874,4 +4874,5 @@
     <string name="speed_dial_your_plays_first_info">Ang ipinapadala ng YouTube sa Prism ay ang mga tile ng website nito, na hindi katulad ng nasa app nito at hindi laging sumusunod sa pinapatugtog mo. Kapag naka-on, mauuna ang pinakamadalas mong pinatugtog sa teleponong ito sa nakaraang tatlong buwan, at pupunuin ng sa YouTube ang natitira.</string>
     <string name="youtube_no_longer_takes_this_sign_in">Hindi na tinatanggap ng YouTube ang sign-in na ito. Mag-sign out at mag-sign in ulit.</string>
     <string name="youtube_isnt_sending_256_kbps">Hindi nagpapadala ang YouTube ng 256 kbps sa account na ito ngayon, kaya sa karaniwang kalidad tumutugtog ang mga kanta</string>
+    <string name="playlist_recommended_songs">Mga inirerekomendang kanta</string>
 </resources>

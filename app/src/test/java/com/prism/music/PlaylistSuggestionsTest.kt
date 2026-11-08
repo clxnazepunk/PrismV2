@@ -87,6 +87,26 @@ class PlaylistSuggestionsTest {
         assertEquals(listOf(song("new")), out)
     }
 
+    @Test fun refreshLeavesOutPreviouslyShownSongsAndRotatesSeeds() = runBlocking {
+        val playlist = (0..8).map { song("seed" + it) }
+        val first = PlaylistSuggestions.load(playlist) {
+            (0..29).map { song("new" + it) }
+        }
+        val second = PlaylistSuggestions.load(playlist, excluded = first.map { it.id }.toSet(), round = 1) {
+            (0..29).map { song("new" + it) }
+        }
+        assertEquals(10, second.size)
+        assertTrue(first.map { it.id }.toSet().intersect(second.map { it.id }.toSet()).isEmpty())
+        assertNotEquals(PlaylistSuggestions.seeds(playlist), PlaylistSuggestions.seeds(playlist, 1))
+    }
+
+    @Test fun refreshDoesNotPretendThereAreFreshResultsWhenRadioIsExhausted() = runBlocking {
+        val out = PlaylistSuggestions.load(listOf(song("seed")), excluded = setOf("old")) {
+            listOf(song("seed"), song("old"))
+        }
+        assertTrue(out.isEmpty())
+    }
+
     @Test fun addingSuggestionAppendsAndSurvivesReopening() {
         val dir = Files.createTempDirectory("prism-suggestions").toFile()
         try {
