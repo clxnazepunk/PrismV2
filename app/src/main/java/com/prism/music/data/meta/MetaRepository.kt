@@ -689,7 +689,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     }
 
     private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
-        .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\\\p{L}\\\\p{N}]+"), " ").trim()
+        .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
     private fun songTagsKey(song: Song) = "songtags1:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
 
