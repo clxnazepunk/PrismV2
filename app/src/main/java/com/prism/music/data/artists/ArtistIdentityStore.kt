@@ -139,7 +139,7 @@ class ArtistIdentityStore(val dir: File) {
                 "image/png" -> "png"
                 "image/jpeg" -> "jpg"
                 "image/webp" -> "webp"
-                else -> error("Unsupported artist image")
+                else -> throw IllegalArgumentException("Unsupported artist image")
             }
             return ext to (bounds.outWidth.toFloat() / bounds.outHeight).coerceIn(0.05f, 30f)
         }

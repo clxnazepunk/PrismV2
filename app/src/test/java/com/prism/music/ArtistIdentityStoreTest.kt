@@ -12,6 +12,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = android.app.Application::class)
+@org.robolectric.annotation.GraphicsMode(org.robolectric.annotation.GraphicsMode.Mode.NATIVE)
 class ArtistIdentityStoreTest {
     private val svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><path d="M0 0L20 20"/></svg>""".toByteArray()
     private fun directory() = Files.createTempDirectory("prism-artists").toFile()
@@ -88,11 +89,24 @@ class ArtistIdentityStoreTest {
     @Test fun pngIsKeptWithoutCroppingOrReencoding(): Unit = runBlocking {
         val dir = directory()
         try {
-            val png = java.util.Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=")
+            val bitmap = android.graphics.Bitmap.createBitmap(4, 2, android.graphics.Bitmap.Config.ARGB_8888)
+            bitmap.setPixel(1, 0, android.graphics.Color.RED)
+            val png = java.io.ByteArrayOutputStream().use { out ->
+                bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
+                out.toByteArray()
+            }
+            bitmap.recycle()
             val store = ArtistIdentityStore(dir)
             val asset = store.install("artist", ArtistImageRole.LOGO, png, true)
             assertTrue(asset.file.endsWith(".png"))
             assertArrayEquals(png, store.file(asset)!!.readBytes())
+            assertEquals(2f, asset.aspect, 0.0001f)
+            val decoded = android.graphics.BitmapFactory.decodeFile(store.file(asset)!!.path)
+            assertEquals(4, decoded.width)
+            assertEquals(2, decoded.height)
+            assertEquals(android.graphics.Color.TRANSPARENT, decoded.getPixel(0, 0))
+            assertEquals(android.graphics.Color.RED, decoded.getPixel(1, 0))
+            decoded.recycle()
         } finally { dir.deleteRecursively() }
     }
 
