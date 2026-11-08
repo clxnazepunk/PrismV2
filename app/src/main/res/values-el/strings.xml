@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Έξυπνη τυπογραφία</string>
     <string name="artist_font_original">Αρχικό αυτόματο στιλ Prism</string>
     <string name="artist_font_fallback">Προεπιλεγμένη και εφεδρική γραμματοσειρά</string>
-    <string name="artist_font_genres_hint">Τα ίδια 16 είδη των λιστών από Deezer και iTunes. Rap στο Hip-hop· Salsa, Cumbia και Norteño στο Pop. Άγνωστα είδη χρησιμοποιούν την προεπιλογή.</string>
+    <string name="artist_font_genres_hint">Γενικά και αναγνωρισμένα τοπικά είδη χωρίς διαθέσεις. Χωρίς δεδομένα ισχύει η προεπιλεγμένη γραμματοσειρά.</string>
     <string name="artist_font_add_group">Προσθήκη νέας ομάδας</string>
     <string name="artist_font_used">Χρησιμοποιείται σε άλλη ομάδα</string>
+    <string name="detail_salsa">Σάλσα</string>
+    <string name="detail_cumbia">Κούμπια</string>
+    <string name="detail_regional_mexican">Τοπική μεξικανική</string>
+    <string name="detail_ballad">Μπαλάντα</string>
+    <string name="detail_reggaeton">Ρεγκετόν</string>
+    <string name="detail_latin">Λάτιν</string>
+    <string name="mood_romantic">Ρομαντικό</string>
+    <string name="mood_sad">Λυπημένο</string>
+    <string name="mood_happy">Χαρούμενο</string>
+    <string name="mood_party">Πάρτι</string>
+    <string name="music_moods">Διαθέσεις</string>
+    <string name="music_tag_api">Κλειδί API Last.fm (προαιρετικό)</string>
+    <string name="music_tag_hint">Οι διαθέσεις χρειάζονται προαιρετικό κλειδί Last.fm στις ρυθμίσεις. Στέλνονται τίτλος και καλλιτέχνης. Εμφανίζονται μόνο ρητές ετικέτες.</string>
 </resources>

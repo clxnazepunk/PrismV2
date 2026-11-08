@@ -4967,7 +4967,20 @@
     <string name="artist_font_smart">Tipografia inteligente</string>
     <string name="artist_font_original">Estilo automático original do Prism</string>
     <string name="artist_font_fallback">Tipo de letra predefinido e alternativo</string>
-    <string name="artist_font_genres_hint">Os mesmos 16 géneros das listas, estimados com Deezer e iTunes. Rap em Hip-hop; Salsa, Cumbia e Norteño atualmente em Pop. Género desconhecido usa a predefinição.</string>
+    <string name="artist_font_genres_hint">Géneros gerais e regionais reconhecidos, sem estados de espírito. Sem dados, usa o tipo de letra predefinido.</string>
     <string name="artist_font_add_group">Adicionar novo grupo</string>
     <string name="artist_font_used">Já utilizado noutro grupo</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional mexicana</string>
+    <string name="detail_ballad">Balada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latina</string>
+    <string name="mood_romantic">Romântico</string>
+    <string name="mood_sad">Triste</string>
+    <string name="mood_happy">Alegre</string>
+    <string name="mood_party">Festa</string>
+    <string name="music_moods">Estados de espírito</string>
+    <string name="music_tag_api">Chave API do Last.fm (opcional)</string>
+    <string name="music_tag_hint">Os estados de espírito exigem uma chave opcional do Last.fm nas Definições. Título e artista são enviados. Só são apresentadas etiquetas explícitas.</string>
 </resources>

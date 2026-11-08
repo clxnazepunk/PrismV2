@@ -4967,7 +4967,20 @@
     <string name="artist_font_smart">Tipografie inteligentă</string>
     <string name="artist_font_original">Stilul automat original Prism</string>
     <string name="artist_font_fallback">Font implicit și de rezervă</string>
-    <string name="artist_font_genres_hint">Aceleași 16 genuri ca în playlisturi, estimate prin Deezer și iTunes. Rap este Hip-hop; Salsa, Cumbia și Norteño sunt momentan Pop. Gen necunoscut: font implicit.</string>
+    <string name="artist_font_genres_hint">Genuri generale și regionale recunoscute, fără stări. Fără date se folosește fontul implicit.</string>
     <string name="artist_font_add_group">Adaugă grup nou</string>
     <string name="artist_font_used">Deja folosit în alt grup</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional mexican</string>
+    <string name="detail_ballad">Baladă</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantic</string>
+    <string name="mood_sad">Trist</string>
+    <string name="mood_happy">Vesel</string>
+    <string name="mood_party">Petrecere</string>
+    <string name="music_moods">Stări</string>
+    <string name="music_tag_api">Cheie API Last.fm (opțională)</string>
+    <string name="music_tag_hint">Stările necesită o cheie Last.fm opțională în Setări. Titlul și artistul sunt trimise. Se afișează doar etichete explicite.</string>
 </resources>

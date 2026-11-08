@@ -4839,7 +4839,20 @@
     <string name="artist_font_smart">スマート書体</string>
     <string name="artist_font_original">Prism本来の自動スタイル</string>
     <string name="artist_font_fallback">標準および代替の書体</string>
-    <string name="artist_font_genres_hint">DeezerとiTunesから推定するプレイリストと同じ16ジャンルです。RapはHip-hop、Salsa・Cumbia・Norteñoは現在Popに分類されます。不明な場合は標準書体です。</string>
+    <string name="artist_font_genres_hint">一般的なジャンルと対応する地域音楽を使用し、ムードは除外します。データがなければ標準書体です。</string>
     <string name="artist_font_add_group">新しいグループを追加</string>
     <string name="artist_font_used">他のグループで使用中</string>
+    <string name="detail_salsa">サルサ</string>
+    <string name="detail_cumbia">クンビア</string>
+    <string name="detail_regional_mexican">メキシコ地域音楽</string>
+    <string name="detail_ballad">バラード</string>
+    <string name="detail_reggaeton">レゲトン</string>
+    <string name="detail_latin">ラテン</string>
+    <string name="mood_romantic">ロマンチック</string>
+    <string name="mood_sad">悲しい</string>
+    <string name="mood_happy">楽しい</string>
+    <string name="mood_party">パーティー</string>
+    <string name="music_moods">ムード</string>
+    <string name="music_tag_api">Last.fm APIキー（任意）</string>
+    <string name="music_tag_hint">ムードには設定で任意のLast.fmキーが必要です。曲名とアーティストを送信し、明示されたタグだけを表示します。</string>
 </resources>

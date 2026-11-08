@@ -223,11 +223,15 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
         value = true to withTimeoutOrNull(1_500) { runCatching { c.meta.artistGenre(page.name) }.getOrNull() }
     }
     val (typeReady, genre) = typeInfo
+    val detailedGenres by produceState(listOfNotNull(genre), page.id, genre) {
+        value = c.meta.cachedArtistTags(page.name, genre)
+        c.meta.refined.collect { artist -> if (artist == page.name) value = c.meta.cachedArtistTags(page.name, genre) }
+    }
     val signatures by c.artistPrefs.signatures.collectAsState()
     val typography by c.artistPrefs.typography.collectAsState()
     val randomFont = remember(page.id) { kotlin.random.Random.nextInt() }
-    val type = remember(page.id, genre, signatures[page.id], typography, randomFont) {
-        val key = signatures[page.id] ?: typography.fontKey(genre, randomFont, ArtistTypography.all.map { it.key })
+    val type = remember(page.id, genre, detailedGenres, signatures[page.id], typography, randomFont) {
+        val key = signatures[page.id] ?: typography.fontForGenres(detailedGenres, randomFont, ArtistTypography.all.map { it.key })
         ArtistTypography.byKey(key) ?: ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers))
     }
 
@@ -423,7 +427,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
         }
 
         if (showInfo) InfoSheet(page, genre, favorite, onFavorite = toggleFavorite, onShare = { showInfo = false; sharing = true }) { showInfo = false }
-        if (showSignature) SignatureSheet(page, genre, randomFont, pageWidth, heroHeight) { showSignature = false }
+        if (showSignature) SignatureSheet(page, genre, randomFont, detailedGenres, pageWidth, heroHeight) { showSignature = false }
     }
     // The page's own color (1.7.2): any color, or back to the photo's.
     if (pageColor) {
@@ -952,13 +956,13 @@ private fun InfoSheet(page: ArtistPage, genre: String?, favorite: Boolean, onFav
 
 /** Pick how this artist's name is set on their page (or leave it to Prism). Kept on this phone. */
 @Composable
-private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, headerWidth: Dp, headerHeight: Dp, onDismiss: () -> Unit) {
+private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, knownGenres: List<String>, headerWidth: Dp, headerHeight: Dp, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val signatures by c.artistPrefs.signatures.collectAsState()
     val chosen = signatures[page.id]
     val typography by c.artistPrefs.typography.collectAsState()
-    val auto = remember(page.id, genre, typography, randomFont) {
-        ArtistTypography.byKey(typography.fontKey(genre, randomFont, ArtistTypography.all.map { it.key }))
+    val auto = remember(page.id, genre, knownGenres, typography, randomFont) {
+        ArtistTypography.byKey(typography.fontForGenres(knownGenres, randomFont, ArtistTypography.all.map { it.key }))
             ?: ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers))
     }
     PrismSheet(onDismiss = onDismiss) {

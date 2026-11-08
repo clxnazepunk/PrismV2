@@ -4839,7 +4839,20 @@
     <string name="artist_font_smart">แบบอักษรอัจฉริยะ</string>
     <string name="artist_font_original">รูปแบบอัตโนมัติดั้งเดิมของ Prism</string>
     <string name="artist_font_fallback">แบบอักษรเริ่มต้นและสำรอง</string>
-    <string name="artist_font_genres_hint">ใช้ 16 แนวเพลงเดียวกับเพลย์ลิสต์จาก Deezer และ iTunes โดย Rap อยู่ใน Hip-hop ส่วน Salsa, Cumbia และ Norteño อยู่ใน Pop หากไม่ทราบแนวเพลงจะใช้แบบอักษรเริ่มต้น</string>
+    <string name="artist_font_genres_hint">ใช้แนวเพลงทั่วไปและท้องถิ่นที่รู้จัก ไม่รวมอารมณ์ หากไม่มีข้อมูลจะใช้แบบอักษรเริ่มต้น</string>
     <string name="artist_font_add_group">เพิ่มกลุ่มใหม่</string>
     <string name="artist_font_used">ใช้ในกลุ่มอื่นแล้ว</string>
+    <string name="detail_salsa">ซัลซา</string>
+    <string name="detail_cumbia">คุมเบีย</string>
+    <string name="detail_regional_mexican">เพลงท้องถิ่นเม็กซิกัน</string>
+    <string name="detail_ballad">บัลลาด</string>
+    <string name="detail_reggaeton">เรเกตอน</string>
+    <string name="detail_latin">ละติน</string>
+    <string name="mood_romantic">โรแมนติก</string>
+    <string name="mood_sad">เศร้า</string>
+    <string name="mood_happy">มีความสุข</string>
+    <string name="mood_party">ปาร์ตี้</string>
+    <string name="music_moods">อารมณ์</string>
+    <string name="music_tag_api">คีย์ API Last.fm (ไม่บังคับ)</string>
+    <string name="music_tag_hint">อารมณ์ต้องใช้คีย์ Last.fm แบบไม่บังคับในตั้งค่า โดยส่งชื่อเพลงและศิลปิน แสดงเฉพาะแท็กที่ระบุชัดเจน</string>
 </resources>

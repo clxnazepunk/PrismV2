@@ -5031,7 +5031,20 @@
     <string name="artist_font_smart">Умные шрифты</string>
     <string name="artist_font_original">Исходный автоматический стиль Prism</string>
     <string name="artist_font_fallback">Основной и резервный шрифт</string>
-    <string name="artist_font_genres_hint">Те же 16 жанров плейлистов по Deezer и iTunes. Rap входит в Hip-hop; Salsa, Cumbia и Norteño сейчас в Pop. Неизвестный жанр использует основной шрифт.</string>
+    <string name="artist_font_genres_hint">Общие и распознанные региональные жанры без настроений. Без данных используется основной шрифт.</string>
     <string name="artist_font_add_group">Добавить группу</string>
     <string name="artist_font_used">Уже используется в другой группе</string>
+    <string name="detail_salsa">Сальса</string>
+    <string name="detail_cumbia">Кумбия</string>
+    <string name="detail_regional_mexican">Региональная мексиканская</string>
+    <string name="detail_ballad">Баллада</string>
+    <string name="detail_reggaeton">Реггетон</string>
+    <string name="detail_latin">Латино</string>
+    <string name="mood_romantic">Романтика</string>
+    <string name="mood_sad">Грусть</string>
+    <string name="mood_happy">Радость</string>
+    <string name="mood_party">Вечеринка</string>
+    <string name="music_moods">Настроения</string>
+    <string name="music_tag_api">Ключ API Last.fm (необязательно)</string>
+    <string name="music_tag_hint">Для настроений нужен необязательный ключ Last.fm в настройках. Передаются название и исполнитель. Только явные теги.</string>
 </resources>

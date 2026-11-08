@@ -4967,7 +4967,20 @@
     <string name="artist_font_smart">טיפוגרפיה חכמה</string>
     <string name="artist_font_original">הסגנון האוטומטי המקורי של Prism</string>
     <string name="artist_font_fallback">גופן ברירת מחדל וחלופי</string>
-    <string name="artist_font_genres_hint">אותם 16 ז׳אנרים של הפלייליסטים לפי Deezer ו-iTunes. ראפ משויך להיפ הופ; סלסה, קומביה ונורטניו לפופ. ז׳אנר לא ידוע משתמש בגופן ברירת המחדל.</string>
+    <string name="artist_font_genres_hint">ז׳אנרים כלליים ואזוריים מזוהים ללא מצבי רוח. בלי נתונים משמש גופן ברירת המחדל.</string>
     <string name="artist_font_add_group">הוספת קבוצה חדשה</string>
     <string name="artist_font_used">כבר בשימוש בקבוצה אחרת</string>
+    <string name="detail_salsa">סלסה</string>
+    <string name="detail_cumbia">קומביה</string>
+    <string name="detail_regional_mexican">מקסיקני אזורי</string>
+    <string name="detail_ballad">בלדה</string>
+    <string name="detail_reggaeton">רגאטון</string>
+    <string name="detail_latin">לטיני</string>
+    <string name="mood_romantic">רומנטי</string>
+    <string name="mood_sad">עצוב</string>
+    <string name="mood_happy">שמח</string>
+    <string name="mood_party">מסיבה</string>
+    <string name="music_moods">מצבי רוח</string>
+    <string name="music_tag_api">מפתח API של Last.fm (אופציונלי)</string>
+    <string name="music_tag_hint">מצבי רוח דורשים מפתח Last.fm אופציונלי בהגדרות. שם השיר והאמן נשלחים. מוצגות רק תגיות מפורשות.</string>
 </resources>

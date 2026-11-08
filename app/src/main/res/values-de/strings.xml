@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Intelligente Typografie</string>
     <string name="artist_font_original">Ursprünglicher automatischer Prism-Stil</string>
     <string name="artist_font_fallback">Standard- und Ersatzschrift</string>
-    <string name="artist_font_genres_hint">Die gleichen 16 Playlist-Genres, geschätzt mit Deezer und iTunes. Rap zählt zu Hip-hop; Salsa, Cumbia und Norteño derzeit zu Pop. Unbekannte Genres nutzen die Standardschrift.</string>
+    <string name="artist_font_genres_hint">Allgemeine und erkannte regionale Genres ohne Stimmungen. Ohne Daten gilt die Standardschrift.</string>
     <string name="artist_font_add_group">Neue Gruppe hinzufügen</string>
     <string name="artist_font_used">Bereits in anderer Gruppe verwendet</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional Mexican</string>
+    <string name="detail_ballad">Ballade</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantisch</string>
+    <string name="mood_sad">Traurig</string>
+    <string name="mood_happy">Fröhlich</string>
+    <string name="mood_party">Party</string>
+    <string name="music_moods">Stimmungen</string>
+    <string name="music_tag_api">Last.fm-API-Schlüssel (optional)</string>
+    <string name="music_tag_hint">Stimmungen benötigen einen optionalen Last.fm-Schlüssel in den Einstellungen. Titel und Künstler werden gesendet. Nur ausdrückliche Tags werden angezeigt.</string>
 </resources>

@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Intelligens tipográfia</string>
     <string name="artist_font_original">Eredeti automatikus Prism-stílus</string>
     <string name="artist_font_fallback">Alapértelmezett és tartalék betűtípus</string>
-    <string name="artist_font_genres_hint">A lejátszási listák 16 műfaja Deezer és iTunes alapján. Rap: Hip-hop; Salsa, Cumbia és Norteño jelenleg Pop. Ismeretlen műfajnál alapértelmezett betűtípus.</string>
+    <string name="artist_font_genres_hint">Általános és felismert regionális műfajok hangulatok nélkül. Adat nélkül alapértelmezett betűtípus.</string>
     <string name="artist_font_add_group">Új csoport hozzáadása</string>
     <string name="artist_font_used">Másik csoport már használja</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regionális mexikói</string>
+    <string name="detail_ballad">Ballada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantikus</string>
+    <string name="mood_sad">Szomorú</string>
+    <string name="mood_happy">Vidám</string>
+    <string name="mood_party">Buli</string>
+    <string name="music_moods">Hangulatok</string>
+    <string name="music_tag_api">Last.fm API-kulcs (opcionális)</string>
+    <string name="music_tag_hint">A hangulatokhoz opcionális Last.fm-kulcs kell a beállításokban. A számcím és előadó elküldésre kerül. Csak kifejezett címkék jelennek meg.</string>
 </resources>

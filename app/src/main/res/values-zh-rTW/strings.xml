@@ -4839,7 +4839,20 @@
     <string name="artist_font_smart">智慧字體</string>
     <string name="artist_font_original">Prism原有自動樣式</string>
     <string name="artist_font_fallback">預設及備用字體</string>
-    <string name="artist_font_genres_hint">使用與歌單相同的16類曲風，依據Deezer和iTunes估計。Rap歸入Hip-hop；Salsa、Cumbia和Norteño目前歸入Pop。未知或未分組曲風使用預設字體。</string>
+    <string name="artist_font_genres_hint">使用常見及已識別的地區曲風，不含心情。缺少資料時使用預設字體。</string>
     <string name="artist_font_add_group">新增分組</string>
     <string name="artist_font_used">已用於其他分組</string>
+    <string name="detail_salsa">薩爾薩</string>
+    <string name="detail_cumbia">昆比亞</string>
+    <string name="detail_regional_mexican">墨西哥地區音樂</string>
+    <string name="detail_ballad">抒情歌</string>
+    <string name="detail_reggaeton">雷鬼頓</string>
+    <string name="detail_latin">拉丁</string>
+    <string name="mood_romantic">浪漫</string>
+    <string name="mood_sad">悲傷</string>
+    <string name="mood_happy">快樂</string>
+    <string name="mood_party">派對</string>
+    <string name="music_moods">心情</string>
+    <string name="music_tag_api">Last.fm API金鑰（選填）</string>
+    <string name="music_tag_hint">心情需要在設定中提供選填的Last.fm金鑰。會傳送歌名和藝人，僅顯示明確標籤。</string>
 </resources>

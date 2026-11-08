@@ -4933,7 +4933,20 @@
     <string name="artist_font_smart">Smart typography</string>
     <string name="artist_font_original">Original Prism automatic style</string>
     <string name="artist_font_fallback">Default font and fallback</string>
-    <string name="artist_font_genres_hint">Uses the same 16 broad genres as playlists, estimated from Deezer and iTunes. Rap is Hip-hop; Salsa, Cumbia and Norteño currently fall under Pop. Unknown or unassigned genres use the default font.</string>
+    <string name="artist_font_genres_hint">Uses broad genres and supported regional styles, without moods. Missing data uses the default font.</string>
     <string name="artist_font_add_group">Add new group</string>
     <string name="artist_font_used">Already used in another group</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional Mexican</string>
+    <string name="detail_ballad">Ballad</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantic</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_happy">Happy</string>
+    <string name="mood_party">Party</string>
+    <string name="music_moods">Moods</string>
+    <string name="music_tag_api">Last.fm API key (optional)</string>
+    <string name="music_tag_hint">Moods need an optional Last.fm key in Settings. Song title and artist are sent there. Only explicit tags are shown.</string>
 </resources>

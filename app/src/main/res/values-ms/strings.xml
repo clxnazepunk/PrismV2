@@ -4839,7 +4839,20 @@
     <string name="artist_font_smart">Tipografi pintar</string>
     <string name="artist_font_original">Gaya automatik asal Prism</string>
     <string name="artist_font_fallback">Fon lalai dan sandaran</string>
-    <string name="artist_font_genres_hint">16 genre senarai main yang sama daripada Deezer dan iTunes. Rap dalam Hip-hop; Salsa, Cumbia dan Norteño kini dalam Pop. Genre tidak diketahui menggunakan fon lalai.</string>
+    <string name="artist_font_genres_hint">Genre umum dan serantau yang dikenali tanpa suasana. Tanpa data menggunakan fon lalai.</string>
     <string name="artist_font_add_group">Tambah kumpulan baharu</string>
     <string name="artist_font_used">Sudah digunakan kumpulan lain</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Serantau Mexico</string>
+    <string name="detail_ballad">Balada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantik</string>
+    <string name="mood_sad">Sedih</string>
+    <string name="mood_happy">Gembira</string>
+    <string name="mood_party">Parti</string>
+    <string name="music_moods">Suasana</string>
+    <string name="music_tag_api">Kunci API Last.fm (pilihan)</string>
+    <string name="music_tag_hint">Suasana memerlukan kunci Last.fm pilihan dalam Tetapan. Tajuk dan artis dihantar. Hanya tag jelas dipaparkan.</string>
 </resources>

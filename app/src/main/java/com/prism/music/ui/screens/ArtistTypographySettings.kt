@@ -12,6 +12,7 @@ import com.prism.music.R
 import com.prism.music.tr
 import com.prism.music.data.*
 import com.prism.music.data.meta.Genres
+import com.prism.music.data.meta.MusicTags
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.components.SignatureSample
 import com.prism.music.ui.theme.ArtistTypography
@@ -44,7 +45,7 @@ internal fun ArtistTypographySettings() {
             Text(tr(R.string.artist_font_genres_hint), style = MaterialTheme.typography.bodySmall)
             for (group in config.groups) {
                 Column {
-                    Text(group.genres.joinToString { Genres.shown(it) }, style = MaterialTheme.typography.bodyMedium)
+                    Text(group.genres.joinToString { MusicTags.shown(it) }, style = MaterialTheme.typography.bodyMedium)
                     Text(ArtistTypography.byKey(group.font)?.label ?: ArtistTypography.standard.label,
                         style = MaterialTheme.typography.bodySmall)
                     Row {
@@ -54,7 +55,7 @@ internal fun ArtistTypographySettings() {
                 }
             }
             PrismTextButton(onClick = { editing = ArtistFontGroup(UUID.randomUUID().toString(), emptySet(), config.fallback) },
-                enabled = config.groups.flatMap { it.genres }.toSet().size < Genres.all.size) {
+                enabled = config.groups.flatMap { it.genres }.toSet().size < MusicTags.typographyGenres.size) {
                 Text(tr(R.string.artist_font_add_group))
             }
         }
@@ -105,7 +106,7 @@ private fun ArtistFontGroupEditor(
                     Checkbox(genre in genres, { selected -> genres = if (selected) genres + genre else genres - genre },
                         enabled = genre !in used)
                     Column {
-                        Text(Genres.shown(genre), color = if (genre in used) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface)
+                        Text(MusicTags.shown(genre), color = if (genre in used) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface)
                         if (genre in used) Text(tr(R.string.artist_font_used), style = MaterialTheme.typography.labelSmall)
                     }
                 }

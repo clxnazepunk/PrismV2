@@ -4967,7 +4967,20 @@
     <string name="artist_font_smart">Tipografia inteligente</string>
     <string name="artist_font_original">Estilo automático original do Prism</string>
     <string name="artist_font_fallback">Fonte padrão e alternativa</string>
-    <string name="artist_font_genres_hint">Os mesmos 16 gêneros das playlists, estimados com Deezer e iTunes. Rap fica em Hip-hop; Salsa, Cumbia e Norteño atualmente em Pop. Gênero desconhecido usa a fonte padrão.</string>
+    <string name="artist_font_genres_hint">Gêneros gerais e regionais reconhecidos, sem humores. Sem dados, usa a fonte padrão.</string>
     <string name="artist_font_add_group">Adicionar novo grupo</string>
     <string name="artist_font_used">Já usado em outro grupo</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional mexicana</string>
+    <string name="detail_ballad">Balada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latina</string>
+    <string name="mood_romantic">Romântico</string>
+    <string name="mood_sad">Triste</string>
+    <string name="mood_happy">Alegre</string>
+    <string name="mood_party">Festa</string>
+    <string name="music_moods">Humores</string>
+    <string name="music_tag_api">Chave de API do Last.fm (opcional)</string>
+    <string name="music_tag_hint">Os humores exigem uma chave opcional do Last.fm em Configurações. Título e artista são enviados. Apenas tags explícitas são exibidas.</string>
 </resources>

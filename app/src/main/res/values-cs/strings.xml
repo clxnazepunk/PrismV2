@@ -5031,7 +5031,20 @@
     <string name="artist_font_smart">Chytré písmo</string>
     <string name="artist_font_original">Původní automatický styl Prism</string>
     <string name="artist_font_fallback">Výchozí a náhradní písmo</string>
-    <string name="artist_font_genres_hint">Stejných 16 žánrů jako u playlistů, odhad z Deezer a iTunes. Rap je Hip-hop; Salsa, Cumbia a Norteño spadají pod Pop. Neznámý žánr použije výchozí písmo.</string>
+    <string name="artist_font_genres_hint">Obecné a rozpoznané regionální žánry bez nálad. Bez dat se použije výchozí písmo.</string>
     <string name="artist_font_add_group">Přidat novou skupinu</string>
     <string name="artist_font_used">Použito v jiné skupině</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regionální mexická</string>
+    <string name="detail_ballad">Balada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latinská</string>
+    <string name="mood_romantic">Romantická</string>
+    <string name="mood_sad">Smutná</string>
+    <string name="mood_happy">Veselá</string>
+    <string name="mood_party">Párty</string>
+    <string name="music_moods">Nálady</string>
+    <string name="music_tag_api">Klíč API Last.fm (volitelný)</string>
+    <string name="music_tag_hint">Nálady vyžadují volitelný klíč Last.fm v nastavení. Odesílá se název skladby a interpret. Zobrazují se jen výslovné štítky.</string>
 </resources>

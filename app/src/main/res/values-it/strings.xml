@@ -4967,7 +4967,20 @@
     <string name="artist_font_smart">Tipografia intelligente</string>
     <string name="artist_font_original">Stile automatico originale di Prism</string>
     <string name="artist_font_fallback">Carattere predefinito e alternativo</string>
-    <string name="artist_font_genres_hint">Gli stessi 16 generi delle playlist, stimati da Deezer e iTunes. Rap è Hip-hop; Salsa, Cumbia e Norteño ora sono Pop. Generi sconosciuti usano il carattere predefinito.</string>
+    <string name="artist_font_genres_hint">Generi generali e regionali riconosciuti, senza stati d’animo. Senza dati si usa il carattere predefinito.</string>
     <string name="artist_font_add_group">Aggiungi gruppo</string>
     <string name="artist_font_used">Già usato in un altro gruppo</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regionale messicana</string>
+    <string name="detail_ballad">Ballata</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latina</string>
+    <string name="mood_romantic">Romantico</string>
+    <string name="mood_sad">Triste</string>
+    <string name="mood_happy">Allegro</string>
+    <string name="mood_party">Festa</string>
+    <string name="music_moods">Stati d’animo</string>
+    <string name="music_tag_api">Chiave API Last.fm (facoltativa)</string>
+    <string name="music_tag_hint">Gli stati d’animo richiedono una chiave Last.fm facoltativa nelle impostazioni. Titolo e artista vengono inviati. Solo etichette esplicite.</string>
 </resources>

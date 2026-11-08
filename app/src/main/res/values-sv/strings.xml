@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Smart typografi</string>
     <string name="artist_font_original">Prisms ursprungliga automatiska stil</string>
     <string name="artist_font_fallback">Standardtypsnitt och reserv</string>
-    <string name="artist_font_genres_hint">Samma 16 spellistegenrer från Deezer och iTunes. Rap hör till Hip-hop; Salsa, Cumbia och Norteño hör för närvarande till Pop. Okänd genre använder standardtypsnitt.</string>
+    <string name="artist_font_genres_hint">Allmänna och kända regionala genrer utan stämningar. Utan data används standardtypsnittet.</string>
     <string name="artist_font_add_group">Lägg till ny grupp</string>
     <string name="artist_font_used">Används redan i annan grupp</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regional mexikansk</string>
+    <string name="detail_ballad">Ballad</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantisk</string>
+    <string name="mood_sad">Sorgsen</string>
+    <string name="mood_happy">Glad</string>
+    <string name="mood_party">Fest</string>
+    <string name="music_moods">Stämningar</string>
+    <string name="music_tag_api">Last.fm API-nyckel (valfri)</string>
+    <string name="music_tag_hint">Stämningar kräver en valfri Last.fm-nyckel i Inställningar. Titel och artist skickas. Endast uttryckliga taggar visas.</string>
 </resources>

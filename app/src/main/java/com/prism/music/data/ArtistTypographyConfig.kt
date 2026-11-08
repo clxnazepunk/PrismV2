@@ -1,6 +1,7 @@
 package com.prism.music.data
 
 import com.prism.music.data.meta.Genres
+import com.prism.music.data.meta.MusicTags
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,7 +21,7 @@ data class ArtistTypographyConfig(
         val claimed = mutableSetOf<String>()
         val ids = mutableSetOf<String>()
         return copy(groups = groups.filter { it.id.isNotBlank() && ids.add(it.id) }.mapNotNull { group ->
-            val allowed = group.genres.filterTo(linkedSetOf()) { it in Genres.all && claimed.add(it) }
+            val allowed = group.genres.filterTo(linkedSetOf()) { it in MusicTags.typographyGenres && claimed.add(it) }
             group.copy(genres = allowed).takeIf { allowed.isNotEmpty() }
         })
     }
@@ -35,4 +36,12 @@ data class ArtistTypographyConfig(
             ArtistFontMode.PRISM -> null
         }
     }
+    fun fontForGenres(genres: List<String>, randomIndex: Int, available: List<String>): String? {
+        if (mode != ArtistFontMode.SMART) return fontKey(genres.firstOrNull(), randomIndex, available)
+        val chosen = genres.asSequence().filter { it in MusicTags.typographyGenres }.mapNotNull { genre ->
+            groups.firstOrNull { genre in it.genres }?.font?.takeIf { it in available }
+        }.firstOrNull()
+        return chosen ?: fontKey(null, randomIndex, available)
+    }
+
 }

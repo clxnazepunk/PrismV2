@@ -5031,7 +5031,20 @@
     <string name="artist_font_smart">Inteligentna typografia</string>
     <string name="artist_font_original">Oryginalny automatyczny styl Prism</string>
     <string name="artist_font_fallback">Czcionka domyślna i zastępcza</string>
-    <string name="artist_font_genres_hint">Te same 16 gatunków playlist z Deezer i iTunes. Rap to Hip-hop; Salsa, Cumbia i Norteño obecnie trafiają do Pop. Nieznany gatunek używa czcionki domyślnej.</string>
+    <string name="artist_font_genres_hint">Ogólne i rozpoznane regionalne gatunki bez nastrojów. Bez danych używana jest czcionka domyślna.</string>
     <string name="artist_font_add_group">Dodaj nową grupę</string>
     <string name="artist_font_used">Używany w innej grupie</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regionalna meksykańska</string>
+    <string name="detail_ballad">Ballada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latynoska</string>
+    <string name="mood_romantic">Romantyczny</string>
+    <string name="mood_sad">Smutny</string>
+    <string name="mood_happy">Wesoły</string>
+    <string name="mood_party">Impreza</string>
+    <string name="music_moods">Nastroje</string>
+    <string name="music_tag_api">Klucz API Last.fm (opcjonalny)</string>
+    <string name="music_tag_hint">Nastroje wymagają opcjonalnego klucza Last.fm w ustawieniach. Tytuł i wykonawca są wysyłani. Wyświetlane są tylko jawne tagi.</string>
 </resources>

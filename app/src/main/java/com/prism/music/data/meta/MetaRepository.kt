@@ -171,7 +171,11 @@ object Genres {
  * every song by them), falling back to the artist's related artists, and
  * finally to whatever the rest of the collection is mostly made of.
  */
-class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao) {
+class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
+    private val tagKey: () -> String = { com.prism.music.BuildConfig.LASTFM_API_KEY },
+    private val tagsHttp: OkHttpClient = OkHttpClient.Builder().connectTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).build(),
+) {
     /** Diagnostics hook (tests print it). */
     var trace: ((String) -> Unit)? = null
     /** Deezer allows ~50 requests per 5 s; iTunes only ~20 a minute, so it's a last resort. */
@@ -668,4 +672,71 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao) {
             if (!cached) majority(its)?.let { dao.putGenre(GenreEntity(exactArtistKey(artist), it, System.currentTimeMillis())) }
         }
     }
+    /** No network: reuse exact iTunes release genres, before legacy normalization loses their detail. */
+    suspend fun cachedArtistTags(name: String, primary: String?): List<String> = withContext(Dispatchers.IO) {
+        val raw = dao.genre(itunesSongsKey(name))?.let { decodeSongs(it.genre) }.orEmpty()
+        val votes = raw.values.flatMap { MusicTags.explicit(it, includeMoods = false) }.groupingBy { it }.eachCount()
+        val threshold = maxOf(1, raw.size / 6)
+        votes.filterValues { it >= threshold }.entries.sortedByDescending { it.value }.map { it.key } + listOfNotNull(primary)
+    }
+
+    /** Exact title only: no assigning a neighbouring song's regional genre or mood. */
+    suspend fun cachedSongTags(songs: List<Song>): Map<String, Set<String>> = withContext(Dispatchers.IO) {
+        val artists = songs.map { it.primaryArtist }.filter { it.isNotBlank() }.distinct()
+        val byArtist = artists.map { itunesSongsKey(it) }.chunked(500).flatMap { dao.genres(it) }
+            .associate { it.key to decodeSongs(it.genre) }
+        val stored = songs.map { songTagsKey(it) }.chunked(500).flatMap { dao.genres(it) }
+            .filter { System.currentTimeMillis() - it.fetchedAt < 7 * 24 * 60 * 60 * 1000L }
+            .associate { it.key to it.genre.orEmpty().split("|").filter { it in MusicTags.typographyGenres || it in MusicTags.moods }.toSet() }
+        songs.associate { song ->
+            val raw = byArtist[itunesSongsKey(song.primaryArtist)]?.get(key(cleanTitle(song.title)))
+            song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + stored[songTagsKey(song)].orEmpty())
+        }
+    }
+
+    private fun songTagsKey(song: Song) = "songtags1:${song.id}:${key(song.primaryArtist)}:${key(song.title)}"
+    private val trackTagsLock = Mutex()
+
+    /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
+    suspend fun resolveSongTags(songs: List<Song>, onBatch: (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
+        val cached = cachedSongTags(songs)
+        if (cached.isNotEmpty()) onBatch(cached)
+        val apiKey = tagKey().trim()
+        if (apiKey.isBlank()) return@withContext
+        var emitted = 0
+        var failures = 0
+        for (song in songs.distinctBy { it.id }) {
+            if (song.primaryArtist.isBlank() || song.title.isBlank()) continue
+            val cachedEntry = dao.genre(songTagsKey(song))
+            if (cachedEntry != null && System.currentTimeMillis() - cachedEntry.fetchedAt < 7 * 24 * 60 * 60 * 1000L) continue
+            // A page can contain thousands of songs. Ask at most 40 uncached songs per explicit refresh/open.
+            if (emitted++ >= 40) break
+            val response = trackTagsLock.withLock {
+                delay(300)
+                val url = "https://ws.audioscrobbler.com/2.0/".toHttpUrl().newBuilder()
+                    .addQueryParameter("method", "track.gettoptags").addQueryParameter("artist", song.primaryArtist)
+                    .addQueryParameter("track", cleanTitle(song.title)).addQueryParameter("autocorrect", "0")
+                    .addQueryParameter("api_key", apiKey).addQueryParameter("format", "json").build()
+                try {
+                    tagsHttp.newCall(Request.Builder().url(url).build()).execute().use { res ->
+                        if (!res.isSuccessful) null else InnerTube.json.parseToJsonElement(res.body.string())
+                    }
+                } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { null }
+            }
+            if (response == null) { if (++failures >= 3) break; continue }
+            failures = 0
+            if (response.field("error") != null) break
+            val data = response.field("toptags")
+            val tags = data.field("tag") as? JsonArray ?: continue
+            val attr = data.field("@attr")
+            if (key(attr.str("artist").orEmpty()) != key(song.primaryArtist) ||
+                key(attr.str("track").orEmpty()) != key(cleanTitle(song.title))) continue
+            val labels = MusicTags.supportedTags(tags.mapNotNull { tag ->
+                tag.str("name")?.let { it to (tag.str("count")?.toIntOrNull() ?: 0) }
+            }.toMap())
+            dao.putGenre(GenreEntity(songTagsKey(song), labels.joinToString("|"), System.currentTimeMillis()))
+            onBatch(mapOf(song.id to (cached[song.id].orEmpty() + labels)))
+        }
+    }
+
 }

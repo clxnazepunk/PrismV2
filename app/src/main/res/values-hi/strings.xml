@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">स्मार्ट टाइपोग्राफी</string>
     <string name="artist_font_original">Prism की मूल स्वचालित शैली</string>
     <string name="artist_font_fallback">डिफ़ॉल्ट और वैकल्पिक फ़ॉन्ट</string>
-    <string name="artist_font_genres_hint">Deezer और iTunes से प्लेलिस्ट वाली 16 शैलियाँ। Rap को Hip-hop और Salsa, Cumbia व Norteño को Pop में रखा जाता है। अज्ञात शैली पर डिफ़ॉल्ट फ़ॉन्ट।</string>
+    <string name="artist_font_genres_hint">सामान्य और पहचानी गई क्षेत्रीय शैलियाँ, मूड नहीं। डेटा न हो तो डिफ़ॉल्ट फ़ॉन्ट।</string>
     <string name="artist_font_add_group">नया समूह जोड़ें</string>
     <string name="artist_font_used">दूसरे समूह में उपयोग हो रहा है</string>
+    <string name="detail_salsa">साल्सा</string>
+    <string name="detail_cumbia">कुम्बिया</string>
+    <string name="detail_regional_mexican">क्षेत्रीय मैक्सिकन</string>
+    <string name="detail_ballad">बैलेड</string>
+    <string name="detail_reggaeton">रेगेटन</string>
+    <string name="detail_latin">लैटिन</string>
+    <string name="mood_romantic">रोमांटिक</string>
+    <string name="mood_sad">उदास</string>
+    <string name="mood_happy">खुश</string>
+    <string name="mood_party">पार्टी</string>
+    <string name="music_moods">मूड</string>
+    <string name="music_tag_api">Last.fm API कुंजी (वैकल्पिक)</string>
+    <string name="music_tag_hint">मूड के लिए सेटिंग्स में वैकल्पिक Last.fm कुंजी चाहिए। गीत का नाम और कलाकार भेजे जाते हैं। केवल स्पष्ट टैग दिखते हैं।</string>
 </resources>

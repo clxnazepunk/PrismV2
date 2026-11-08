@@ -52,7 +52,7 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val api by identities.signatureApi.collectAsState()
     val saved = entries[page.id] ?: ArtistIdentity()
     val entry = when (preview?.first) {
-        ArtistImageRole.LOGO -> saved.copy(logoLayout = preview.second, display = ArtistDisplayChoice(true, false, false))
+        ArtistImageRole.LOGO -> saved.copy(logoLayout = requireNotNull(preview).second, display = ArtistDisplayChoice(true, false, false))
         ArtistImageRole.SIGNATURE -> saved.copy(signatureLayout = preview.second, display = ArtistDisplayChoice(false, true, false))
         null -> saved
     }
@@ -65,7 +65,7 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val shown = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
         ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
     Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp, canvasHeight = canvasHeight,
+        if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp, canvasHeight = canvasHeight, overflow = true,
             onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
         if (shown.signature && signature != null) {
             ArtistMark(signature, tr(R.string.signature), entry.signatureLayout, 72.dp, canvasHeight = canvasHeight,
@@ -82,14 +82,14 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
 
 /** Fit enlarges small originals too; zoom is visual, never an unbounded image decode. */
 @Composable
-private fun ArtistMark(
+internal fun ArtistMark(
     file: File, label: String, layout: ArtistImageLayout, height: Dp,
-    tint: Boolean = false, canvasHeight: Dp = height, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
+    tint: Boolean = false, canvasHeight: Dp = height, overflow: Boolean = false, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
-    Box(Modifier.fillMaxWidth().height(height).clickable(onClick = onEdit)) {
+    Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).clickable(onClick = onEdit)) {
         AsyncImage(
             ImageRequest.Builder(context).data(file).size(1600, 800).build(), label,
             Modifier.fillMaxSize().graphicsLayer {
@@ -112,15 +112,16 @@ private fun ArtistLayoutEditor(
     var draft by remember(page.id, role) { mutableStateOf(current.forHeader(headerHeight.value, slot)) }
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize()) {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            Column(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(tr(R.string.artist_adjust), Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                     PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) }
                     PrismTextButton(onClick = { onSave(draft.bounded()) }) { Text(tr(R.string.save)) }
                 }
                 BoxWithConstraints(Modifier.fillMaxWidth()) {
-                    val ratio = maxWidth / headerWidth.coerceAtLeast(1.dp)
-                    Box(Modifier.fillMaxWidth().height(headerHeight * ratio).clipToBounds()) {
+                    val maxPreviewHeight = androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp * 0.36f
+                    val ratio = minOf(maxWidth / headerWidth.coerceAtLeast(1.dp), maxPreviewHeight / headerHeight.coerceAtLeast(1.dp))
+                    Box(Modifier.width(headerWidth * ratio).height(headerHeight * ratio).align(Alignment.CenterHorizontally).clipToBounds()) {
                         Box(Modifier.wrapContentSize(Alignment.TopStart, unbounded = true)
                             .requiredSize(headerWidth, headerHeight).graphicsLayer {
                                 transformOrigin = TransformOrigin(0f, 0f); scaleX = ratio; scaleY = ratio
@@ -129,7 +130,7 @@ private fun ArtistLayoutEditor(
                         }
                     }
                 }
-                Column(Modifier.padding(22.dp)) {
+                Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(22.dp)) {
                     Text(tr(R.string.artist_zoom))
                     Slider(draft.scale, { draft = draft.copy(scale = it) }, valueRange = 0.25f..12f)
                     Text(tr(R.string.artist_horizontal))

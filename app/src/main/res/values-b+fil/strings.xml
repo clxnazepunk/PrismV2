@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Matalinong tipograpiya</string>
     <string name="artist_font_original">Orihinal na awtomatikong estilo ng Prism</string>
     <string name="artist_font_fallback">Default at pamalit na font</string>
-    <string name="artist_font_genres_hint">Gamit ang 16 na genre ng playlist mula sa Deezer at iTunes. Rap ay Hip-hop; Salsa, Cumbia at Norteño ay Pop. Default na font kapag walang grupo o genre.</string>
+    <string name="artist_font_genres_hint">Pangkalahatan at kinikilalang rehiyonal na genre, walang moods. Default na font kapag walang datos.</string>
     <string name="artist_font_add_group">Magdagdag ng bagong grupo</string>
     <string name="artist_font_used">Ginagamit na sa ibang grupo</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Rehiyonal na Mehikano</string>
+    <string name="detail_ballad">Balada</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantiko</string>
+    <string name="mood_sad">Malungkot</string>
+    <string name="mood_happy">Masaya</string>
+    <string name="mood_party">Kasiyahan</string>
+    <string name="music_moods">Mga damdamin</string>
+    <string name="music_tag_api">Last.fm API key (opsyonal)</string>
+    <string name="music_tag_hint">Kailangan ng opsyonal na Last.fm key sa Settings para sa moods. Ipinapadala ang pamagat at artista. Tiyak na tag lamang ang ipinapakita.</string>
 </resources>

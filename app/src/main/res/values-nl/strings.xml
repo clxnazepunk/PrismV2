@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">Slimme typografie</string>
     <string name="artist_font_original">Oorspronkelijke automatische Prism-stijl</string>
     <string name="artist_font_fallback">Standaard- en vervangend lettertype</string>
-    <string name="artist_font_genres_hint">Dezelfde 16 playlistgenres, geschat via Deezer en iTunes. Rap valt onder Hip-hop; Salsa, Cumbia en Norteño nu onder Pop. Onbekende genres krijgen het standaardlettertype.</string>
+    <string name="artist_font_genres_hint">Algemene en herkende regionale genres zonder stemmingen. Zonder gegevens geldt het standaardlettertype.</string>
     <string name="artist_font_add_group">Nieuwe groep toevoegen</string>
     <string name="artist_font_used">Al gebruikt in een andere groep</string>
+    <string name="detail_salsa">Salsa</string>
+    <string name="detail_cumbia">Cumbia</string>
+    <string name="detail_regional_mexican">Regionaal Mexicaans</string>
+    <string name="detail_ballad">Ballade</string>
+    <string name="detail_reggaeton">Reggaeton</string>
+    <string name="detail_latin">Latin</string>
+    <string name="mood_romantic">Romantisch</string>
+    <string name="mood_sad">Verdrietig</string>
+    <string name="mood_happy">Vrolijk</string>
+    <string name="mood_party">Feest</string>
+    <string name="music_moods">Stemmingen</string>
+    <string name="music_tag_api">Last.fm-API-sleutel (optioneel)</string>
+    <string name="music_tag_hint">Stemmingen vereisen een optionele Last.fm-sleutel in Instellingen. Titel en artiest worden verstuurd. Alleen expliciete tags verschijnen.</string>
 </resources>

@@ -4903,7 +4903,20 @@
     <string name="artist_font_smart">ذہین ٹائپوگرافی</string>
     <string name="artist_font_original">Prism کا اصل خودکار انداز</string>
     <string name="artist_font_fallback">ڈیفالٹ اور متبادل فونٹ</string>
-    <string name="artist_font_genres_hint">Deezer اور iTunes سے پلے لسٹ کی وہی 16 اصناف۔ Rap کو Hip-hop جبکہ Salsa، Cumbia اور Norteño کو فی الحال Pop میں رکھا جاتا ہے۔ نامعلوم صنف پر ڈیفالٹ فونٹ۔</string>
+    <string name="artist_font_genres_hint">عمومی اور پہچانی علاقائی اصناف، مزاج کے بغیر۔ معلومات نہ ہوں تو ڈیفالٹ فونٹ۔</string>
     <string name="artist_font_add_group">نیا گروپ شامل کریں</string>
     <string name="artist_font_used">دوسرے گروپ میں استعمال ہو رہا ہے</string>
+    <string name="detail_salsa">سالسا</string>
+    <string name="detail_cumbia">کمبیا</string>
+    <string name="detail_regional_mexican">علاقائی میکسیکن</string>
+    <string name="detail_ballad">بیلڈ</string>
+    <string name="detail_reggaeton">ریگیٹون</string>
+    <string name="detail_latin">لاطینی</string>
+    <string name="mood_romantic">رومانوی</string>
+    <string name="mood_sad">اداس</string>
+    <string name="mood_happy">خوش</string>
+    <string name="mood_party">پارٹی</string>
+    <string name="music_moods">مزاج</string>
+    <string name="music_tag_api">Last.fm API کلید (اختیاری)</string>
+    <string name="music_tag_hint">مزاج کے لیے ترتیبات میں اختیاری Last.fm کلید درکار ہے۔ گانے کا عنوان اور فنکار بھیجے جاتے ہیں۔ صرف واضح ٹیگ دکھتے ہیں۔</string>
 </resources>
