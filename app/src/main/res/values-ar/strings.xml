@@ -5135,4 +5135,6 @@
     <string name="artist_logo">شعار الفنان</string>
     <string name="automatic_artist_images">الشعارات والتوقيعات التلقائية</string>
     <string name="artist_signature_api">واجهة برمجة التوقيعات</string>
+    <string name="artist_profile_save">حفظ الملف الشخصي دون اتصال</string>
+    <string name="artist_profile_remove">إلغاء حفظ الملف الشخصي</string>
 </resources>

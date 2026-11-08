@@ -4943,4 +4943,6 @@
     <string name="artist_logo">Logótipo do artista</string>
     <string name="automatic_artist_images">Logótipos e assinaturas automáticos</string>
     <string name="artist_signature_api">API de assinaturas</string>
+    <string name="artist_profile_save">Guardar perfil offline</string>
+    <string name="artist_profile_remove">Deixar de guardar o perfil</string>
 </resources>

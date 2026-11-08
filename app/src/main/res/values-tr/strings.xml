@@ -4879,4 +4879,6 @@
     <string name="artist_logo">Sanatçı logosu</string>
     <string name="automatic_artist_images">Otomatik logolar ve imzalar</string>
     <string name="artist_signature_api">İmza API’si</string>
+    <string name="artist_profile_save">Profili çevrimdışı kaydet</string>
+    <string name="artist_profile_remove">Profili saklamayı bırak</string>
 </resources>

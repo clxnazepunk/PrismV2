@@ -4815,4 +4815,6 @@
     <string name="artist_logo">아티스트 로고</string>
     <string name="automatic_artist_images">자동 로고 및 서명</string>
     <string name="artist_signature_api">서명 API</string>
+    <string name="artist_profile_save">프로필 오프라인 저장</string>
+    <string name="artist_profile_remove">프로필 저장 해제</string>
 </resources>

@@ -28,6 +28,8 @@ class OfflineLibrary(context: Context) {
     private val pagesDir = File(dir, "pages").apply { mkdirs() }
     /** Artist pages as they were last opened (1.8.2), one file each. */
     private val artistsDir = File(dir, "artists").apply { mkdirs() }
+    private val savedArtistsDir = File(dir, "saved-artists").apply { mkdirs() }
+    val savedArtistChanges = kotlinx.coroutines.flow.MutableStateFlow(0)
     private val listsFile = File(dir, "library.json")
     private val uploadsFile = File(dir, "uploads.json")
 
@@ -125,7 +127,35 @@ class OfflineLibrary(context: Context) {
         .sortedByDescending { it.lastModified() }
         .mapNotNull { f -> f.name.removeSuffix(".json").let { id -> page(id)?.let { id to it } } }
 
-    private fun artistFile(id: String) = File(artistsDir, id.replace(Regex("[^A-Za-z0-9_-]"), "_") + ".json")
+    private fun artistHash(id: String) = java.security.MessageDigest.getInstance("SHA-256").digest(id.toByteArray(Charsets.UTF_8))
+        .joinToString("") { "%02x".format(java.util.Locale.ROOT, it.toInt() and 255) }
+
+    private fun cachedArtistFile(id: String) = File(artistsDir,
+        if (id.matches(Regex("[A-Za-z0-9_-]+"))) "$id.json" else "id-" + artistHash(id) + ".json")
+    private fun legacyArtistFile(id: String) = File(artistsDir, id.replace(Regex("[^A-Za-z0-9_-]"), "_") + ".json")
+    private fun savedArtistFile(id: String) = File(savedArtistsDir, artistHash(id) + ".json")
+    private fun artistFile(id: String) = savedArtistFile(id).takeIf { it.exists() }
+        ?: cachedArtistFile(id).takeIf { it.exists() } ?: legacyArtistFile(id)
+
+    fun isArtistSaved(id: String) = savedArtistFile(id).isFile
+
+    /** Explicitly kept profiles are distinct from the bounded, automatically visited profile cache. */
+    fun savedArtistItems(): List<ArtistItem> = savedArtistsDir.listFiles { f -> f.name.endsWith(".json") }.orEmpty()
+        .sortedByDescending { it.lastModified() }.mapNotNull { f ->
+            readArtist(f)?.let { ArtistItem(it.id, it.name, "", it.thumbnail) }
+        }
+
+    /** Stop keeping it permanently; the ordinary visited-page cache may still hold it. */
+    fun removeSavedArtist(id: String): Boolean {
+        val saved = savedArtistFile(id)
+        if (!saved.exists()) return true
+        val result = runCatching {
+            atomicWrite(cachedArtistFile(id), saved.readText())
+            check(saved.delete())
+        }.isSuccess
+        if (result) savedArtistChanges.value++
+        return result
+    }
 
     private fun keptShelves(page: ArtistPage, itemsEach: Int) = page.shelves.mapNotNull { s ->
         val items = s.items.take(itemsEach).mapNotNull { it.toItem() }
@@ -138,16 +168,21 @@ class OfflineLibrary(context: Context) {
      * over [MAX_ARTIST_BYTES] keeps shorter shelves and no biography, and one still over it isn't kept. False when
      * nothing was kept.
      */
-    fun saveArtist(page: ArtistPage): Boolean {
+    fun saveArtist(page: ArtistPage, permanent: Boolean = false): Boolean {
         val full = KeptArtist(
             page.id, page.name, page.thumbnail, page.description?.take(MAX_ARTIST_BIO), page.subscribers, page.views, page.channelId, page.subscribed,
             keptShelves(page, MAX_ARTIST_ITEMS),
         )
-        if (full.shelves.isEmpty()) return false
+        if (full.shelves.isEmpty() && !permanent) return false
         var text = InnerTube.json.encodeToString(KeptArtist.serializer(), full)
         if (text.length > MAX_ARTIST_BYTES) text = InnerTube.json.encodeToString(KeptArtist.serializer(), full.copy(description = null, shelves = keptShelves(page, TRIMMED_ARTIST_ITEMS)))
         if (text.length > MAX_ARTIST_BYTES) return false
-        runCatching { atomicWrite(artistFile(page.id), text) }.getOrElse { return false }
+        val saved = permanent || isArtistSaved(page.id)
+        runCatching { atomicWrite(if (saved) savedArtistFile(page.id) else cachedArtistFile(page.id), text) }.getOrElse { return false }
+        if (saved) {
+            cachedArtistFile(page.id).delete()
+            savedArtistChanges.value++
+        }
         artistsDir.listFiles { f -> f.name.endsWith(".json") }?.sortedByDescending { it.lastModified() }?.drop(MAX_ARTISTS)?.forEach { it.delete() }
         return true
     }
@@ -164,7 +199,7 @@ class OfflineLibrary(context: Context) {
     private fun readArtist(file: File): KeptArtist? = runCatching { InnerTube.json.decodeFromString(KeptArtist.serializer(), file.readText()) }.getOrNull()
 
     /** The kept copy of the artist whose page is [id], if there is one. */
-    fun artist(id: String): ArtistPage? = readArtist(artistFile(id))?.toPage()
+    fun artist(id: String): ArtistPage? = readArtist(artistFile(id))?.takeIf { it.id == id }?.toPage()
 
     fun hasArtist(id: String): Boolean = artistFile(id).exists()
 
@@ -175,8 +210,12 @@ class OfflineLibrary(context: Context) {
      */
     fun artistNamed(name: String): ArtistPage? {
         val want = SearchRank.norm(name).ifBlank { return null }
-        return artistsDir.listFiles { f -> f.name.endsWith(".json") }.orEmpty().sortedByDescending { it.lastModified() }
-            .firstNotNullOfOrNull { f -> readArtist(f)?.takeIf { SearchRank.norm(it.name) == want } }?.toPage()
+        val matches = (savedArtistsDir.listFiles { f -> f.name.endsWith(".json") }.orEmpty().toList() +
+            artistsDir.listFiles { f -> f.name.endsWith(".json") }.orEmpty().toList())
+            .sortedByDescending { it.lastModified() }
+            .mapNotNull { f -> readArtist(f)?.takeIf { SearchRank.norm(it.name) == want } }.distinctBy { it.id }
+        // Same names do not establish identity; let the caller build a page from the phone instead.
+        return matches.singleOrNull()?.toPage()
     }
 
     /** Keeps the account's uploads as last listed (1.8.2), so Library → Uploads opens offline. */
@@ -199,6 +238,8 @@ class OfflineLibrary(context: Context) {
         uploadsFile.delete()
         pagesDir.listFiles()?.forEach { it.delete() }
         artistsDir.listFiles()?.forEach { it.delete() }
+        savedArtistsDir.listFiles()?.forEach { it.delete() }
+        savedArtistChanges.value++
     }
 
     /** When the copy of [id] was saved (0 if there's none). */
@@ -207,7 +248,7 @@ class OfflineLibrary(context: Context) {
     /** Every saved page's cover and songs' covers, so the covers they need are kept. */
     fun covers(): List<String?> = pagesDir.listFiles()?.flatMap { f ->
         runCatching { InnerTube.json.decodeFromString(Page.serializer(), f.readText()).let { listOf(it.thumbnail) } }.getOrDefault(emptyList())
-    }.orEmpty() + artistsDir.listFiles()?.mapNotNull { f -> readArtist(f)?.thumbnail }.orEmpty() +
+    }.orEmpty() + (artistsDir.listFiles().orEmpty().toList() + savedArtistsDir.listFiles().orEmpty().toList()).mapNotNull { f -> readArtist(f)?.thumbnail } +
         (library()?.let { l -> (l.playlists + l.albums + l.artists).map { it.thumbnail } } ?: emptyList())
 
     /** The most recently saved pages stay; the rest go (each is a few hundred KB at most). */

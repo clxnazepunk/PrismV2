@@ -5007,4 +5007,6 @@
     <string name="artist_logo">Логотип виконавця</string>
     <string name="automatic_artist_images">Автоматичні логотипи й підписи</string>
     <string name="artist_signature_api">API підписів</string>
+    <string name="artist_profile_save">Зберегти профіль офлайн</string>
+    <string name="artist_profile_remove">Не зберігати профіль</string>
 </resources>

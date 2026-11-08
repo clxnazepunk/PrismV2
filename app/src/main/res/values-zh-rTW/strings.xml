@@ -4815,4 +4815,6 @@
     <string name="artist_logo">藝人標誌</string>
     <string name="automatic_artist_images">自動取得標誌與簽名</string>
     <string name="artist_signature_api">簽名 API</string>
+    <string name="artist_profile_save">離線儲存藝人資料</string>
+    <string name="artist_profile_remove">取消儲存藝人資料</string>
 </resources>

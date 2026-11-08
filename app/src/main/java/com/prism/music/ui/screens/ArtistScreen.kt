@@ -564,6 +564,11 @@ private fun TopBar(
         ctl?.isAppearanceLightStatusBars = !lightIcons
         onDispose { if (previous != null) ctl.isAppearanceLightStatusBars = previous }
     }
+    val profileContainer = LocalContainer.current
+    val profileScope = rememberCoroutineScope()
+    val profileContext = androidx.compose.ui.platform.LocalContext.current
+    val savedRevision by profileContainer.offline.savedArtistChanges.collectAsState()
+    val profileSaved = remember(page.id, savedRevision) { profileContainer.offline.isArtistSaved(page.id) }
     var menu by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().statusBarsPadding().height(60.dp)) {
@@ -583,6 +588,34 @@ private fun TopBar(
                             leadingIcon = { Icon(if (favorite) PrismIcons.StarFilled else PrismIcons.Star, null) },
                         )
                         DropdownMenuItem({ Text(tr(R.string.artist_identity)) }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
+                        DropdownMenuItem(
+                            { Text(tr(if (profileSaved) R.string.artist_profile_remove else R.string.artist_profile_save)) },
+                            {
+                                menu = false
+                                profileScope.launch {
+                                    try {
+                                        val kept = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                                            if (profileSaved) profileContainer.offline.removeSavedArtist(page.id)
+                                            else profileContainer.offline.saveArtist(page, permanent = true)
+                                        }
+                                        if (!kept) {
+                                            android.widget.Toast.makeText(profileContext, tr(R.string.try_again), android.widget.Toast.LENGTH_SHORT).show()
+                                            return@launch
+                                        }
+                                        if (!profileSaved && profileContainer.network.isOnline()) {
+                                            // Keep available images too; absent resources never turn into a failed profile.
+                                            try {
+                                                profileContainer.artistIdentities.refresh(page)
+                                                if (!profileContainer.dataSaving() && page.thumbnail?.startsWith("https://") == true) profileContainer.artwork.save(page.thumbnail, 1440)
+                                            } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { }
+                                        }
+                                        if (!profileSaved) android.widget.Toast.makeText(profileContext, tr(R.string.saved_to_your_library), android.widget.Toast.LENGTH_SHORT).show()
+                                    } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+                                    catch (_: Exception) { android.widget.Toast.makeText(profileContext, tr(R.string.try_again), android.widget.Toast.LENGTH_SHORT).show() }
+                                }
+                            },
+                            leadingIcon = { Icon(if (profileSaved) PrismIcons.DownloadDone else PrismIcons.Download, null) },
+                        )
                         DropdownMenuItem({ Text(tr(R.string.page_color)) }, { menu = false; onColor() }, leadingIcon = { Icon(PrismIcons.Palette, null) })
                         // Never in radios, autoplay, Smart Shuffle, mixes or Smart Downloads (Settings → Library & Replay → Exclusions).
                         val c = com.prism.music.ui.theme.LocalContainer.current

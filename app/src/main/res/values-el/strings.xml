@@ -4879,4 +4879,6 @@
     <string name="artist_logo">Λογότυπο καλλιτέχνη</string>
     <string name="automatic_artist_images">Αυτόματα λογότυπα και υπογραφές</string>
     <string name="artist_signature_api">API υπογραφών</string>
+    <string name="artist_profile_save">Αποθήκευση προφίλ εκτός σύνδεσης</string>
+    <string name="artist_profile_remove">Διακοπή αποθήκευσης προφίλ</string>
 </resources>

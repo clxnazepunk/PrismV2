@@ -4879,4 +4879,6 @@
     <string name="artist_logo">فنکار کا لوگو</string>
     <string name="automatic_artist_images">خودکار لوگو اور دستخط</string>
     <string name="artist_signature_api">دستخط API</string>
+    <string name="artist_profile_save">پروفائل آف لائن محفوظ کریں</string>
+    <string name="artist_profile_remove">پروفائل محفوظ کرنا بند کریں</string>
 </resources>

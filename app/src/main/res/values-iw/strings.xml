@@ -4943,4 +4943,6 @@
     <string name="artist_logo">לוגו האמן</string>
     <string name="automatic_artist_images">סמלים וחתימות אוטומטיים</string>
     <string name="artist_signature_api">API לחתימות</string>
+    <string name="artist_profile_save">שמירת פרופיל ללא חיבור</string>
+    <string name="artist_profile_remove">הפסקת שמירת הפרופיל</string>
 </resources>
