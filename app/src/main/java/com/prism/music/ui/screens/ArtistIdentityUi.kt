@@ -57,7 +57,7 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val api by identities.signatureApi.collectAsState()
     val saved = entries[page.id] ?: ArtistIdentity()
     val entry = when (preview?.first) {
-        ArtistImageRole.LOGO -> saved.copy(logoLayout = requireNotNull(preview).second, display = ArtistDisplayChoice(true, false, false))
+        ArtistImageRole.LOGO -> saved.copy(logoLayout = requireNotNull(preview).second)
         ArtistImageRole.SIGNATURE -> saved.copy(signatureLayout = preview.second, display = ArtistDisplayChoice(false, true, false))
         null -> saved
     }
@@ -67,8 +67,9 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     var signatureFailed by remember(signature) { mutableStateOf(false) }
     var logoLoaded by remember(logo) { mutableStateOf(false) }
     var signatureLoaded by remember(signature) { mutableStateOf(false) }
-    val shown = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
+    val selected = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
         ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
+    val shown = preview?.first?.let { selected.preview(it) } ?: selected
     Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp, canvasHeight = canvasHeight, overflow = true,
             onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })

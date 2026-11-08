@@ -145,4 +145,13 @@ class MusicTagsTest {
         assertEquals(40, dao.entries.size)
     }
 
+    @Test fun visibleImagePreviewKeepsTheSameCombinedLayoutAsTheSavedProfile() {
+        val together = com.prism.music.data.artists.ArtistDisplayChoice(true, true, true)
+        assertEquals(together, together.preview(com.prism.music.data.artists.ArtistImageRole.LOGO))
+        assertEquals(together, together.preview(com.prism.music.data.artists.ArtistImageRole.SIGNATURE))
+        val onlyLogo = com.prism.music.data.artists.ArtistDisplayChoice(true, false, false)
+        assertEquals(com.prism.music.data.artists.ArtistDisplayChoice(false, true, false),
+            onlyLogo.preview(com.prism.music.data.artists.ArtistImageRole.SIGNATURE))
+    }
+
 }

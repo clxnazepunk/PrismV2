@@ -10,6 +10,12 @@ data class ArtistDisplayChoice(val logo: Boolean = true, val signature: Boolean 
         val s = signature && hasSignature
         return ArtistDisplayChoice(l, s, text || (!l && !s))
     }
+    /** Keep the real combined layout when editing a visible mark; isolate only a hidden resource. */
+    fun preview(role: ArtistImageRole): ArtistDisplayChoice = when (role) {
+        ArtistImageRole.LOGO -> if (logo) this else ArtistDisplayChoice(true, false, false)
+        ArtistImageRole.SIGNATURE -> if (signature) this else ArtistDisplayChoice(false, true, false)
+    }
+
     companion object {
         fun automatic(hasLogo: Boolean, hasSignature: Boolean) =
             ArtistDisplayChoice(hasLogo, !hasLogo && hasSignature, !hasLogo && !hasSignature)
