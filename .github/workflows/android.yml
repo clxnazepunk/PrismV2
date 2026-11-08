@@ -109,7 +109,7 @@ jobs:
           retention-days: 14
 
   suggestions:
-    name: Playlist suggestions focused tests
+    name: Artist identities and playlist focused tests
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -124,8 +124,8 @@ jobs:
       - name: Install Android SDK
         run: '"${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;36.0.0"'
       - run: chmod +x gradlew
-      - name: Check playlist suggestions and saved order
-        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PrismLibraryTest*'
+      - name: Check artists, backups, translations and playlists
+        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PrismLibraryTest*' --tests '*ArtistImageSourcesTest*' --tests '*ArtistIdentityStoreTest*' --tests '*ArtistIdentityBackupTest*' --tests '*BackupPartsTest*' --tests '*TranslationsTest*' --tests '*OfflineArtistsTest*'
       - name: Upload focused test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube artık bu oturum açmayı kabul etmiyor. Çıkış yapıp yeniden oturum açın.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube şu anda bu hesaba 256 kbps göndermiyor, bu yüzden şarkılar normal kalitede çalıyor</string>
     <string name="playlist_recommended_songs">Önerilen şarkılar</string>
+    <string name="artist_identity">Logo ve imza</string>
+    <string name="artist_logo">Sanatçı logosu</string>
+    <string name="automatic_artist_images">Otomatik logolar ve imzalar</string>
+    <string name="artist_signature_api">İmza API’si</string>
 </resources>

@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">O YouTube não aceita mais este login. Saia da conta e entre de novo.</string>
     <string name="youtube_isnt_sending_256_kbps">O YouTube não está enviando 256 kbps para esta conta agora, então as músicas tocam na qualidade normal</string>
     <string name="playlist_recommended_songs">Músicas recomendadas</string>
+    <string name="artist_identity">Logo e assinatura</string>
+    <string name="artist_logo">Logo do artista</string>
+    <string name="automatic_artist_images">Logos e assinaturas automáticos</string>
+    <string name="artist_signature_api">API de assinaturas</string>
 </resources>

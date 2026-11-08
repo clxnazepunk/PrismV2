@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube はこのログインを受け付けなくなりました。ログアウトしてもう一度ログインしてください。</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube は現在このアカウントに 256 kbps を送っていないため、曲は通常の音質で再生されます</string>
     <string name="playlist_recommended_songs">おすすめの曲</string>
+    <string name="artist_identity">ロゴとサイン</string>
+    <string name="artist_logo">アーティストのロゴ</string>
+    <string name="automatic_artist_images">ロゴとサインを自動取得</string>
+    <string name="artist_signature_api">サイン API</string>
 </resources>

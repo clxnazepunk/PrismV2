@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube अब यह साइन-इन स्वीकार नहीं करता। साइन आउट करके फिर से साइन इन करें।</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube अभी इस खाते को 256 kbps नहीं भेज रहा, इसलिए गाने सामान्य क्वालिटी में चल रहे हैं</string>
     <string name="playlist_recommended_songs">सुझाए गए गाने</string>
+    <string name="artist_identity">लोगो और हस्ताक्षर</string>
+    <string name="artist_logo">कलाकार का लोगो</string>
+    <string name="automatic_artist_images">अपने आप लोगो और हस्ताक्षर</string>
+    <string name="artist_signature_api">हस्ताक्षर API</string>
 </resources>

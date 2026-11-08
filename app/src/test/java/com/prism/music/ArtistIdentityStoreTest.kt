@@ -1,0 +1,103 @@
+package com.prism.music
+
+import com.prism.music.data.artists.*
+import java.io.ByteArrayInputStream
+import java.nio.file.Files
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.*
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34], application = android.app.Application::class)
+class ArtistIdentityStoreTest {
+    private val svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><path d="M0 0L20 20"/></svg>""".toByteArray()
+    private fun directory() = Files.createTempDirectory("prism-artists").toFile()
+
+    @Test fun logoSignatureAndArtistsWithSimilarIdsStayIndependent(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val store = ArtistIdentityStore(dir)
+            store.install("a/b", ArtistImageRole.LOGO, svg, true)
+            store.install("a/b", ArtistImageRole.SIGNATURE, svg, true)
+            store.install("a_b", ArtistImageRole.LOGO, svg, true)
+            val first = store.entries.value.getValue("a/b")
+            val second = store.entries.value.getValue("a_b")
+            assertNotEquals(first.localLogo!!.file, first.localSignature!!.file)
+            assertNotEquals(first.localLogo.file, second.localLogo!!.file)
+            assertEquals(3f, first.localLogo.aspect, 0.0001f)
+        } finally { dir.deleteRecursively() }
+    }
+
+    @Test fun remoteRefreshCannotOverwriteLocalChoiceAndResetRevealsRemote(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val store = ArtistIdentityStore(dir)
+            val remote = store.install("artist", ArtistImageRole.LOGO, svg, false)
+            val local = store.install("artist", ArtistImageRole.LOGO, svg, true)
+            val newer = store.install("artist", ArtistImageRole.LOGO, svg, false)
+            assertEquals(local, store.entries.value.getValue("artist").chosen(ArtistImageRole.LOGO))
+            assertFalse(java.io.File(dir, remote.file).exists())
+            store.clearLocal("artist", ArtistImageRole.LOGO)
+            assertEquals(newer, store.entries.value.getValue("artist").chosen(ArtistImageRole.LOGO))
+            assertFalse(java.io.File(dir, local.file).exists())
+            assertNull(store.entries.value.getValue("artist").chosen(ArtistImageRole.LOGO, automatic = false))
+        } finally { dir.deleteRecursively() }
+    }
+
+    @Test fun invalidImagePreservesExistingResourceAndLeavesNoExtraFile(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val store = ArtistIdentityStore(dir)
+            val original = store.install("artist", ArtistImageRole.LOGO, svg, true)
+            val before = dir.list()!!.toSet()
+            try { store.install("artist", ArtistImageRole.LOGO, "not an image".toByteArray(), true); fail() }
+            catch (_: IllegalArgumentException) { }
+            assertEquals(original, store.entries.value.getValue("artist").localLogo)
+            assertEquals(before, dir.list()!!.toSet())
+        } finally { dir.deleteRecursively() }
+    }
+
+    @Test fun resourcesReopenAndRelocateWithoutAbsolutePaths(): Unit = runBlocking {
+        val original = directory()
+        val restored = directory()
+        try {
+            val store = ArtistIdentityStore(original)
+            store.install("artist", ArtistImageRole.SIGNATURE, svg, true)
+            original.copyRecursively(restored, overwrite = true)
+            val again = ArtistIdentityStore(restored)
+            val resource = again.entries.value.getValue("artist").localSignature!!
+            assertEquals(restored.canonicalFile, again.file(resource)!!.parentFile.canonicalFile)
+            assertArrayEquals(svg, again.file(resource)!!.readBytes())
+            assertFalse(java.io.File(original, "index.json").readText().contains(original.path.replace("\\", "\\\\")))
+        } finally { original.deleteRecursively(); restored.deleteRecursively() }
+    }
+
+    @Test fun svgCannotReadOutsideFilesAndPathsCannotEscapeStore() {
+        for (bad in listOf(
+            """<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///private">]><svg/>""",
+            """<svg xmlns="http://www.w3.org/2000/svg"><image href="https://example.test/image"/></svg>""",
+        )) try { ArtistIdentityStore.imageInfo(bad.toByteArray()); fail() } catch (_: IllegalArgumentException) { }
+        val dir = directory()
+        try { assertNull(ArtistIdentityStore(dir).file(ArtistImageAsset("../outside.svg", 1f))) }
+        finally { dir.deleteRecursively() }
+    }
+
+    @Test fun pngIsKeptWithoutCroppingOrReencoding(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val png = java.util.Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=")
+            val store = ArtistIdentityStore(dir)
+            val asset = store.install("artist", ArtistImageRole.LOGO, png, true)
+            assertTrue(asset.file.endsWith(".png"))
+            assertArrayEquals(png, store.file(asset)!!.readBytes())
+        } finally { dir.deleteRecursively() }
+    }
+
+    @Test fun boundedDownloadsRejectOversizedResponses() {
+        try { ArtistIdentities.bounded(ByteArrayInputStream(ByteArray(1025)), 1024); fail() }
+        catch (_: IllegalArgumentException) { }
+    }
+}

@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">A YouTube már nem fogadja el ezt a bejelentkezést. Jelentkezz ki, majd be újra.</string>
     <string name="youtube_isnt_sending_256_kbps">A YouTube most nem küld 256 kbps-t ennek a fióknak, ezért a dalok a szokásos minőségben szólnak</string>
     <string name="playlist_recommended_songs">Ajánlott dalok</string>
+    <string name="artist_identity">Logó és aláírás</string>
+    <string name="artist_logo">Előadó logója</string>
+    <string name="automatic_artist_images">Automatikus logók és aláírások</string>
+    <string name="artist_signature_api">Aláírás-API</string>
 </resources>

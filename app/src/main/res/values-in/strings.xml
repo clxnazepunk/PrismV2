@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube tidak lagi menerima login ini. Logout lalu login lagi.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube sedang tidak mengirim 256 kbps ke akun ini, jadi lagu diputar dengan kualitas biasa</string>
     <string name="playlist_recommended_songs">Lagu yang direkomendasikan</string>
+    <string name="artist_identity">Logo dan tanda tangan</string>
+    <string name="artist_logo">Logo artis</string>
+    <string name="automatic_artist_images">Logo dan tanda tangan otomatis</string>
+    <string name="artist_signature_api">API tanda tangan</string>
 </resources>

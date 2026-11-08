@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube n\'accepte plus cette connexion. Déconnectez-vous puis reconnectez-vous.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube n\'envoie pas de 256 kbit/s à ce compte pour le moment : les titres sont lus en qualité habituelle</string>
     <string name="playlist_recommended_songs">Titres recommandés</string>
+    <string name="artist_identity">Logo et signature</string>
+    <string name="artist_logo">Logo de l’artiste</string>
+    <string name="automatic_artist_images">Logos et signatures automatiques</string>
+    <string name="artist_signature_api">API de signatures</string>
 </resources>

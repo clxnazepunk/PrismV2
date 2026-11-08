@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube akzeptiert diese Anmeldung nicht mehr. Melde dich ab und wieder an.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube sendet diesem Konto gerade keine 256 kbit/s, deshalb laufen Songs in der üblichen Qualität</string>
     <string name="playlist_recommended_songs">Empfohlene Songs</string>
+    <string name="artist_identity">Logo und Unterschrift</string>
+    <string name="artist_logo">Künstlerlogo</string>
+    <string name="automatic_artist_images">Automatische Logos und Unterschriften</string>
+    <string name="artist_signature_api">Signatur-API</string>
 </resources>

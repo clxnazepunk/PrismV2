@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube nu mai acceptă această conectare. Deconectează-te și conectează-te din nou.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube nu trimite acum 256 kbps către acest cont, așa că melodiile se aud la calitatea obișnuită</string>
     <string name="playlist_recommended_songs">Melodii recomandate</string>
+    <string name="artist_identity">Siglă și semnătură</string>
+    <string name="artist_logo">Sigla artistului</string>
+    <string name="automatic_artist_images">Sigle și semnături automate</string>
+    <string name="artist_signature_api">API pentru semnături</string>
 </resources>

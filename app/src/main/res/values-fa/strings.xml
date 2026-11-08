@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube دیگر این ورود را نمی‌پذیرد. از حساب خارج شوید و دوباره وارد شوید.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube فعلاً برای این حساب ۲۵۶ کیلوبیت‌برثانیه نمی‌فرستد، پس آهنگ‌ها با کیفیت معمول پخش می‌شوند</string>
     <string name="playlist_recommended_songs">آهنگ‌های پیشنهادی</string>
+    <string name="artist_identity">نشان و امضا</string>
+    <string name="artist_logo">نشان هنرمند</string>
+    <string name="automatic_artist_images">نشان‌ها و امضاهای خودکار</string>
+    <string name="artist_signature_api">API امضا</string>
 </resources>

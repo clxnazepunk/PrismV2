@@ -4811,4 +4811,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube 不再接受此次登录。请退出后重新登录。</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube 目前未向此帐号提供 256 kbps，因此歌曲以普通音质播放</string>
     <string name="playlist_recommended_songs">推荐歌曲</string>
+    <string name="artist_identity">标志与签名</string>
+    <string name="artist_logo">艺人标志</string>
+    <string name="automatic_artist_images">自动获取标志与签名</string>
+    <string name="artist_signature_api">签名 API</string>
 </resources>

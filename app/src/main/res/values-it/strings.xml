@@ -4939,4 +4939,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube non accetta più questo accesso. Esci e accedi di nuovo.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube non sta inviando 256 kbps a questo account, quindi i brani vengono riprodotti nella qualità consueta</string>
     <string name="playlist_recommended_songs">Brani consigliati</string>
+    <string name="artist_identity">Logo e firma</string>
+    <string name="artist_logo">Logo dell’artista</string>
+    <string name="automatic_artist_images">Loghi e firme automatici</string>
+    <string name="artist_signature_api">API delle firme</string>
 </resources>

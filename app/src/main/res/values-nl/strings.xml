@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube accepteert deze aanmelding niet meer. Meld je af en weer aan.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube stuurt op dit moment geen 256 kbps naar dit account, dus nummers spelen in de gewone kwaliteit</string>
     <string name="playlist_recommended_songs">Aanbevolen nummers</string>
+    <string name="artist_identity">Logo en handtekening</string>
+    <string name="artist_logo">Artiestenlogo</string>
+    <string name="automatic_artist_images">Automatische logo’s en handtekeningen</string>
+    <string name="artist_signature_api">Handtekening-API</string>
 </resources>

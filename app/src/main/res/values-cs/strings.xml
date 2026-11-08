@@ -5003,4 +5003,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube už toto přihlášení nepřijímá. Odhlaste se a znovu se přihlaste.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube teď tomuto účtu neposílá 256 kb/s, takže skladby hrají v obvyklé kvalitě</string>
     <string name="playlist_recommended_songs">Doporučené skladby</string>
+    <string name="artist_identity">Logo a podpis</string>
+    <string name="artist_logo">Logo interpreta</string>
+    <string name="automatic_artist_images">Automatická loga a podpisy</string>
+    <string name="artist_signature_api">API podpisů</string>
 </resources>

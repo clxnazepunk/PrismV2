@@ -4875,4 +4875,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">Το YouTube δεν δέχεται πια αυτή τη σύνδεση. Αποσυνδέσου και συνδέσου ξανά.</string>
     <string name="youtube_isnt_sending_256_kbps">Το YouTube δεν στέλνει τώρα 256 kbps σε αυτόν τον λογαριασμό, οπότε τα τραγούδια παίζουν στη συνηθισμένη ποιότητα</string>
     <string name="playlist_recommended_songs">Προτεινόμενα τραγούδια</string>
+    <string name="artist_identity">Λογότυπο και υπογραφή</string>
+    <string name="artist_logo">Λογότυπο καλλιτέχνη</string>
+    <string name="automatic_artist_images">Αυτόματα λογότυπα και υπογραφές</string>
+    <string name="artist_signature_api">API υπογραφών</string>
 </resources>

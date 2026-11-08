@@ -5003,4 +5003,8 @@
     <string name="youtube_no_longer_takes_this_sign_in">YouTube больше не принимает этот вход. Выйдите из аккаунта и войдите снова.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube сейчас не отправляет на этот аккаунт 256 кбит/с, поэтому песни играют в обычном качестве</string>
     <string name="playlist_recommended_songs">Рекомендуемые песни</string>
+    <string name="artist_identity">Логотип и подпись</string>
+    <string name="artist_logo">Логотип исполнителя</string>
+    <string name="automatic_artist_images">Автоматические логотипы и подписи</string>
+    <string name="artist_signature_api">API подписей</string>
 </resources>

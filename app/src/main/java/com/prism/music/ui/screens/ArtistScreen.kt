@@ -204,6 +204,15 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
     val sections = remember(page) { ArtistSections(page) }
     // An uploaded artist's page (#332) has no mixes, shuffles or links of YouTube's: what plays is what it lists.
     val uploads = com.prism.music.data.innertube.Parser.isUploadArtist(page.id)
+    val automaticArt by c.artistIdentities.automatic.collectAsState()
+    val signatureApi by c.artistIdentities.signatureApi.collectAsState()
+    LaunchedEffect(page.id, online, uploads, automaticArt, signatureApi) {
+        if (online && !uploads && automaticArt) {
+            try { c.artistIdentities.refresh(fromYouTube) }
+            catch (e: kotlinx.coroutines.CancellationException) { throw e }
+            catch (_: Exception) { /* Keep the cached resources and native name. */ }
+        }
+    }
     val list = rememberLazyListState()
     val palette = rememberArtPalette(page.thumbnail)
     val frost = rememberFrost(page.thumbnail)
@@ -483,11 +492,7 @@ private fun Hero(
                     },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    ArtistSignature(
-                        page.name, type, typeReady,
-                        Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 4.dp),
-                        onLongPress = onSignature,
-                    )
+                    ArtistIdentityName(page, type, typeReady, onSignature)
                     page.subscribers?.let {
                         Text(
                             it, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -577,7 +582,7 @@ private fun TopBar(
                             { Text(if (favorite) tr(R.string.remove_from_favorites) else tr(R.string.add_to_favorites)) }, { menu = false; onFavorite() },
                             leadingIcon = { Icon(if (favorite) PrismIcons.StarFilled else PrismIcons.Star, null) },
                         )
-                        DropdownMenuItem({ Text(tr(R.string.signature_style)) }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
+                        DropdownMenuItem({ Text(tr(R.string.artist_identity)) }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
                         DropdownMenuItem({ Text(tr(R.string.page_color)) }, { menu = false; onColor() }, leadingIcon = { Icon(PrismIcons.Palette, null) })
                         // Never in radios, autoplay, Smart Shuffle, mixes or Smart Downloads (Settings → Library & Replay → Exclusions).
                         val c = com.prism.music.ui.theme.LocalContainer.current
@@ -912,7 +917,7 @@ private fun SignatureSheet(page: ArtistPage, genre: String?, onDismiss: () -> Un
     val auto = remember(page.id, genre) { ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers)) }
     PrismSheet(onDismiss = onDismiss) {
         Column(Modifier.padding(horizontal = 22.dp)) {
-            Text(tr(R.string.signature), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
+            Text(tr(R.string.artist_identity), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
             Text(
                 tr(R.string.how_s_name_is_set_on, page.name),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -920,6 +925,7 @@ private fun SignatureSheet(page: ArtistPage, genre: String?, onDismiss: () -> Un
         }
         Spacer(Modifier.height(10.dp))
         LazyColumn(Modifier.heightIn(max = 560.dp), contentPadding = PaddingValues(bottom = 28.dp)) {
+            item("artist-images") { ArtistIdentityControls(page) }
             item("auto") { SignatureOption(page.name, tr(R.string.automatic, auto.label), auto, chosen == null) { c.artistPrefs.setSignature(page.id, null) } }
             items(ArtistTypography.all, key = { it.key }) { t ->
                 SignatureOption(page.name, t.label, t, chosen == t.key) { c.artistPrefs.setSignature(page.id, t.key) }
