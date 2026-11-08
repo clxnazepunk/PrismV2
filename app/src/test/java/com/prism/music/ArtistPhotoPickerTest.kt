@@ -69,8 +69,12 @@ class ArtistPhotoPickerTest {
             artistId = "second"
         }
         compose.waitForIdle()
-        compose.runOnIdle { registry.dispatchResult(registry.requestCode, Uri.fromFile(input)) }
-        compose.waitUntil(10_000) { error || covers.custom(covers.artistKey("first")) != null }
+        compose.runOnIdle { assertTrue(registry.dispatchResult(registry.requestCode, Uri.fromFile(input))) }
+        compose.waitUntil(10_000) {
+            // The importer returns via Android Dispatchers.Main, separate from Compose v2's test clock.
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+            error || covers.custom(covers.artistKey("first")) != null
+        }
         compose.runOnIdle {
             assertFalse("Photo callback returned an import failure", error)
             val saved = covers.custom(covers.artistKey("first"))!!
