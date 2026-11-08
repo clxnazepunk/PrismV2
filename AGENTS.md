@@ -23,7 +23,7 @@
 - PlaybackService y PlayerConnection conservan el control de reproducción, audio focus y MediaSession.
 - data/ArtistPrefs.kt conserva favoritos, estilo tipográfico de firma y color. Un nuevo logo o firma de imagen debe coexistir con esos datos.
 - Respetar diseños, iconos generados desde design/icons y splitTranslations: no editar archivos generados.
-- Textos nuevos localizados con placeholders consistentes; ejecutar TranslationsTest.
+- Textos nuevos localizados con placeholders consistentes; ejecutar TranslationsTest e I18nGuardTest. Los créditos también se localizan; los tipos MIME son constantes de protocolo, no textos de interfaz.
 - Seguir las versiones actuales de Gradle/dependencias; no habilitar R8/minificación en releases. CONTRIBUTING explica dependencias de reflexión.
 - Consultar límites y formatos antes de importar archivos; copiar recursos elegidos al almacenamiento propio, evitar rutas externas frágiles.
 - Diferenciar logo de firma y selección local de respuesta API. Una actualización remota no sobrescribe una elección local.
@@ -36,6 +36,8 @@
   - ./gradlew :app:testDebugUnitTest -PsideBySide=dev
   - ./gradlew :app:lintDebug -PsideBySide=dev
 - En Windows usar gradlew.bat.
+- CI prepara Gradle/Kotlin desde publicaciones oficiales con hashes en .github/actions/prepare-gradle/action.yml. Al incorporar versiones nuevas del upstream, actualizar versiones, asset IDs y hashes juntos; nunca compilar silenciosamente con herramientas anteriores.
+- ArtistIdentityStore guarda recursos y rutas relativas; las elecciones locales prevalecen. OfflineLibrary distingue perfiles guardados de caché reciente y limpia ambos al cerrar sesión.
 - La suite original contiene pruebas contra servicios en vivo; investigar y distinguir fallo de red, fallo previo y regresión.
 - No presentar compilación APK como prueba de arranque, audio real, cuentas o integraciones.
 - Para cambios de artistas/backup: pruebas significativas de independencia logo/firma, prioridad local, borrado/restauración y nombres/IDs ambiguos.

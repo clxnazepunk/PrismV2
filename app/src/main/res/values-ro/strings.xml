@@ -4946,4 +4946,8 @@
     <string name="artist_profile_save">Salvează profilul offline</string>
     <string name="artist_profile_remove">Nu mai păstra profilul</string>
     <string name="artist_identity_backup_hint">Copiile de siguranță %1$s includ profiluri de artiști salvate, coperți personalizate, sigle și semnături.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Contribuitori BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

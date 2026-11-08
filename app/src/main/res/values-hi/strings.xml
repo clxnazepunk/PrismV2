@@ -4882,4 +4882,8 @@
     <string name="artist_profile_save">प्रोफ़ाइल ऑफ़लाइन सहेजें</string>
     <string name="artist_profile_remove">प्रोफ़ाइल सहेजना बंद करें</string>
     <string name="artist_identity_backup_hint">%1$s के बैकअप में सहेजे गए कलाकार प्रोफ़ाइल, कस्टम कवर, लोगो और हस्ताक्षर शामिल हैं।</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">BitChord योगदानकर्ता</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

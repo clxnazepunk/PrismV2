@@ -91,7 +91,7 @@ class ArtistImageSources(private val get: (String) -> String?) {
             val h = logo.optInt("height")
             if (w <= 0 || h <= 0) return null
             val url = logo.optString("url").replace("{w}", "1000").replace("{h}", (1000L * h / w).coerceAtLeast(1).toString()).replace("{c}", "bb").replace("{f}", "png")
-            return url.takeIf { it.toHttpUrlOrNull()?.isHttps == true }?.let { RemoteArtistImage(it, source, "Apple Music artwork") }
+            return url.takeIf { it.toHttpUrlOrNull()?.isHttps == true }?.let { RemoteArtistImage(it, source) }
         }
 
         private fun findHeader(node: Any?, depth: Int): JSONObject? {

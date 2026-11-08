@@ -4882,4 +4882,8 @@
     <string name="artist_profile_save">Spara profilen offline</string>
     <string name="artist_profile_remove">Sluta spara profilen</string>
     <string name="artist_identity_backup_hint">Säkerhetskopior av %1$s innehåller sparade artistprofiler, egna omslag, logotyper och signaturer.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Bidragsgivare till BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

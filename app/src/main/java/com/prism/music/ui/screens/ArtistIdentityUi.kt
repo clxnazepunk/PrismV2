@@ -29,6 +29,8 @@ import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
+private const val ARTIST_IMAGE_MIME_TYPE = "image/*"
+
 /** Cached logo and handwriting are different resources. The handwriting is explicitly credited below. */
 @Composable
 internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boolean, onEdit: () -> Unit) {
@@ -99,12 +101,12 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
                 AsyncImage(identities.store.file(asset), label, Modifier.fillMaxWidth().height(74.dp), contentScale = ContentScale.Fit)
                 asset.source?.takeIf { it.startsWith("https://") }?.let { source ->
                     PrismTextButton(onClick = { runCatching { uriHandler.openUri(source) } }) {
-                        Text(asset.license ?: "Apple Music", style = MaterialTheme.typography.labelSmall)
+                        Text(asset.license ?: tr(R.string.source), style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                PrismTextButton(onClick = { role = kind; picker.launch("image/*") }, enabled = !busy) { Text(tr(R.string.choose_a_photo)) }
+                PrismTextButton(onClick = { role = kind; picker.launch(ARTIST_IMAGE_MIME_TYPE) }, enabled = !busy) { Text(tr(R.string.choose_a_photo)) }
                 if (local != null) PrismTextButton(onClick = { scope.launch { identities.store.clearLocal(page.id, kind) } }, enabled = !busy) { Text(tr(R.string.reset)) }
             }
         }

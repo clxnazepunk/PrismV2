@@ -4882,4 +4882,8 @@
     <string name="artist_profile_save">প্রোফাইল অফলাইনে রাখুন</string>
     <string name="artist_profile_remove">প্রোফাইল সংরক্ষণ বন্ধ করুন</string>
     <string name="artist_identity_backup_hint">%1$s ব্যাকআপে সংরক্ষিত শিল্পীর প্রোফাইল, নিজস্ব প্রচ্ছদ, লোগো ও স্বাক্ষর থাকে।</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">BitChord-এর অবদানকারীরা</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

@@ -4882,4 +4882,8 @@
     <string name="artist_profile_save">I-save ang profile offline</string>
     <string name="artist_profile_remove">Huwag nang panatilihin ang profile</string>
     <string name="artist_identity_backup_hint">Kasama sa mga backup ng %1$s ang mga naka-save na profile ng artist, sariling cover, logo at lagda.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Mga kontribyutor ng BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

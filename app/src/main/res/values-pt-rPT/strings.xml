@@ -4946,4 +4946,8 @@
     <string name="artist_profile_save">Guardar perfil offline</string>
     <string name="artist_profile_remove">Deixar de guardar o perfil</string>
     <string name="artist_identity_backup_hint">As cópias de segurança de %1$s incluem perfis de artistas guardados, capas personalizadas, logótipos e assinaturas.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Colaboradores do BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

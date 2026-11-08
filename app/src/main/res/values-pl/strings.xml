@@ -5010,4 +5010,8 @@
     <string name="artist_profile_save">Zapisz profil offline</string>
     <string name="artist_profile_remove">Przestań przechowywać profil</string>
     <string name="artist_identity_backup_hint">Kopie zapasowe %1$s obejmują zapisane profile wykonawców, własne okładki, logo i podpisy.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Współtwórcy BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

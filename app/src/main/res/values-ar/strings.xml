@@ -5138,4 +5138,8 @@
     <string name="artist_profile_save">حفظ الملف الشخصي دون اتصال</string>
     <string name="artist_profile_remove">إلغاء حفظ الملف الشخصي</string>
     <string name="artist_identity_backup_hint">تتضمن نسخ %1$s الاحتياطية ملفات الفنانين المحفوظة والأغلفة المخصصة والشعارات والتوقيعات.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">المساهمون في BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

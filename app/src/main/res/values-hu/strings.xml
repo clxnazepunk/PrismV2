@@ -4882,4 +4882,8 @@
     <string name="artist_profile_save">Profil mentése offline</string>
     <string name="artist_profile_remove">Profil megőrzésének leállítása</string>
     <string name="artist_identity_backup_hint">A(z) %1$s biztonsági mentései tartalmazzák a mentett előadói profilokat, egyéni borítókat, logókat és aláírásokat.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">A BitChord közreműködői</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>
