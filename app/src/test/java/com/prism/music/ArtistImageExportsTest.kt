@@ -73,7 +73,13 @@ class ArtistImageExportsTest {
             runBlocking { task.await() }
             val decoded = BitmapFactory.decodeFile(output.path)
             assertEquals(0, Color.alpha(decoded.getPixel(0, 0)))
-            assertEquals(Color.BLACK, decoded.getPixel(6, 6))
+            assertEquals("Tiny PNG must not be unnecessarily upscaled", 12, decoded.width)
+            assertEquals(12, decoded.height)
+            val pixels = IntArray(decoded.width * decoded.height)
+            decoded.getPixels(pixels, 0, decoded.width, 0, 0, decoded.width, decoded.height)
+            assertTrue("Export lost the foreground at ${decoded.width}x${decoded.height}", pixels.any { Color.alpha(it) > 200 && Color.red(it) < 32 })
+            val previewDir = File("build/artist-header-previews").apply { mkdirs() }
+            output.copyTo(File(previewDir, "export-transparent.png"), overwrite = true)
             assertArrayEquals(png, store.file(asset)!!.readBytes())
             decoded.recycle()
         } finally { scope.cancel() }

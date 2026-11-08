@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">مقامی اور واپس قابل تبدیلی۔ گہرا موڈ سفید، اسکرین سیاہ چھپاتا ہے۔ پیچیدہ پس منظر رہ سکتا ہے۔ غیر معاون موڈ بند ہیں۔</string>
     <string name="artist_export_original">اصل ڈاؤن لوڈ کریں</string>
     <string name="artist_export_png">پس منظر کی تبدیلیوں کے ساتھ PNG برآمد کریں</string>
+    <string name="artist_font_gradient">گریڈینٹ</string>
 </resources>

@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">Local și reversibil. Întunecarea ascunde albul, Ecran negrul. Fundalurile complexe pot rămâne. Modurile incompatibile sunt dezactivate.</string>
     <string name="artist_export_original">Descarcă originalul</string>
     <string name="artist_export_png">Exportă PNG cu ajustările fundalului</string>
+    <string name="artist_font_gradient">Gradient</string>
 </resources>

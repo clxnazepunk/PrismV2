@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">Local e reversível. Escurecer disfarça branco, Ecrã disfarça preto. Fundos complexos podem permanecer. Modos incompatíveis são desativados.</string>
     <string name="artist_export_original">Transferir original</string>
     <string name="artist_export_png">Exportar PNG com ajustes de fundo</string>
+    <string name="artist_font_gradient">Gradiente</string>
 </resources>

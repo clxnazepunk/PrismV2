@@ -4862,4 +4862,5 @@
     <string name="artist_background_hint">在本机处理且可还原。变暗可隐藏白色，滤色可隐藏黑色。复杂背景可能保留。不支持的模式会被禁用。</string>
     <string name="artist_export_original">下载原图</string>
     <string name="artist_export_png">导出应用背景调整的PNG</string>
+    <string name="artist_font_gradient">渐变</string>
 </resources>

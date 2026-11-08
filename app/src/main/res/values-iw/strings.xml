@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">מקומי והפיך. הכהיה מסתירה לבן ומסך מסתיר שחור. רקע מורכב עשוי להישאר. מצבים לא נתמכים מושבתים.</string>
     <string name="artist_export_original">הורדת המקור</string>
     <string name="artist_export_png">ייצוא PNG עם התאמות רקע</string>
+    <string name="artist_font_gradient">מעבר צבע</string>
 </resources>

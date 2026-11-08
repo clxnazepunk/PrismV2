@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Yerel ve geri alınabilir. Koyulaştır beyazı, Ekran siyahı gizler. Karmaşık arka plan kalabilir. Desteklenmeyen modlar kapalıdır.</string>
     <string name="artist_export_original">Orijinali indir</string>
     <string name="artist_export_png">Arka plan ayarlarıyla PNG dışa aktar</string>
+    <string name="artist_font_gradient">Gradyan</string>
 </resources>

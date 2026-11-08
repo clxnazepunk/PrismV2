@@ -4862,4 +4862,5 @@
     <string name="artist_background_hint">Xử lý trên máy và có thể hoàn tác. Làm tối giấu trắng, Lọc sáng giấu đen. Nền phức tạp có thể còn lại. Chế độ không hỗ trợ bị tắt.</string>
     <string name="artist_export_original">Tải bản gốc</string>
     <string name="artist_export_png">Xuất PNG với điều chỉnh nền</string>
+    <string name="artist_font_gradient">Chuyển màu</string>
 </resources>

@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">Local y reversible. Oscurecer disimula el blanco; Trama disimula el negro. Los fondos complejos pueden permanecer. Los modos no compatibles se desactivan.</string>
     <string name="artist_export_original">Descargar original</string>
     <string name="artist_export_png">Exportar PNG con ajustes de fondo</string>
+    <string name="artist_font_gradient">Degradado</string>
 </resources>

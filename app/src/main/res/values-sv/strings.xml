@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Lokalt och ångrbart. Mörkare döljer vitt, Raster svart. Komplexa bakgrunder kan bli kvar. Lägen utan stöd är avstängda.</string>
     <string name="artist_export_original">Ladda ned original</string>
     <string name="artist_export_png">Exportera PNG med bakgrundsjusteringar</string>
+    <string name="artist_font_gradient">Övertoning</string>
 </resources>

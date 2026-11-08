@@ -49,7 +49,7 @@ object ArtistImageExports {
             } ?: error("Cannot open destination")
         } else {
             val fit = layout.bounded()
-            val request = ImageRequest.Builder(context).data(source).size(2048, 2048).allowHardware(false)
+            val request = ImageRequest.Builder(context).data(source).size(ArtistRasterSize(source, 2048)).allowHardware(false)
                 .apply { if (fit.removeBackground) transformations(UniformArtistBackground(fit.backgroundTolerance)) }.build()
             val bitmap = (SingletonImageLoader.get(context).execute(request) as? SuccessResult)?.image?.toBitmap()
                 ?: error("Cannot decode artist image")

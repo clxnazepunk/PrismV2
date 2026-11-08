@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Τοπικό και αναστρέψιμο. Η σκούρυνση κρύβει το λευκό, η οθόνη το μαύρο. Σύνθετα φόντα μπορεί να μείνουν. Μη υποστηριζόμενες λειτουργίες απενεργοποιούνται.</string>
     <string name="artist_export_original">Λήψη πρωτοτύπου</string>
     <string name="artist_export_png">Εξαγωγή PNG με ρυθμίσεις φόντου</string>
+    <string name="artist_font_gradient">Διαβάθμιση</string>
 </resources>

@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">স্থানীয় ও ফিরিয়ে নেওয়া যায়। গাঢ় মোড সাদা এবং স্ক্রিন কালো আড়াল করে। জটিল পটভূমি থাকতে পারে। অসমর্থিত মোড বন্ধ।</string>
     <string name="artist_export_original">আসল ছবি ডাউনলোড</string>
     <string name="artist_export_png">পটভূমি সমন্বয়সহ PNG রপ্তানি</string>
+    <string name="artist_font_gradient">গ্রেডিয়েন্ট</string>
 </resources>

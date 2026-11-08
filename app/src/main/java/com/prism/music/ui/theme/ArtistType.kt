@@ -151,13 +151,13 @@ object ArtistTypography {
     }
 
     /** Hollow, outlined wide capitals. */
-    private val outline by lazy { extended.copy(key = "outline", label = "Outline", size = 38f, effect = SignatureEffect.OUTLINE) }
+    private val outline by lazy { extended.copy(key = "outline", label = tr(R.string.outline), size = 38f, effect = SignatureEffect.OUTLINE) }
 
     /** Rounded letters glowing in the artist's color. */
-    private val neon by lazy { rounded.copy(key = "neon", label = "Neon", effect = SignatureEffect.GLOW) }
+    private val neon by lazy { rounded.copy(key = "neon", label = tr(R.string.neon), effect = SignatureEffect.GLOW) }
 
     /** The display serif, filled with a gradient of the artist's colors. */
-    private val gradient by lazy { serif.copy(key = "gradient", label = "Gradient", size = 50f, effect = SignatureEffect.GRADIENT) }
+    private val gradient by lazy { serif.copy(key = "gradient", label = tr(R.string.artist_font_gradient), size = 50f, effect = SignatureEffect.GRADIENT) }
 
     /** The everyday headline: Apple's standard heavy sans. */
     val standard by lazy {

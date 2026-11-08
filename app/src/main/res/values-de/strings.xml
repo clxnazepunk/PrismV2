@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Lokal und rückgängig machbar. Abdunkeln verbirgt Weiß, Negativ multiplizieren Schwarz. Komplexe Hintergründe können bleiben. Nicht unterstützte Modi sind deaktiviert.</string>
     <string name="artist_export_original">Original herunterladen</string>
     <string name="artist_export_png">PNG mit Hintergrundanpassungen exportieren</string>
+    <string name="artist_font_gradient">Farbverlauf</string>
 </resources>

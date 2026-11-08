@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">स्थानीय और वापस बदलने योग्य। गहरा मोड सफेद, स्क्रीन काला छिपाता है। जटिल पृष्ठभूमि रह सकती है। असमर्थित मोड बंद हैं।</string>
     <string name="artist_export_original">मूल डाउनलोड करें</string>
     <string name="artist_export_png">पृष्ठभूमि बदलाव सहित PNG निर्यात करें</string>
+    <string name="artist_font_gradient">ग्रेडिएंट</string>
 </resources>

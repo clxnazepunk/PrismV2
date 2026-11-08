@@ -4862,4 +4862,5 @@
     <string name="artist_background_hint">Lokal dan dapat dibatalkan. Gelapkan menyamarkan putih, Layar hitam. Latar rumit mungkin tersisa. Mode tak didukung dinonaktifkan.</string>
     <string name="artist_export_original">Unduh asli</string>
     <string name="artist_export_png">Ekspor PNG dengan penyesuaian latar</string>
+    <string name="artist_font_gradient">Gradien</string>
 </resources>

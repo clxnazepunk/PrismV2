@@ -4956,4 +4956,5 @@
     <string name="artist_background_hint">Local and reversible. Darken hides white; Screen hides black. Complex backgrounds may remain. Unsupported modes are disabled.</string>
     <string name="artist_export_original">Download original</string>
     <string name="artist_export_png">Export PNG with background adjustments</string>
+    <string name="artist_font_gradient">Gradient</string>
 </resources>

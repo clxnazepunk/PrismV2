@@ -97,8 +97,11 @@ internal fun ArtistMark(
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
     Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).clickable(onClick = onEdit)) {
         AsyncImage(
-            ImageRequest.Builder(context).data(file).size(if (fit.removeBackground) 1024 else 1600, if (fit.removeBackground) 1024 else 800)
-                .apply { if (fit.removeBackground) transformations(UniformArtistBackground(fit.backgroundTolerance)) }.build(), label,
+            ImageRequest.Builder(context).data(file)
+                .apply {
+                    if (fit.removeBackground) { size(ArtistRasterSize(file, 1024)); transformations(UniformArtistBackground(fit.backgroundTolerance)) }
+                    else size(1600, 800)
+                }.build(), label,
             Modifier.fillMaxSize().graphicsLayer {
                 scaleX = fit.scale; scaleY = fit.scale
                 blendMode = mode
@@ -188,7 +191,7 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
-    var role by remember { mutableStateOf(ArtistImageRole.LOGO) }
+    var role by rememberSaveable { mutableStateOf(ArtistImageRole.LOGO) }
     var busy by remember { mutableStateOf(false) }
     var adjusting by remember { mutableStateOf<ArtistImageRole?>(null) }
     val current = entries[page.id] ?: ArtistIdentity()

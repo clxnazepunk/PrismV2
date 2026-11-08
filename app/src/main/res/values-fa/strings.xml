@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">محلی و برگشت‌پذیر. تیره کردن سفید و اسکرین سیاه را پنهان می‌کند. پس‌زمینه پیچیده ممکن است باقی بماند. حالت‌های پشتیبانی‌نشده غیرفعال‌اند.</string>
     <string name="artist_export_original">دانلود نسخه اصلی</string>
     <string name="artist_export_png">خروجی PNG با تنظیمات پس‌زمینه</string>
+    <string name="artist_font_gradient">گرادیان</string>
 </resources>

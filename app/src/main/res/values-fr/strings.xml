@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">Local et réversible. Obscurcir masque le blanc, Superposition le noir. Un fond complexe peut rester. Modes incompatibles désactivés.</string>
     <string name="artist_export_original">Télécharger l’original</string>
     <string name="artist_export_png">Exporter un PNG avec les réglages du fond</string>
+    <string name="artist_font_gradient">Dégradé</string>
 </resources>

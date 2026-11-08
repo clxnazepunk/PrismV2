@@ -5054,4 +5054,5 @@
     <string name="artist_background_hint">Lokalne i odwracalne. Przyciemnianie ukrywa biel, Ekran czerń. Złożone tła mogą pozostać. Nieobsługiwane tryby wyłączone.</string>
     <string name="artist_export_original">Pobierz oryginał</string>
     <string name="artist_export_png">Eksportuj PNG z korektą tła</string>
+    <string name="artist_font_gradient">Gradient</string>
 </resources>

@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Helyi és visszavonható. A sötétítés a fehéret, a kivetítés a feketét rejti el. Összetett háttér megmaradhat. Nem támogatott módok tiltva.</string>
     <string name="artist_export_original">Eredeti letöltése</string>
     <string name="artist_export_png">PNG exportálása háttérbeállításokkal</string>
+    <string name="artist_font_gradient">Színátmenet</string>
 </resources>

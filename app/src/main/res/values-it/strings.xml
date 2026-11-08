@@ -4990,4 +4990,5 @@
     <string name="artist_background_hint">Locale e reversibile. Scurisci nasconde il bianco, Scolora il nero. Gli sfondi complessi possono restare. Metodi non supportati disattivati.</string>
     <string name="artist_export_original">Scarica originale</string>
     <string name="artist_export_png">Esporta PNG con regolazioni sfondo</string>
+    <string name="artist_font_gradient">Sfumatura</string>
 </resources>

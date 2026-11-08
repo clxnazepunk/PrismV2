@@ -4862,4 +4862,5 @@
     <string name="artist_background_hint">ทำบนเครื่องและย้อนกลับได้ โหมดมืดช่วยซ่อนสีขาว สกรีนช่วยซ่อนสีดำ พื้นหลังซับซ้อนอาจยังอยู่ โหมดที่ไม่รองรับถูกปิด</string>
     <string name="artist_export_original">ดาวน์โหลดต้นฉบับ</string>
     <string name="artist_export_png">ส่งออก PNG พร้อมการปรับพื้นหลัง</string>
+    <string name="artist_font_gradient">ไล่สี</string>
 </resources>

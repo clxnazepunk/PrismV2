@@ -5054,4 +5054,5 @@
     <string name="artist_background_hint">Локально и обратимо. Затемнение скрывает белое, Экран чёрное. Сложный фон может остаться. Неподдерживаемые режимы отключены.</string>
     <string name="artist_export_original">Скачать оригинал</string>
     <string name="artist_export_png">Экспорт PNG с настройками фона</string>
+    <string name="artist_font_gradient">Градиент</string>
 </resources>

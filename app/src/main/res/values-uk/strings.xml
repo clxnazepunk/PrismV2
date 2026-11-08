@@ -5054,4 +5054,5 @@
     <string name="artist_background_hint">Локально й зворотно. Затемнення приховує біле, Екран чорне. Складне тло може залишитися. Непідтримувані режими вимкнені.</string>
     <string name="artist_export_original">Завантажити оригінал</string>
     <string name="artist_export_png">Експорт PNG з налаштуваннями тла</string>
+    <string name="artist_font_gradient">Градієнт</string>
 </resources>

@@ -4926,4 +4926,5 @@
     <string name="artist_background_hint">Lokaal en omkeerbaar. Donkerder verbergt wit, Bleken zwart. Complexe achtergronden kunnen blijven. Niet-ondersteunde modi staan uit.</string>
     <string name="artist_export_original">Origineel downloaden</string>
     <string name="artist_export_png">PNG met achtergrondaanpassingen exporteren</string>
+    <string name="artist_font_gradient">Kleurverloop</string>
 </resources>

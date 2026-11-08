@@ -4862,4 +4862,5 @@
     <string name="artist_background_hint">기기 내에서 처리하며 되돌릴 수 있습니다. 어둡게는 흰색, 스크린은 검은색을 숨깁니다. 복잡한 배경은 남을 수 있습니다. 미지원 모드는 비활성화됩니다.</string>
     <string name="artist_export_original">원본 다운로드</string>
     <string name="artist_export_png">배경 조정이 적용된 PNG 내보내기</string>
+    <string name="artist_font_gradient">그라데이션</string>
 </resources>

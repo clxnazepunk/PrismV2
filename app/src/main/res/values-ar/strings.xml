@@ -5182,4 +5182,5 @@
     <string name="artist_background_hint">محلي وقابل للتراجع. التغميق يخفي الأبيض والشاشة تخفي الأسود. قد تبقى الخلفيات المعقدة. تُعطّل الأوضاع غير المدعومة.</string>
     <string name="artist_export_original">تنزيل الأصل</string>
     <string name="artist_export_png">تصدير PNG مع تعديلات الخلفية</string>
+    <string name="artist_font_gradient">تدرج</string>
 </resources>

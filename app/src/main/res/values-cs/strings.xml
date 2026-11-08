@@ -5054,4 +5054,5 @@
     <string name="artist_background_hint">Místní a vratné. Ztmavení skryje bílou, závoj černou. Složité pozadí může zůstat. Nepodporované režimy jsou vypnuté.</string>
     <string name="artist_export_original">Stáhnout originál</string>
     <string name="artist_export_png">Exportovat PNG s úpravami pozadí</string>
+    <string name="artist_font_gradient">Přechod</string>
 </resources>
