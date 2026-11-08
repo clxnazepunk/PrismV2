@@ -5024,4 +5024,14 @@
     <string name="artist_native_text">Tekst</string>
     <string name="artist_signature_caption">Pokaż nazwę wykonawcy pod podpisem</string>
     <string name="artist_invert">Odwróć kolor</string>
+    <string name="artist_font_settings">Typografia wykonawców</string>
+    <string name="artist_font_hint">Domyślnie standardowa czcionka. Wybory indywidualne mają pierwszeństwo; logo i obrazy podpisu są niezależne.</string>
+    <string name="artist_font_fixed">Stała czcionka</string>
+    <string name="artist_font_random">Losowa przy każdej wizycie</string>
+    <string name="artist_font_smart">Inteligentna typografia</string>
+    <string name="artist_font_original">Oryginalny automatyczny styl Prism</string>
+    <string name="artist_font_fallback">Czcionka domyślna i zastępcza</string>
+    <string name="artist_font_genres_hint">Te same 16 gatunków playlist z Deezer i iTunes. Rap to Hip-hop; Salsa, Cumbia i Norteño obecnie trafiają do Pop. Nieznany gatunek używa czcionki domyślnej.</string>
+    <string name="artist_font_add_group">Dodaj nową grupę</string>
+    <string name="artist_font_used">Używany w innej grupie</string>
 </resources>

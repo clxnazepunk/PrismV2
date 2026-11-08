@@ -4832,4 +4832,14 @@
     <string name="artist_native_text">文字</string>
     <string name="artist_signature_caption">在签名下显示艺人姓名</string>
     <string name="artist_invert">反转颜色</string>
+    <string name="artist_font_settings">艺人字体</string>
+    <string name="artist_font_hint">默认使用标准字体。艺人单独设置优先，标志和签名图片互不影响。</string>
+    <string name="artist_font_fixed">固定字体</string>
+    <string name="artist_font_random">每次访问随机</string>
+    <string name="artist_font_smart">智能字体</string>
+    <string name="artist_font_original">Prism原有自动样式</string>
+    <string name="artist_font_fallback">默认及备用字体</string>
+    <string name="artist_font_genres_hint">使用与歌单相同的16类流派，依据Deezer和iTunes估计。Rap归入Hip-hop；Salsa、Cumbia和Norteño目前归入Pop。未知或未分组流派使用默认字体。</string>
+    <string name="artist_font_add_group">添加新分组</string>
+    <string name="artist_font_used">已用于其他分组</string>
 </resources>

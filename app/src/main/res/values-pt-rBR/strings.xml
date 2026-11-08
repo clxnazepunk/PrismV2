@@ -4960,4 +4960,14 @@
     <string name="artist_native_text">Texto</string>
     <string name="artist_signature_caption">Mostrar nome do artista abaixo da assinatura</string>
     <string name="artist_invert">Inverter cor</string>
+    <string name="artist_font_settings">Tipografia dos artistas</string>
+    <string name="artist_font_hint">Fonte padrão por predefinição. Escolhas individuais têm prioridade; logos e imagens de assinatura são independentes.</string>
+    <string name="artist_font_fixed">Fonte fixa</string>
+    <string name="artist_font_random">Aleatória a cada visita</string>
+    <string name="artist_font_smart">Tipografia inteligente</string>
+    <string name="artist_font_original">Estilo automático original do Prism</string>
+    <string name="artist_font_fallback">Fonte padrão e alternativa</string>
+    <string name="artist_font_genres_hint">Os mesmos 16 gêneros das playlists, estimados com Deezer e iTunes. Rap fica em Hip-hop; Salsa, Cumbia e Norteño atualmente em Pop. Gênero desconhecido usa a fonte padrão.</string>
+    <string name="artist_font_add_group">Adicionar novo grupo</string>
+    <string name="artist_font_used">Já usado em outro grupo</string>
 </resources>

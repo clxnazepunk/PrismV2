@@ -4960,4 +4960,14 @@
     <string name="artist_native_text">טקסט</string>
     <string name="artist_signature_caption">הצגת שם האמן מתחת לחתימה</string>
     <string name="artist_invert">היפוך צבע</string>
+    <string name="artist_font_settings">טיפוגרפיית אמנים</string>
+    <string name="artist_font_hint">גופן רגיל כברירת מחדל. בחירות אישיות קודמות; סמלים ותמונות חתימה עצמאיים.</string>
+    <string name="artist_font_fixed">גופן קבוע</string>
+    <string name="artist_font_random">אקראי בכל ביקור</string>
+    <string name="artist_font_smart">טיפוגרפיה חכמה</string>
+    <string name="artist_font_original">הסגנון האוטומטי המקורי של Prism</string>
+    <string name="artist_font_fallback">גופן ברירת מחדל וחלופי</string>
+    <string name="artist_font_genres_hint">אותם 16 ז׳אנרים של הפלייליסטים לפי Deezer ו-iTunes. ראפ משויך להיפ הופ; סלסה, קומביה ונורטניו לפופ. ז׳אנר לא ידוע משתמש בגופן ברירת המחדל.</string>
+    <string name="artist_font_add_group">הוספת קבוצה חדשה</string>
+    <string name="artist_font_used">כבר בשימוש בקבוצה אחרת</string>
 </resources>

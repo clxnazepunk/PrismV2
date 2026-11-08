@@ -4960,4 +4960,14 @@
     <string name="artist_native_text">Text</string>
     <string name="artist_signature_caption">Arată numele artistului sub semnătură</string>
     <string name="artist_invert">Inversează culoarea</string>
+    <string name="artist_font_settings">Tipografia artiștilor</string>
+    <string name="artist_font_hint">Font standard implicit. Alegerile individuale au prioritate; siglele și imaginile semnăturii sunt independente.</string>
+    <string name="artist_font_fixed">Font fix</string>
+    <string name="artist_font_random">Aleatoriu la fiecare vizită</string>
+    <string name="artist_font_smart">Tipografie inteligentă</string>
+    <string name="artist_font_original">Stilul automat original Prism</string>
+    <string name="artist_font_fallback">Font implicit și de rezervă</string>
+    <string name="artist_font_genres_hint">Aceleași 16 genuri ca în playlisturi, estimate prin Deezer și iTunes. Rap este Hip-hop; Salsa, Cumbia și Norteño sunt momentan Pop. Gen necunoscut: font implicit.</string>
+    <string name="artist_font_add_group">Adaugă grup nou</string>
+    <string name="artist_font_used">Deja folosit în alt grup</string>
 </resources>

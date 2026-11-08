@@ -5152,4 +5152,14 @@
     <string name="artist_native_text">نص</string>
     <string name="artist_signature_caption">إظهار اسم الفنان أسفل التوقيع</string>
     <string name="artist_invert">عكس اللون</string>
+    <string name="artist_font_settings">خطوط الفنانين</string>
+    <string name="artist_font_hint">الخط القياسي افتراضيًا. اختيارات الفنان الفردية لها الأولوية؛ الشعارات وصور التوقيع مستقلة.</string>
+    <string name="artist_font_fixed">خط ثابت</string>
+    <string name="artist_font_random">عشوائي عند كل زيارة</string>
+    <string name="artist_font_smart">خط ذكي</string>
+    <string name="artist_font_original">النمط التلقائي الأصلي لـ Prism</string>
+    <string name="artist_font_fallback">الخط الافتراضي والبديل</string>
+    <string name="artist_font_genres_hint">تُستخدم فئات قوائم التشغيل الـ16 المقدرة من Deezer وiTunes. الراب ضمن الهيب هوب والسالسا والكومبيا والنورتينيو ضمن البوب. الفئة المجهولة تستخدم الخط الافتراضي.</string>
+    <string name="artist_font_add_group">إضافة مجموعة جديدة</string>
+    <string name="artist_font_used">مستخدم في مجموعة أخرى</string>
 </resources>

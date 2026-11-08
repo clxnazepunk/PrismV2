@@ -5024,4 +5024,14 @@
     <string name="artist_native_text">Text</string>
     <string name="artist_signature_caption">Zobrazit jméno interpreta pod podpisem</string>
     <string name="artist_invert">Invertovat barvu</string>
+    <string name="artist_font_settings">Písmo interpretů</string>
+    <string name="artist_font_hint">Výchozí je standardní písmo. Volby pro interpreta mají přednost; loga a obrázky podpisů jsou nezávislé.</string>
+    <string name="artist_font_fixed">Pevné písmo</string>
+    <string name="artist_font_random">Náhodné při každé návštěvě</string>
+    <string name="artist_font_smart">Chytré písmo</string>
+    <string name="artist_font_original">Původní automatický styl Prism</string>
+    <string name="artist_font_fallback">Výchozí a náhradní písmo</string>
+    <string name="artist_font_genres_hint">Stejných 16 žánrů jako u playlistů, odhad z Deezer a iTunes. Rap je Hip-hop; Salsa, Cumbia a Norteño spadají pod Pop. Neznámý žánr použije výchozí písmo.</string>
+    <string name="artist_font_add_group">Přidat novou skupinu</string>
+    <string name="artist_font_used">Použito v jiné skupině</string>
 </resources>

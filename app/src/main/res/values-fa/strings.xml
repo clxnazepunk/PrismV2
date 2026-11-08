@@ -4896,4 +4896,14 @@
     <string name="artist_native_text">متن</string>
     <string name="artist_signature_caption">نمایش نام هنرمند زیر امضا</string>
     <string name="artist_invert">معکوس کردن رنگ</string>
+    <string name="artist_font_settings">قلم هنرمندان</string>
+    <string name="artist_font_hint">پیش‌فرض قلم استاندارد است. انتخاب هر هنرمند اولویت دارد؛ لوگو و تصویر امضا مستقل‌اند.</string>
+    <string name="artist_font_fixed">قلم ثابت</string>
+    <string name="artist_font_random">تصادفی در هر بازدید</string>
+    <string name="artist_font_smart">قلم هوشمند</string>
+    <string name="artist_font_original">سبک خودکار اصلی Prism</string>
+    <string name="artist_font_fallback">قلم پیش‌فرض و جایگزین</string>
+    <string name="artist_font_genres_hint">همان ۱۶ سبک فهرست پخش از Deezer و iTunes. رپ در هیپ‌هاپ؛ سالسا، کومبیا و نورتنیو فعلاً در پاپ هستند. سبک نامشخص از قلم پیش‌فرض استفاده می‌کند.</string>
+    <string name="artist_font_add_group">افزودن گروه جدید</string>
+    <string name="artist_font_used">در گروه دیگری استفاده شده</string>
 </resources>

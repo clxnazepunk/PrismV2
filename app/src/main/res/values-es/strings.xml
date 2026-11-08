@@ -4960,4 +4960,14 @@
     <string name="artist_native_text">Texto</string>
     <string name="artist_signature_caption">Mostrar nombre del artista debajo de la firma</string>
     <string name="artist_invert">Invertir color</string>
+    <string name="artist_font_settings">Tipografías de artistas</string>
+    <string name="artist_font_hint">Estándar por defecto. Las elecciones individuales del artista tienen prioridad; logos y firmas de imagen son independientes.</string>
+    <string name="artist_font_fixed">Tipografía fija</string>
+    <string name="artist_font_random">Aleatoria en cada visita</string>
+    <string name="artist_font_smart">Tipografía inteligente</string>
+    <string name="artist_font_original">Estilo automático original de Prism</string>
+    <string name="artist_font_fallback">Tipografía predeterminada y alternativa</string>
+    <string name="artist_font_genres_hint">Usa los mismos 16 géneros generales de las playlists, estimados con Deezer e iTunes. Rap se agrupa en Hip-hop; Salsa, Cumbia y Norteño actualmente en Pop. Sin género o grupo asignado se usa la tipografía predeterminada.</string>
+    <string name="artist_font_add_group">Agregar nuevo grupo</string>
+    <string name="artist_font_used">Ya utilizado en otro grupo</string>
 </resources>

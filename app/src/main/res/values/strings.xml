@@ -4926,4 +4926,14 @@
     <string name="artist_native_text">Text</string>
     <string name="artist_signature_caption">Show artist name below signature</string>
     <string name="artist_invert">Invert color</string>
+    <string name="artist_font_settings">Artist typography</string>
+    <string name="artist_font_hint">Standard by default. Individual artist choices take priority; logos and image signatures remain independent.</string>
+    <string name="artist_font_fixed">Fixed font</string>
+    <string name="artist_font_random">Random on each visit</string>
+    <string name="artist_font_smart">Smart typography</string>
+    <string name="artist_font_original">Original Prism automatic style</string>
+    <string name="artist_font_fallback">Default font and fallback</string>
+    <string name="artist_font_genres_hint">Uses the same 16 broad genres as playlists, estimated from Deezer and iTunes. Rap is Hip-hop; Salsa, Cumbia and Norteño currently fall under Pop. Unknown or unassigned genres use the default font.</string>
+    <string name="artist_font_add_group">Add new group</string>
+    <string name="artist_font_used">Already used in another group</string>
 </resources>

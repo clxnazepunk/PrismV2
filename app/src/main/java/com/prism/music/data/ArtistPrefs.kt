@@ -27,8 +27,21 @@ class ArtistPrefs(context: Context) {
         prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
     )
 
+    private fun readTypography() = prefs.getString(TYPE, null)?.let {
+        runCatching { InnerTube.json.decodeFromString(ArtistTypographyConfig.serializer(), it).sanitized() }.getOrNull()
+    } ?: ArtistTypographyConfig()
+
+    val typography = MutableStateFlow(readTypography())
+
+    fun setTypography(value: ArtistTypographyConfig) {
+        val next = value.sanitized()
+        prefs.edit().putString(TYPE, InnerTube.json.encodeToString(ArtistTypographyConfig.serializer(), next)).apply()
+        typography.value = next
+    }
+
     /** Reads the saved choices again (after "Bring your Prism" merged a phone's into them, 1.8.0). */
     fun reload() {
+        typography.value = readTypography()
         favorites.value = prefs.getString("favorites", null)?.let { runCatching { InnerTube.json.decodeFromString(listSerializer, it) }.getOrNull() } ?: emptyList()
         signatures.value = prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
         colors.value = prefs.all.filterKeys { it.startsWith(COL) }.mapNotNull { (k, v) -> (v as? Int)?.let { k.removePrefix(COL) to it } }.toMap()
@@ -87,6 +100,7 @@ class ArtistPrefs(context: Context) {
     }
 
     companion object {
+        private const val TYPE = "typography_config"
         private const val SIG = "sig:"
         private const val COL = "col:"
         private const val REPAIRED = "stars_repaired_182"
