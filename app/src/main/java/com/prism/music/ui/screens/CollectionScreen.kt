@@ -289,6 +289,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val songs by live.songs.collectAsState()
     val loadingMore by live.loadingMore.collectAsState()
     val page = live.page.copy(songs = songs)
+    val playlistSuggestions = remember(page.id) { LocalPlaylistSuggestionsState() }
     // Plain map + a version counter: results land in batches, so the list re-sorts a handful
     // of times rather than once per song.
     val genres = remember(page.id) { HashMap<String, String>() }
@@ -826,6 +827,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 8.dp),
                     )
+                }
+                if (type == CollectionType.PRISM && query.isBlank() && genreFilter == null &&
+                    com.prism.music.data.foryou.PlaylistSuggestions.seeds(songs).isNotEmpty()) item("playlist-suggestions") {
+                    LocalPlaylistSuggestions(page.id, page.title, songs, playlistSuggestions, scope)
                 }
                 if (type == CollectionType.ALBUM) {
                     if (live.page.otherVersions.isNotEmpty()) item("versions") {

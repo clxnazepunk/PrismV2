@@ -16,7 +16,7 @@ no funcionalidades ya entregadas ni garantía de compatibilidad.
 | N07 / F06 | Pendiente | Reunir álbumes oficiales guardados y privados subidos del artista. Primero evaluar el perfil actual; usar Catálogo si la integración es compleja/frágil. |
 | N08 / F07 | Pendiente | Orden y agrupación por año de lanzamientos oficiales/no oficiales disponibles, con fechas desconocidas explícitas. |
 | N09 / F07 | Pendiente | Búsqueda conjunta por artista y cronología, en perfil o Catálogo según la evaluación N07. |
-| N10 / F09 | Pendiente | Recomendaciones relacionadas al final de playlist y acción inmediata de añadir, inspiradas en MySpoti. |
+| N10 / F09 | Primera etapa local en revisión; remota pendiente | Recomendaciones relacionadas al final de playlist y acción inmediata de añadir, inspiradas en MySpoti. |
 | N11 / F10 | Desmarcada por el propietario | No activar una playlist radio fija de 30 canciones sin nueva indicación. |
 | N12 / F10 | Pendiente | Radio sucesiva/radio de la radio para descubrir música; no garantizar rareza ni cantidad exacta. |
 

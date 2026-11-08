@@ -4874,4 +4874,5 @@
     <string name="speed_dial_your_plays_first_info">YouTube, Prism को अपनी वेबसाइट की टाइलें भेजता है, जो उसके ऐप वाली नहीं होतीं और हमेशा आपके सुने गानों के हिसाब से नहीं चलतीं। चालू होने पर, पिछले तीन महीनों में इस फ़ोन पर आपने जो सबसे ज़्यादा सुना वह पहले आता है, और बाकी जगह YouTube की टाइलें भरती हैं।</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube अब यह साइन-इन स्वीकार नहीं करता। साइन आउट करके फिर से साइन इन करें।</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube अभी इस खाते को 256 kbps नहीं भेज रहा, इसलिए गाने सामान्य क्वालिटी में चल रहे हैं</string>
+    <string name="playlist_recommended_songs">सुझाए गए गाने</string>
 </resources>

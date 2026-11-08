@@ -4874,4 +4874,5 @@
     <string name="speed_dial_your_plays_first_info">YouTube, Prism-কে তার ওয়েবসাইটের টাইল পাঠায়, যা তার অ্যাপের টাইল নয় এবং সবসময় আপনার শোনা গান অনুসরণ করে না। চালু থাকলে, গত তিন মাসে এই ফোনে আপনি যা সবচেয়ে বেশি শুনেছেন তা আগে আসে, আর বাকিটা YouTube-এর টাইল দিয়ে ভরে।</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube আর এই সাইন-ইন গ্রহণ করছে না। সাইন আউট করে আবার সাইন ইন করুন।</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube এখন এই অ্যাকাউন্টে 256 kbps পাঠাচ্ছে না, তাই গান সাধারণ মানে বাজছে</string>
+    <string name="playlist_recommended_songs">প্রস্তাবিত গান</string>
 </resources>

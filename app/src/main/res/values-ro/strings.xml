@@ -4938,4 +4938,5 @@
     <string name="speed_dial_your_plays_first_info">YouTube îi trimite lui Prism plăcile de pe site-ul său, care nu sunt cele din aplicație și nu urmăresc mereu ce asculți. Când este activat, mai întâi apare ce ai ascultat cel mai mult pe acest telefon în ultimele trei luni, iar plăcile YouTube completează restul.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube nu mai acceptă această conectare. Deconectează-te și conectează-te din nou.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube nu trimite acum 256 kbps către acest cont, așa că melodiile se aud la calitatea obișnuită</string>
+    <string name="playlist_recommended_songs">Melodii recomandate</string>
 </resources>
