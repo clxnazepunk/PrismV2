@@ -40,7 +40,9 @@ runs:
         PRISM_KOTLIN_SHA1: 23b042894dcabe39edd0f8bd30b7be0f25fe9933
       run: |
         set -euo pipefail
-        compiler_dir="${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/2.4.20/$PRISM_KOTLIN_SHA1"
+        gradle_home="${GRADLE_USER_HOME:-$HOME/.gradle}"
+        verified_repo="$gradle_home/caches/prism-verified-maven"
+        compiler_dir="$verified_repo/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.4.20"
         compiler="$compiler_dir/kotlin-compiler-embeddable-2.4.20.jar"
         mkdir -p "$compiler_dir"
         if ! printf '%s  %s\n' "$PRISM_KOTLIN_SHA256" "$compiler" | sha256sum --check --status; then
@@ -52,3 +54,23 @@ runs:
           printf '%s  %s\n' "$PRISM_KOTLIN_SHA1" "$compiler.part" | sha1sum --check
           mv "$compiler.part" "$compiler"
         fi
+        curl --fail --location --retry 3 --connect-timeout 15 --max-time 60 \
+          --output "$compiler_dir/kotlin-compiler-embeddable-2.4.20.pom" \
+          https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.4.20/kotlin-compiler-embeddable-2.4.20.pom
+        printf 'PRISM_VERIFIED_KOTLIN_REPO=%s\n' "$verified_repo" >> "$GITHUB_ENV"
+        mkdir -p "$gradle_home/init.d"
+        cat > "$gradle_home/init.d/prism-verified-kotlin.gradle" <<'GROOVY'
+        settingsEvaluated { settings ->
+            settings.dependencyResolutionManagement.repositories {
+                exclusiveContent {
+                    forRepository {
+                        maven {
+                            name = "PrismVerifiedKotlinCompiler"
+                            url = new File(System.getenv("PRISM_VERIFIED_KOTLIN_REPO")).toURI()
+                        }
+                    }
+                    filter { includeModule("org.jetbrains.kotlin", "kotlin-compiler-embeddable") }
+                }
+            }
+        }
+        GROOVY
