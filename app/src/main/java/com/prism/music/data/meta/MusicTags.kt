@@ -42,6 +42,9 @@ object MusicTags {
         return details + broad
     }
 
+    fun displayGenre(tags: Set<String>, legacy: String?): String? =
+        tags.firstOrNull { it in detailedGenres } ?: legacy ?: tags.firstOrNull { it in Genres.all }
+
     fun shown(id: String): String = when (id) {
         "Salsa" -> R.string.detail_salsa
         "Cumbia" -> R.string.detail_cumbia

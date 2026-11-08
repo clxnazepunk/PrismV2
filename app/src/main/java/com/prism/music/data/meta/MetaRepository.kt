@@ -682,12 +682,15 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             .filter { System.currentTimeMillis() - it.fetchedAt < 7 * 24 * 60 * 60 * 1000L }
             .associate { it.key to it.genre.orEmpty().split("|").filter { it in MusicTags.genresAll || it in MusicTags.moods }.toSet() }
         songs.associate { song ->
-            val raw = byArtist[itunesSongsKey(song.primaryArtist)]?.get(key(cleanTitle(song.title)))
+            val raw = if (key(song.primaryArtist).isBlank() || key(cleanTitle(song.title)).isBlank()) null
+                else byArtist[itunesSongsKey(song.primaryArtist)]?.get(key(cleanTitle(song.title)))
             song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + stored[songTagsKey(song)].orEmpty())
         }
     }
 
-    private fun songTagsKey(song: Song) = "songtags1:${song.id}:${key(song.primaryArtist)}:${key(song.title)}"
+    private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\\\p{L}\\\\p{N}]+"), " ").trim()
+    private fun songTagsKey(song: Song) = "songtags1:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
@@ -722,8 +725,11 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             val data = response.field("toptags")
             val tags = data.field("tag") as? JsonArray ?: continue
             val attr = data.field("@attr")
-            if (key(attr.str("artist").orEmpty()) != key(song.primaryArtist) ||
-                key(attr.str("track").orEmpty()) != key(cleanTitle(song.title))) continue
+            val artistIdentity = tagIdentity(song.primaryArtist)
+            val trackIdentity = tagIdentity(cleanTitle(song.title))
+            if (artistIdentity.isBlank() || trackIdentity.isBlank() ||
+                tagIdentity(attr.str("artist").orEmpty()) != artistIdentity ||
+                tagIdentity(attr.str("track").orEmpty()) != trackIdentity) continue
             val labels = MusicTags.supportedTags(tags.mapNotNull { tag ->
                 tag.str("name")?.let { it to (tag.str("count")?.toIntOrNull() ?: 0) }
             }.toMap())

@@ -154,4 +154,27 @@ class MusicTagsTest {
             onlyLogo.preview(com.prism.music.data.artists.ArtistImageRole.SIGNATURE))
     }
 
+    @Test fun lastFmGenresCanBeShownWithoutLegacyMetadataAndMoodsNeverBecomeGenres() {
+        assertEquals("Rock", MusicTags.displayGenre(setOf("Rock", "mood:romantic"), null))
+        assertEquals("Salsa", MusicTags.displayGenre(setOf("Salsa"), "Pop"))
+        assertNull(MusicTags.displayGenre(setOf("mood:romantic"), null))
+    }
+
+    @Test fun nonLatinArtistNamesAreComparedAsNamesRatherThanEmptyAsciiKeys(): Unit = runBlocking {
+        val dao = Dao()
+        var correct = false
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val artist = if (correct) "周杰倫" else "林俊傑"
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK")
+                .body("""{"toptags":{"@attr":{"artist":"$artist","track":"夜曲"},"tag":[{"name":"romantic","count":100}]}}""".toResponseBody("application/json".toMediaType())).build()
+        }.build()
+        val meta = MetaRepository(client, dao, tagKey = { "test" }, tagsHttp = client)
+        val song = Song("unicode", "夜曲", listOf(ArtistRef("周杰倫")))
+        meta.resolveSongTags(listOf(song)) {}
+        assertTrue(dao.entries.isEmpty())
+        correct = true
+        meta.resolveSongTags(listOf(song)) {}
+        assertTrue("mood:romantic" in meta.cachedSongTags(listOf(song)).getValue("unicode"))
+    }
+
 }

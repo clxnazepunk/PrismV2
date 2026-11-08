@@ -303,7 +303,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
     fun genresOf(id: String): List<String> = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty() +
         detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }).distinct()
-    fun displayGenre(id: String): String? = detailTags[id]?.firstOrNull { it in com.prism.music.data.meta.MusicTags.detailedGenres } ?: genres[id]
+    fun displayGenre(id: String): String? = com.prism.music.data.meta.MusicTags.displayGenre(detailTags[id].orEmpty(), genres[id])
     var genreFilter by rememberSaveable(page.id) { mutableStateOf(initialGenre) }
     // Liked songs', Downloads' and each playlist's sort is kept, so leaving the page doesn't undo it.
     val sortList = when (type) {
