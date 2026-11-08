@@ -698,7 +698,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     private val trackTagsLock = Mutex()
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
-    suspend fun resolveSongTags(songs: List<Song>, onBatch: (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun resolveSongTags(songs: List<Song>, onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
         val cached = cachedSongTags(songs)
         if (cached.isNotEmpty()) onBatch(cached)
         val apiKey = tagKey().trim()

@@ -364,9 +364,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
 
     LaunchedEffect(page.id, songs, showGenres, tagApiKey, tagRefresh) {
         if (!showGenres) return@LaunchedEffect
-        c.meta.resolveSongTags(songs) { batch -> detailTags.putAll(batch); genreVersion++ }
+        c.meta.resolveSongTags(songs) { batch ->
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { detailTags.putAll(batch); genreVersion++ }
+        }
     }
-    LaunchedEffect(page.id, showGenres) {
+    LaunchedEffect(page.id, songs, showGenres) {
         if (showGenres) c.meta.refined.collect {
             detailTags.putAll(c.meta.cachedSongTags(songs)); genreVersion++
         }

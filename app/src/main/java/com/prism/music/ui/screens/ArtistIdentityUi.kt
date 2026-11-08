@@ -121,7 +121,7 @@ private fun ArtistLayoutEditor(
                 BoxWithConstraints(Modifier.fillMaxWidth()) {
                     val maxPreviewHeight = androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp * 0.36f
                     val ratio = minOf(maxWidth / headerWidth.coerceAtLeast(1.dp), maxPreviewHeight / headerHeight.coerceAtLeast(1.dp))
-                    Box(Modifier.width(headerWidth * ratio).height(headerHeight * ratio).align(Alignment.CenterHorizontally).clipToBounds()) {
+                    Box(Modifier.width(headerWidth * ratio).height(headerHeight * ratio).align(Alignment.TopCenter).clipToBounds()) {
                         Box(Modifier.wrapContentSize(Alignment.TopStart, unbounded = true)
                             .requiredSize(headerWidth, headerHeight).graphicsLayer {
                                 transformOrigin = TransformOrigin(0f, 0f); scaleX = ratio; scaleY = ratio
