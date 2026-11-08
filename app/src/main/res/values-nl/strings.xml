@@ -4879,4 +4879,6 @@
     <string name="artist_logo">Artiestenlogo</string>
     <string name="automatic_artist_images">Automatische logo’s en handtekeningen</string>
     <string name="artist_signature_api">Handtekening-API</string>
+    <string name="artist_profile_save">Profiel offline opslaan</string>
+    <string name="artist_profile_remove">Profiel niet meer bewaren</string>
 </resources>

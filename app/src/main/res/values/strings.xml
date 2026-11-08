@@ -4909,4 +4909,6 @@
     <string name="artist_logo">Artist logo</string>
     <string name="automatic_artist_images">Automatic logos and signatures</string>
     <string name="artist_signature_api">Signature API</string>
+    <string name="artist_profile_save">Save profile offline</string>
+    <string name="artist_profile_remove">Stop keeping profile offline</string>
 </resources>

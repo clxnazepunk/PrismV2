@@ -4815,4 +4815,6 @@
     <string name="artist_logo">โลโก้ศิลปิน</string>
     <string name="automatic_artist_images">โลโก้และลายเซ็นอัตโนมัติ</string>
     <string name="artist_signature_api">API ลายเซ็น</string>
+    <string name="artist_profile_save">บันทึกโปรไฟล์แบบออฟไลน์</string>
+    <string name="artist_profile_remove">เลิกเก็บโปรไฟล์</string>
 </resources>

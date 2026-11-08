@@ -201,10 +201,14 @@ fun LibraryScreen(bottomPadding: Dp) {
     val albums = remember(remoteAlbums, mine, savedAlbums, signedIn) {
         (savedAlbums.map { it.item() } + remoteAlbums + if (signedIn) emptyList() else LibraryRepository.albumsFrom(mine)).distinctBy { it.id }
     }
+    val savedArtistRevision by c.offline.savedArtistChanges.collectAsState()
+    val savedArtistProfiles by androidx.compose.runtime.produceState<List<ArtistItem>>(emptyList(), savedArtistRevision) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.offline.savedArtistItems() }
+    }
     // Starred artists lead, marked as favourites.
-    val artists = remember(remoteArtists, mine, thumbs, favorites) {
+    val artists = remember(remoteArtists, mine, thumbs, favorites, savedArtistProfiles) {
         val starred = favorites.map { f -> ArtistItem(f.id, f.name, tr(R.string.favorite), f.thumbnail) }
-        (starred + remoteArtists + LibraryRepository.artistsFrom(mine)).distinctBy { it.id }.map { a ->
+        (starred + savedArtistProfiles + remoteArtists + LibraryRepository.artistsFrom(mine)).distinctBy { it.id }.map { a ->
             // Your own photo of them (1.7.6) first.
             val own = c.covers.custom(c.covers.artistKey(a.id))
             if (a is ArtistItem && own != null) a.copy(thumbnail = own)

@@ -4879,4 +4879,6 @@
     <string name="artist_logo">Logo ng artist</string>
     <string name="automatic_artist_images">Awtomatikong logo at mga lagda</string>
     <string name="artist_signature_api">API ng lagda</string>
+    <string name="artist_profile_save">I-save ang profile offline</string>
+    <string name="artist_profile_remove">Huwag nang panatilihin ang profile</string>
 </resources>

@@ -4879,4 +4879,6 @@
     <string name="artist_logo">نشان هنرمند</string>
     <string name="automatic_artist_images">نشان‌ها و امضاهای خودکار</string>
     <string name="artist_signature_api">API امضا</string>
+    <string name="artist_profile_save">ذخیرهٔ نمایه برای حالت آفلاین</string>
+    <string name="artist_profile_remove">توقف نگهداری نمایه</string>
 </resources>

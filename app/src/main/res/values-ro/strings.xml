@@ -4943,4 +4943,6 @@
     <string name="artist_logo">Sigla artistului</string>
     <string name="automatic_artist_images">Sigle și semnături automate</string>
     <string name="artist_signature_api">API pentru semnături</string>
+    <string name="artist_profile_save">Salvează profilul offline</string>
+    <string name="artist_profile_remove">Nu mai păstra profilul</string>
 </resources>

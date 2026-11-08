@@ -4879,4 +4879,6 @@
     <string name="artist_logo">कलाकार का लोगो</string>
     <string name="automatic_artist_images">अपने आप लोगो और हस्ताक्षर</string>
     <string name="artist_signature_api">हस्ताक्षर API</string>
+    <string name="artist_profile_save">प्रोफ़ाइल ऑफ़लाइन सहेजें</string>
+    <string name="artist_profile_remove">प्रोफ़ाइल सहेजना बंद करें</string>
 </resources>

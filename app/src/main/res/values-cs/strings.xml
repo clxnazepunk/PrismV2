@@ -5007,4 +5007,6 @@
     <string name="artist_logo">Logo interpreta</string>
     <string name="automatic_artist_images">Automatická loga a podpisy</string>
     <string name="artist_signature_api">API podpisů</string>
+    <string name="artist_profile_save">Uložit profil offline</string>
+    <string name="artist_profile_remove">Přestat uchovávat profil</string>
 </resources>

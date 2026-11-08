@@ -4815,4 +4815,6 @@
     <string name="artist_logo">アーティストのロゴ</string>
     <string name="automatic_artist_images">ロゴとサインを自動取得</string>
     <string name="artist_signature_api">サイン API</string>
+    <string name="artist_profile_save">プロフィールをオフライン保存</string>
+    <string name="artist_profile_remove">プロフィールの保存を解除</string>
 </resources>

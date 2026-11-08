@@ -4815,4 +4815,6 @@
     <string name="artist_logo">Logo artis</string>
     <string name="automatic_artist_images">Logo dan tandatangan automatik</string>
     <string name="artist_signature_api">API tandatangan</string>
+    <string name="artist_profile_save">Simpan profil luar talian</string>
+    <string name="artist_profile_remove">Berhenti menyimpan profil</string>
 </resources>

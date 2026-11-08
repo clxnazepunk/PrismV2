@@ -4879,4 +4879,6 @@
     <string name="artist_logo">Előadó logója</string>
     <string name="automatic_artist_images">Automatikus logók és aláírások</string>
     <string name="artist_signature_api">Aláírás-API</string>
+    <string name="artist_profile_save">Profil mentése offline</string>
+    <string name="artist_profile_remove">Profil megőrzésének leállítása</string>
 </resources>
