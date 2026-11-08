@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">BitChord 기여자</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">조정</string>
+    <string name="artist_zoom">크기</string>
+    <string name="artist_horizontal">가로 위치</string>
+    <string name="artist_vertical">세로 위치</string>
+    <string name="artist_zoom_hint">작은 이미지를 최대 12배 확대할 수 있지만 세부 묘사는 늘어나지 않습니다.</string>
+    <string name="artist_display_auto">자동 표시</string>
+    <string name="artist_display_priority">로고, 서명, 텍스트 순서입니다. 함께 표시할 항목을 선택하세요.</string>
+    <string name="artist_native_text">텍스트</string>
+    <string name="artist_signature_caption">서명 아래 아티스트 이름 표시</string>
+    <string name="artist_invert">색상 반전</string>
 </resources>

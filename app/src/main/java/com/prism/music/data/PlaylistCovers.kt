@@ -103,16 +103,35 @@ class PlaylistCovers(private val context: Context) {
     /** Copies a picked photo into the app as a square, so it survives the original being moved or deleted. */
     suspend fun usePhoto(id: String, uri: Uri): Boolean = withContext(Dispatchers.IO) {
         val bmp = runCatching { decode(uri) }.getOrNull() ?: return@withContext false
-        val side = minOf(bmp.width, bmp.height)
-        val square = Bitmap.createBitmap(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side)
-        val out = if (side > 1200) Bitmap.createScaledBitmap(square, 1200, 1200, true) else square
-        dir.mkdirs()
-        // A fresh name each time, so the new picture isn't served from the image cache.
-        val safe = id.replace(Regex("[^A-Za-z0-9_-]"), "_")
-        val file = File(dir, "$safe-${System.currentTimeMillis()}.jpg")
-        runCatching { file.outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 90, it) } }.getOrElse { return@withContext false }
-        withContext(Dispatchers.Main) { put(id, Uri.fromFile(file).toString()) }
-        true
+        var square: Bitmap? = null
+        var out: Bitmap? = null
+        var file: File? = null
+        var committed = false
+        try {
+            val side = minOf(bmp.width, bmp.height)
+            val cropped = Bitmap.createBitmap(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side)
+            square = cropped
+            val result = if (side > 1200) Bitmap.createScaledBitmap(cropped, 1200, 1200, true) else cropped
+            out = result
+            dir.mkdirs()
+            val safe = id.replace(Regex("[^A-Za-z0-9_-]"), "_")
+            val target = File(dir, "$safe-${java.util.UUID.randomUUID()}.jpg")
+            file = target
+            val compressed = target.outputStream().use { result.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+            if (!compressed) return@withContext false
+            withContext(Dispatchers.Main) {
+                put(id, Uri.fromFile(target).toString())
+                committed = true
+            }
+            true
+        } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+        catch (_: Exception) { false }
+        finally {
+            if (!committed) file?.delete()
+            if (out !== square && out !== bmp) out?.recycle()
+            if (square !== bmp) square?.recycle()
+            bmp.recycle()
+        }
     }
 
     /** A picture made in Prism (the cover maker), saved as a photo would be. */
@@ -137,7 +156,7 @@ class PlaylistCovers(private val context: Context) {
     private fun deleteIfOurs(value: String) {
         if (!value.startsWith("file:")) return
         val f = File(Uri.parse(value).path ?: return)
-        if (f.canonicalPath.startsWith(dir.canonicalPath)) f.delete()
+        if (f.canonicalFile.parentFile == dir.canonicalFile) f.delete()
     }
 
     /** Decoded at a sensible size, the right way up (phone photos often carry a rotation). */

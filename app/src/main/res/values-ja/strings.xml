@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">BitChord の貢献者</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">調整</string>
+    <string name="artist_zoom">サイズ</string>
+    <string name="artist_horizontal">横位置</string>
+    <string name="artist_vertical">縦位置</string>
+    <string name="artist_zoom_hint">小さい画像も最大12倍に拡大できますが、細部は増えません。</string>
+    <string name="artist_display_auto">自動表示</string>
+    <string name="artist_display_priority">ロゴ、署名、文字の順に表示。組み合わせる項目を選択できます。</string>
+    <string name="artist_native_text">文字</string>
+    <string name="artist_signature_caption">署名の下にアーティスト名を表示</string>
+    <string name="artist_invert">色を反転</string>
 </resources>

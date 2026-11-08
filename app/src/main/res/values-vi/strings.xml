@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">Người đóng góp BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Điều chỉnh</string>
+    <string name="artist_zoom">Kích thước</string>
+    <string name="artist_horizontal">Vị trí ngang</string>
+    <string name="artist_vertical">Vị trí dọc</string>
+    <string name="artist_zoom_hint">Ảnh nhỏ có thể phóng to tới 12× nhưng không thêm chi tiết.</string>
+    <string name="artist_display_auto">Hiển thị tự động</string>
+    <string name="artist_display_priority">Ưu tiên logo, rồi chữ ký và văn bản. Chọn để kết hợp.</string>
+    <string name="artist_native_text">Văn bản</string>
+    <string name="artist_signature_caption">Hiện tên nghệ sĩ dưới chữ ký</string>
+    <string name="artist_invert">Đảo màu</string>
 </resources>

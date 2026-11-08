@@ -5142,4 +5142,14 @@
     <string name="third_party_bitchord_contributors">المساهمون في BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">ضبط</string>
+    <string name="artist_zoom">الحجم</string>
+    <string name="artist_horizontal">الموضع الأفقي</string>
+    <string name="artist_vertical">الموضع الرأسي</string>
+    <string name="artist_zoom_hint">يمكن تكبير الصور الصغيرة حتى 12× دون إضافة تفاصيل.</string>
+    <string name="artist_display_auto">عرض تلقائي</string>
+    <string name="artist_display_priority">الشعار ثم التوقيع ثم النص. حدد الخيارات لدمجها.</string>
+    <string name="artist_native_text">نص</string>
+    <string name="artist_signature_caption">إظهار اسم الفنان أسفل التوقيع</string>
+    <string name="artist_invert">عكس اللون</string>
 </resources>

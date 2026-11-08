@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">BitChord योगदानकर्ता</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">समायोजित करें</string>
+    <string name="artist_zoom">आकार</string>
+    <string name="artist_horizontal">क्षैतिज स्थिति</string>
+    <string name="artist_vertical">लंबवत स्थिति</string>
+    <string name="artist_zoom_hint">छोटी छवियाँ 12× तक बढ़ सकती हैं; इससे नया विवरण नहीं जुड़ता।</string>
+    <string name="artist_display_auto">अपने आप दिखाएँ</string>
+    <string name="artist_display_priority">पहले लोगो, फिर हस्ताक्षर, फिर पाठ। संयोजन के लिए विकल्प चुनें।</string>
+    <string name="artist_native_text">पाठ</string>
+    <string name="artist_signature_caption">हस्ताक्षर के नीचे कलाकार का नाम दिखाएँ</string>
+    <string name="artist_invert">रंग उलटें</string>
 </resources>

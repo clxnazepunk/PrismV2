@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">BitChord-এর অবদানকারীরা</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">সামঞ্জস্য করুন</string>
+    <string name="artist_zoom">আকার</string>
+    <string name="artist_horizontal">অনুভূমিক অবস্থান</string>
+    <string name="artist_vertical">উল্লম্ব অবস্থান</string>
+    <string name="artist_zoom_hint">ছোট ছবি 12× পর্যন্ত বড় করা যায়; এতে নতুন সূক্ষ্মতা যোগ হয় না।</string>
+    <string name="artist_display_auto">স্বয়ংক্রিয় প্রদর্শন</string>
+    <string name="artist_display_priority">প্রথমে লোগো, তারপর স্বাক্ষর, তারপর লেখা। একসাথে দেখাতে বেছে নিন।</string>
+    <string name="artist_native_text">লেখা</string>
+    <string name="artist_signature_caption">স্বাক্ষরের নিচে শিল্পীর নাম দেখান</string>
+    <string name="artist_invert">রং উল্টান</string>
 </resources>

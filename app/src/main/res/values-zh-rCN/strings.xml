@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">BitChord 贡献者</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">调整</string>
+    <string name="artist_zoom">大小</string>
+    <string name="artist_horizontal">水平位置</string>
+    <string name="artist_vertical">垂直位置</string>
+    <string name="artist_zoom_hint">小图片可放大至12倍，但不会增加细节。</string>
+    <string name="artist_display_auto">自动显示</string>
+    <string name="artist_display_priority">优先标志，其次签名，最后文字。勾选可组合显示。</string>
+    <string name="artist_native_text">文字</string>
+    <string name="artist_signature_caption">在签名下显示艺人姓名</string>
+    <string name="artist_invert">反转颜色</string>
 </resources>

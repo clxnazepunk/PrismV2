@@ -5014,4 +5014,14 @@
     <string name="third_party_bitchord_contributors">Участники BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Настроить</string>
+    <string name="artist_zoom">Размер</string>
+    <string name="artist_horizontal">Положение по горизонтали</string>
+    <string name="artist_vertical">Положение по вертикали</string>
+    <string name="artist_zoom_hint">Маленькие изображения можно увеличить до 12× без добавления деталей.</string>
+    <string name="artist_display_auto">Автоматическое отображение</string>
+    <string name="artist_display_priority">Сначала логотип, затем подпись и текст. Выберите для сочетания.</string>
+    <string name="artist_native_text">Текст</string>
+    <string name="artist_signature_caption">Показывать имя исполнителя под подписью</string>
+    <string name="artist_invert">Инвертировать цвет</string>
 </resources>

@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">Bidragsgivare till BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Justera</string>
+    <string name="artist_zoom">Storlek</string>
+    <string name="artist_horizontal">Vågrät position</string>
+    <string name="artist_vertical">Lodrät position</string>
+    <string name="artist_zoom_hint">Små bilder kan förstoras upp till 12×; inga detaljer tillkommer.</string>
+    <string name="artist_display_auto">Automatisk visning</string>
+    <string name="artist_display_priority">Först logotyp, sedan signatur och text. Markera för att kombinera.</string>
+    <string name="artist_native_text">Text</string>
+    <string name="artist_signature_caption">Visa artistnamn under signaturen</string>
+    <string name="artist_invert">Invertera färg</string>
 </resources>
