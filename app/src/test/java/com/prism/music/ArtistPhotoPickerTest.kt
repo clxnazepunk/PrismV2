@@ -49,7 +49,7 @@ class ArtistPhotoPickerTest {
         val owner = object : ActivityResultRegistryOwner { override val activityResultRegistry = registry }
         var menuOpen by mutableStateOf(true)
         var artistId by mutableStateOf("first")
-        var error = false
+        var error by mutableStateOf(false)
         val input = File(context.cacheDir, "artist-input.png")
         val bitmap = Bitmap.createBitmap(20, 10, Bitmap.Config.ARGB_8888)
         bitmap.eraseColor(android.graphics.Color.RED)
@@ -70,9 +70,9 @@ class ArtistPhotoPickerTest {
         }
         compose.waitForIdle()
         compose.runOnIdle { registry.dispatchResult(registry.requestCode, Uri.fromFile(input)) }
-        compose.waitUntil(10_000) { covers.custom(covers.artistKey("first")) != null }
+        compose.waitUntil(10_000) { error || covers.custom(covers.artistKey("first")) != null }
         compose.runOnIdle {
-            assertFalse(error)
+            assertFalse("Photo callback returned an import failure", error)
             val saved = covers.custom(covers.artistKey("first"))!!
             assertTrue(File(Uri.parse(saved).path!!).isFile)
             assertEquals(saved, PlaylistCovers(context).custom(covers.artistKey("first")))

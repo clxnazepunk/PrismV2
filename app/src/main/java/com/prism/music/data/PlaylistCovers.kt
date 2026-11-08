@@ -162,11 +162,12 @@ class PlaylistCovers(private val context: Context) {
     /** Decoded at a sensible size, the right way up (phone photos often carry a rotation). */
     private fun decode(uri: Uri): Bitmap? {
         if (Build.VERSION.SDK_INT >= 28) {
-            return ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { d, info, _ ->
+            val decoded = runCatching { ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { d, info, _ ->
                 val longest = maxOf(info.size.width, info.size.height)
                 if (longest > 2400) d.setTargetSampleSize(longest / 2400 + 1)
                 d.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-            }
+            } }.getOrNull()
+            if (decoded != null) return decoded
         }
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
