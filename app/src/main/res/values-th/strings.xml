@@ -4817,4 +4817,9 @@
     <string name="artist_signature_api">API ลายเซ็น</string>
     <string name="artist_profile_save">บันทึกโปรไฟล์แบบออฟไลน์</string>
     <string name="artist_profile_remove">เลิกเก็บโปรไฟล์</string>
+    <string name="artist_identity_backup_hint">ข้อมูลสำรองของ %1$s รวมโปรไฟล์ศิลปินที่บันทึกไว้ ปกที่กำหนดเอง โลโก้ และลายเซ็น</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">ผู้ร่วมพัฒนา BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

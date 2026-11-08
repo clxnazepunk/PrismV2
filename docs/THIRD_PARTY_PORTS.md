@@ -7,8 +7,10 @@ revisión acf219a7e4a7f52f026d4336d5c7ac5cf7bfafcc:
 - [AppleArtistArt.kt](https://github.com/kushagrasinghx/BitChord/blob/acf219a7e4a7f52f026d4336d5c7ac5cf7bfafcc/app/src/main/java/com/music/bitchord/data/canvas/AppleArtistArt.kt).
 - [AppleCatalogue.kt](https://github.com/kushagrasinghx/BitChord/blob/acf219a7e4a7f52f026d4336d5c7ac5cf7bfafcc/shared/src/jvmSharedMain/kotlin/com/music/bitchord/data/AppleCatalogue.kt).
 
-Autores: colaboradores de BitChord. Licencia raíz GNU GPL v3; se conserva GPL v3
-o posterior de Prism y la atribución en el código y la pantalla de licencias.
+Autores: colaboradores de BitChord. README y licencia raíz declaran GNU GPL v3.
+La adaptación se distribuye bajo GPL v3, compatible con la elección de GPL v3
+que permite Prism. No se presume permiso de relicenciar esa parte bajo versiones
+posteriores. Se conserva la atribución en el código y la pantalla de licencias.
 No se han importado los motores de reproducción ni los módulos AGPL/LGPL de BitChord.
 
 La adaptación conserva búsqueda de firmas, rechazo de respuesta ambigua,

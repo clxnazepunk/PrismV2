@@ -4881,4 +4881,9 @@
     <string name="artist_signature_api">Signatur-API</string>
     <string name="artist_profile_save">Profil offline speichern</string>
     <string name="artist_profile_remove">Profil nicht mehr speichern</string>
+    <string name="artist_identity_backup_hint">Sicherungen von %1$s enthalten gespeicherte Künstlerprofile, eigene Cover, Logos und Unterschriften.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Mitwirkende von BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

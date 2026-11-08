@@ -5009,4 +5009,9 @@
     <string name="artist_signature_api">API подписей</string>
     <string name="artist_profile_save">Сохранить профиль офлайн</string>
     <string name="artist_profile_remove">Не сохранять профиль</string>
+    <string name="artist_identity_backup_hint">Резервные копии %1$s включают сохранённые профили исполнителей, свои обложки, логотипы и подписи.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Участники BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

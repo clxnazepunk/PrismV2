@@ -4881,4 +4881,9 @@
     <string name="artist_signature_api">دستخط API</string>
     <string name="artist_profile_save">پروفائل آف لائن محفوظ کریں</string>
     <string name="artist_profile_remove">پروفائل محفوظ کرنا بند کریں</string>
+    <string name="artist_identity_backup_hint">%1$s کے بیک اپ میں محفوظ فنکار پروفائلز، ذاتی سرورق، لوگو اور دستخط شامل ہیں۔</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">BitChord کے معاونین</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

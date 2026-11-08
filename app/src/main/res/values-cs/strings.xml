@@ -5009,4 +5009,9 @@
     <string name="artist_signature_api">API podpisů</string>
     <string name="artist_profile_save">Uložit profil offline</string>
     <string name="artist_profile_remove">Přestat uchovávat profil</string>
+    <string name="artist_identity_backup_hint">Zálohy %1$s obsahují uložené profily interpretů, vlastní obaly, loga a podpisy.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Přispěvatelé BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

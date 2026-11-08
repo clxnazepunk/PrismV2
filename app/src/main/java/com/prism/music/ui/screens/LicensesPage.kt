@@ -29,8 +29,8 @@ const val SOURCE_URL = "https://github.com/Yigder/Prism"
 private class Library(val name: String, val by: String, val license: String, val text: String, val url: String)
 
 private val libraries = listOf(
-    Library("BitChord", "BitChord contributors", tr(R.string.gpl_3_0_or_later), "gpl-3.0", "https://github.com/kushagrasinghx/BitChord"),
-    Library("AndroidSVG", "Paul LeBeau", tr(R.string.apache_2_0), "apache-2.0", "https://github.com/BigBadaboom/androidsvg"),
+    Library(tr(R.string.third_party_bitchord), tr(R.string.third_party_bitchord_contributors), tr(R.string.gpl_3_0), "gpl-3.0", "https://github.com/kushagrasinghx/BitChord"),
+    Library(tr(R.string.third_party_androidsvg), tr(R.string.third_party_paul_lebeau), tr(R.string.apache_2_0), "apache-2.0", "https://github.com/BigBadaboom/androidsvg"),
     Library(tr(R.string.newpipe_extractor), tr(R.string.team_newpipe), tr(R.string.gpl_3_0_or_later), "gpl-3.0", "https://github.com/TeamNewPipe/NewPipeExtractor"),
     Library("nanojson", tr(R.string.matt_mastracci_team_newpipe), tr(R.string.mit_or_apache_2_0), "apache-2.0", "https://github.com/TeamNewPipe/nanojson"),
     Library(tr(R.string.rhino), tr(R.string.mozilla), tr(R.string.mpl_2_0), "mpl-2.0", "https://github.com/mozilla/rhino"),

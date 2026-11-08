@@ -4817,4 +4817,9 @@
     <string name="artist_signature_api">서명 API</string>
     <string name="artist_profile_save">프로필 오프라인 저장</string>
     <string name="artist_profile_remove">프로필 저장 해제</string>
+    <string name="artist_identity_backup_hint">%1$s 백업에는 저장한 아티스트 프로필, 맞춤 커버, 로고 및 서명이 포함됩니다.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">BitChord 기여자</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

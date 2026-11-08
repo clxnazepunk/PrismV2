@@ -4817,4 +4817,9 @@
     <string name="artist_signature_api">API tandatangan</string>
     <string name="artist_profile_save">Simpan profil luar talian</string>
     <string name="artist_profile_remove">Berhenti menyimpan profil</string>
+    <string name="artist_identity_backup_hint">Sandaran %1$s merangkumi profil artis tersimpan, kulit tersuai, logo dan tandatangan.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Penyumbang BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

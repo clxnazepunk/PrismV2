@@ -108,6 +108,9 @@ jobs:
       - run: chmod +x gradlew
       - name: Run lint
         run: ./gradlew --no-daemon --stacktrace :app:lintDebug -PsideBySide=dev
+      - name: Show diagnostics in customized files
+        if: ${{ !cancelled() }}
+        run: python3 .github/scripts/lint_customizations.py
       - name: Upload lint reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -137,7 +140,7 @@ jobs:
         run: '"${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;36.0.0"'
       - run: chmod +x gradlew
       - name: Check artists, backups, translations and playlists
-        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PrismLibraryTest*' --tests '*ArtistImageSourcesTest*' --tests '*ArtistIdentityStoreTest*' --tests '*ArtistIdentityBackupTest*' --tests '*BackupPartsTest*' --tests '*TranslationsTest*' --tests '*OfflineArtistsTest*' --tests '*SavedArtistProfilesTest*'
+        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PrismLibraryTest*' --tests '*ArtistImageSourcesTest*' --tests '*ArtistIdentityStoreTest*' --tests '*ArtistIdentityBackupTest*' --tests '*BackupPartsTest*' --tests '*TranslationsTest*' --tests '*OfflineArtistsTest*' --tests '*SavedArtistProfilesTest*' --tests '*ArtistPersonalizationBackupTest*' --tests '*SongVersionsTest*' --tests '*AutoArtworkTest*' --tests '*I18nGuardTest*'
       - name: Upload focused test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

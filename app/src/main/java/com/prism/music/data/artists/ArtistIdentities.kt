@@ -2,6 +2,7 @@ package com.prism.music.data.artists
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.content.edit
 import com.prism.music.data.model.AlbumItem
 import com.prism.music.data.model.ArtistPage
 import com.prism.music.data.model.SongItem
@@ -34,11 +35,11 @@ class ArtistIdentities(private val context: Context) {
     private val source = ArtistImageSources { get(it, MAX_METADATA_BYTES)?.toString(Charsets.UTF_8) }
     private val lookups = ConcurrentHashMap<String, Mutex>()
 
-    fun setAutomatic(on: Boolean) { prefs.edit().putBoolean("automatic", on).apply(); automatic.value = on }
+    fun setAutomatic(on: Boolean) { prefs.edit { putBoolean("automatic", on) }; automatic.value = on }
 
     fun setSignatureApi(raw: String): Boolean {
         val base = if (raw.isBlank()) "" else ArtistImageSources.baseUrl(raw) ?: return false
-        prefs.edit().putString("signature_api", base).apply()
+        prefs.edit { putString("signature_api", base) }
         signatureApi.value = base
         return true
     }

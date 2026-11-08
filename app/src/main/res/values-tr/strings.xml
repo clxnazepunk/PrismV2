@@ -4881,4 +4881,9 @@
     <string name="artist_signature_api">İmza API’si</string>
     <string name="artist_profile_save">Profili çevrimdışı kaydet</string>
     <string name="artist_profile_remove">Profili saklamayı bırak</string>
+    <string name="artist_identity_backup_hint">%1$s yedekleri kayıtlı sanatçı profillerini, özel kapakları, logoları ve imzaları içerir.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">BitChord katkıda bulunanları</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

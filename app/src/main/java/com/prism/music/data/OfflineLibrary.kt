@@ -146,6 +146,7 @@ class OfflineLibrary(context: Context) {
         }
 
     /** Stop keeping it permanently; the ordinary visited-page cache may still hold it. */
+    @Synchronized
     fun removeSavedArtist(id: String): Boolean {
         val saved = savedArtistFile(id)
         if (!saved.exists()) return true
@@ -168,6 +169,7 @@ class OfflineLibrary(context: Context) {
      * over [MAX_ARTIST_BYTES] keeps shorter shelves and no biography, and one still over it isn't kept. False when
      * nothing was kept.
      */
+    @Synchronized
     fun saveArtist(page: ArtistPage, permanent: Boolean = false): Boolean {
         val full = KeptArtist(
             page.id, page.name, page.thumbnail, page.description?.take(MAX_ARTIST_BIO), page.subscribers, page.views, page.channelId, page.subscribed,
@@ -233,6 +235,7 @@ class OfflineLibrary(context: Context) {
     }.getOrNull()
 
     /** Forgets everything kept (after signing out). */
+    @Synchronized
     fun clear() {
         listsFile.delete()
         uploadsFile.delete()

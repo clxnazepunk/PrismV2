@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream
 /** The parts a backup can hold (1.7.8, #149: settings can be shared without your listening or your sign-in). */
 enum class BackupPart(val label: String, val detail: String) {
     SETTINGS(tr(R.string.settings_looks), tr(R.string.everything_you_ve_set_your_looks)),
-    LIBRARY(tr(R.string.library), tr(R.string.prism_playlists_folders_and_pins_starred)),
+    LIBRARY(tr(R.string.library), tr(R.string.prism_playlists_folders_and_pins_starred) + "\n" + tr(R.string.artist_identity_backup_hint, tr(R.string.library))),
     HISTORY(tr(R.string.listening_history_replay), tr(R.string.what_you_ve_played_likes_replay)),
     ACCOUNTS(tr(R.string.accounts), tr(R.string.your_youtube_music_sign_in_and)),
     DOWNLOADS(tr(R.string.downloaded_songs), tr(R.string.the_audio_itself_otherwise_they_re)),

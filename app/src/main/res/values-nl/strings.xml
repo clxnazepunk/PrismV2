@@ -4881,4 +4881,9 @@
     <string name="artist_signature_api">Handtekening-API</string>
     <string name="artist_profile_save">Profiel offline opslaan</string>
     <string name="artist_profile_remove">Profiel niet meer bewaren</string>
+    <string name="artist_identity_backup_hint">Back-ups van %1$s bevatten opgeslagen artiestenprofielen, eigen hoezen, logo’s en handtekeningen.</string>
+    <string name="third_party_bitchord">BitChord</string>
+    <string name="third_party_bitchord_contributors">Bijdragers aan BitChord</string>
+    <string name="third_party_androidsvg">AndroidSVG</string>
+    <string name="third_party_paul_lebeau">Paul LeBeau</string>
 </resources>

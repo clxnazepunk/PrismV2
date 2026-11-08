@@ -9,14 +9,14 @@ no funcionalidades ya entregadas ni garantía de compatibilidad.
 | --- | --- | --- |
 | N01 / F01 | Pendiente | Elegir manualmente la calidad/resolución disponible de miniaturas, conservando proporciones y recorte cuadrado. |
 | N02 / F03 | Pendiente | Portadas animadas locales elegibles por álbum; admitir formatos viables tras verificarlos, sin prometer universalidad. |
-| N03 / F04 | Prioridad máxima, pendiente | Logo y firma independientes, importables/editables, con recurso local y API configurable. Revisar el código de firmas de BitChord en GitHub antes de adaptarlo. |
-| N04 / F04 | Pendiente | Guardar perfiles con logo/firma para uso offline y mostrarlos cuando el artista tenga canciones o álbumes descargados. Área Catálogo si es la alternativa adecuada. |
-| N05 / F04 | Pendiente | Respaldo/restauración de recursos y asociaciones. La actualización remota no reemplaza una elección local. |
+| N03 / F04 | Implementada en PR #3; revisión ampliada en #5 | Logo y firma independientes, importables/editables, con recurso local y API configurable. Revisar el código de firmas de BitChord en GitHub antes de adaptarlo. |
+| N04 / F04 | Implementada en PR #4; prueba en dispositivo pendiente | Guardar perfiles con logo/firma para uso offline y mostrarlos cuando el artista tenga canciones o álbumes descargados. Área Catálogo si es la alternativa adecuada. |
+| N05 / F04 | Implementada en PR #5; prueba de ZIP y dispositivo pendiente | Respaldo/restauración de recursos y asociaciones. La actualización remota no reemplaza una elección local. |
 | N06 / F05 | Verificar y ampliar | Subidos de YouTube Music: canciones, álbumes y artistas; aprovechar lo existente en Prism. |
 | N07 / F06 | Pendiente | Reunir álbumes oficiales guardados y privados subidos del artista. Primero evaluar el perfil actual; usar Catálogo si la integración es compleja/frágil. |
 | N08 / F07 | Pendiente | Orden y agrupación por año de lanzamientos oficiales/no oficiales disponibles, con fechas desconocidas explícitas. |
 | N09 / F07 | Pendiente | Búsqueda conjunta por artista y cronología, en perfil o Catálogo según la evaluación N07. |
-| N10 / F09 | Primera etapa local en revisión; remota pendiente | Recomendaciones relacionadas al final de playlist y acción inmediata de añadir, inspiradas en MySpoti. |
+| N10 / F09 | Primera etapa local en revisión; remota pendiente | Recomendaciones en playlists locales, botón para añadir y botón de actualizar con resultados nuevos cuando la radio disponga de ellos. Listas remotas pendientes. |
 | N11 / F10 | Desmarcada por el propietario | No activar una playlist radio fija de 30 canciones sin nueva indicación. |
 | N12 / F10 | Pendiente | Radio sucesiva/radio de la radio para descubrir música; no garantizar rareza ni cantidad exacta. |
 
