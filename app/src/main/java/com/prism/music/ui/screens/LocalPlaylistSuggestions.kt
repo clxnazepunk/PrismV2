@@ -53,14 +53,15 @@ internal fun LocalPlaylistSuggestions(
     val context = LocalContext.current
     val current by c.player.currentSong.collectAsState()
     val settings = com.prism.music.ui.theme.LocalAppSettings.current
+    val disliked by c.library.dislikedIds.collectAsState()
     val excludedSongs by c.exclusions.songs.collectAsState()
     val excludedArtists by c.exclusions.artists.collectAsState()
     val excludedPlaylists by c.exclusions.playlists.collectAsState()
     // Respect the same unwanted songs/artists and explicit-content preference as recommendations elsewhere.
-    fun allowed(song: Song) = !c.library.isDisliked(song.id) &&
+    fun allowed(song: Song) = song.id !in disliked &&
         !c.exclusions.outOfTaste(song, playlistId) &&
         (!song.explicit || settings.behavior.explicitContent == com.prism.music.data.prefs.ExplicitContent.SHOW)
-    val visible = remember(existing, state.songs, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
+    val visible = remember(existing, state.songs, disliked, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
         PlaylistSuggestions.select(existing, state.songs, allowed = ::allowed)
     }
 
