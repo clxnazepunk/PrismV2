@@ -14,7 +14,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34], application = android.app.Application::class)
 class ArtistIdentityBackupTest {
     @Test fun libraryRestoreBringsArtistImagesAndAssociations() {
-        val app = org.robolectric.RuntimeEnvironment.getApplication<android.app.Application>()
+        val app = org.robolectric.RuntimeEnvironment.getApplication()
         val staging = File(app.filesDir, "restore_pending").apply { mkdirs() }
         File(staging, "prism-backup.json").writeText("""{"format":2,"app":"${app.packageName}","parts":["LIBRARY"]}""")
         val resources = File(staging, "files/artist_identity").apply { mkdirs() }
