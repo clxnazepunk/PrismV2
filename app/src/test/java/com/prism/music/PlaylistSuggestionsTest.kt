@@ -74,6 +74,19 @@ class PlaylistSuggestionsTest {
         assertEquals(1, calls)
     }
 
+    @Test fun respectsExistingRecommendationRulesForSeedsAndResults() = runBlocking {
+        val asked = ArrayList<String>()
+        val out = PlaylistSuggestions.load(
+            listOf(song("excluded"), song("a")),
+            allowed = { it.id != "excluded" && !it.explicit },
+        ) { seed ->
+            asked += seed.id
+            listOf(song("excluded"), song("explicit").copy(explicit = true), song("new"))
+        }
+        assertEquals(listOf("a"), asked)
+        assertEquals(listOf(song("new")), out)
+    }
+
     @Test fun addingSuggestionAppendsAndSurvivesReopening() {
         val dir = Files.createTempDirectory("prism-suggestions").toFile()
         try {

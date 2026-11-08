@@ -24,21 +24,27 @@ object PlaylistSuggestions {
     }
 
     /** Keep radio order, never alter the playlist, and omit songs already in it. */
-    fun select(existing: List<Song>, candidates: List<Song>, limit: Int = LIMIT): List<Song> {
+    fun select(
+        existing: List<Song>, candidates: List<Song>, limit: Int = LIMIT,
+        allowed: (Song) -> Boolean = { true },
+    ): List<Song> {
         if (limit <= 0) return emptyList()
         val seen = existing.mapTo(HashSet()) { it.id }
-        return candidates.asSequence().filter(::eligible).filter { seen.add(it.id) }.take(limit).toList()
+        return candidates.asSequence().filter(::eligible).filter(allowed).filter { seen.add(it.id) }.take(limit).toList()
     }
 
     /**
      * At most three radio requests. A failed seed doesn't discard successful ones.
      * Cancellation always reaches the caller. No queue is played or saved here.
      */
-    suspend fun load(songs: List<Song>, radio: suspend (Song) -> List<Song>): List<Song> {
+    suspend fun load(
+        songs: List<Song>, allowed: (Song) -> Boolean = { true },
+        radio: suspend (Song) -> List<Song>,
+    ): List<Song> {
         val candidates = ArrayList<Song>()
         var failure: Exception? = null
         var answered = false
-        for (seed in seeds(songs)) {
+        for (seed in seeds(songs.filter(allowed))) {
             try {
                 candidates += radio(seed)
                 answered = true
@@ -49,6 +55,6 @@ object PlaylistSuggestions {
             }
         }
         if (!answered && failure != null) throw failure
-        return select(songs, candidates)
+        return select(songs, candidates, allowed = allowed)
     }
 }

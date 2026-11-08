@@ -52,7 +52,17 @@ internal fun LocalPlaylistSuggestions(
     val c = LocalContainer.current
     val context = LocalContext.current
     val current by c.player.currentSong.collectAsState()
-    val visible = remember(existing, state.songs) { PlaylistSuggestions.select(existing, state.songs) }
+    val settings = com.prism.music.ui.theme.LocalAppSettings.current
+    val excludedSongs by c.exclusions.songs.collectAsState()
+    val excludedArtists by c.exclusions.artists.collectAsState()
+    val excludedPlaylists by c.exclusions.playlists.collectAsState()
+    // Respect the same unwanted songs/artists and explicit-content preference as recommendations elsewhere.
+    fun allowed(song: Song) = !c.library.isDisliked(song.id) &&
+        !c.exclusions.outOfTaste(song, playlistId) &&
+        (!song.explicit || settings.behavior.explicitContent == com.prism.music.data.prefs.ExplicitContent.SHOW)
+    val visible = remember(existing, state.songs, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
+        PlaylistSuggestions.select(existing, state.songs, allowed = ::allowed)
+    }
 
     fun load() {
         if (state.loading) return
@@ -64,7 +74,7 @@ internal fun LocalPlaylistSuggestions(
             try {
                 val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
                 state.songs = withContext(Dispatchers.IO) {
-                    PlaylistSuggestions.load(snapshot) { seed ->
+                    PlaylistSuggestions.load(snapshot, allowed = ::allowed) { seed ->
                         c.radio(seed.id, "RDAMVM" + seed.id).songs
                     }
                 }
