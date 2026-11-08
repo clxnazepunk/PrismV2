@@ -303,6 +303,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
     fun genresOf(id: String): List<String> = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty() +
         detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }).distinct()
+    fun displayGenre(id: String): String? = detailTags[id]?.firstOrNull { it in com.prism.music.data.meta.MusicTags.detailedGenres } ?: genres[id]
     var genreFilter by rememberSaveable(page.id) { mutableStateOf(initialGenre) }
     // Liked songs', Downloads' and each playlist's sort is kept, so leaving the page doesn't undo it.
     val sortList = when (type) {
@@ -398,7 +399,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             SortMode.DEFAULT -> filtered
             SortMode.TITLE -> filtered.sortedBy { it.title.lowercase() }
             SortMode.ARTIST -> filtered.sortedBy { it.artistText.lowercase() }
-            SortMode.GENRE -> filtered.sortedWith(compareBy<Song> { genres[it.id] ?: "￿" }.thenBy { it.artistText.lowercase() })
+            SortMode.GENRE -> filtered.sortedWith(compareBy<Song> { displayGenre(it.id) ?: "￿" }.thenBy { it.artistText.lowercase() })
             SortMode.DURATION -> filtered.sortedBy { it.durationSec }
             SortMode.ALBUM -> filtered.sortedBy { it.album?.title?.lowercase() ?: "" }
             SortMode.OLDEST -> filtered.asReversed()
@@ -849,7 +850,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 trailingInfo = if (skippedCount > 0 && type != CollectionType.DOWNLOADS && com.prism.music.download.PlaylistDownloads.isSkipped(s.id, skipped, standIns)) tr(R.string.skipped_in_downloads)
                                 else if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
-                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
+                                else genreVersion.let { displayGenre(s.id) }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s) + skipAction(s),
                                 showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }

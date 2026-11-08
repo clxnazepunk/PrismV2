@@ -61,10 +61,11 @@ class ArtistHeaderCanvasTest {
         }
         val image = compose.onNodeWithTag("header").captureToImage()
         val pixels = image.toPixelMap()
+        val output = File("build/artist-header-previews").apply { mkdirs() }
+        File(output, "round-mark-expanded.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
         // The old 72dp slot starts at y228. This point must now be visible far above that slot.
         assertTrue("Expanded round logo is still clipped to its small slot", pixels[150, 70].red > 0.8f)
         assertTrue("Image must stay inside the full page boundary", pixels[0, 0].red < 0.1f)
-        val output = File("build/artist-header-previews").apply { mkdirs() }
-        File(output, "round-mark-expanded.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
+
     }
 }
