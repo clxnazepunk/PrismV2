@@ -1,8 +1,5 @@
 package com.prism.music
 
-import com.prism.music.data.ArtistFontGroup
-import com.prism.music.data.ArtistFontMode
-import com.prism.music.data.ArtistTypographyConfig
 import com.prism.music.data.artists.ArtistImageLayout
 import com.prism.music.data.db.*
 import com.prism.music.data.meta.*
@@ -44,16 +41,6 @@ class MusicTagsTest {
         assertFalse("Pop" in MusicTags.supportedTags(mapOf("female vocalists" to 100)))
     }
 
-    @Test fun smartFontsAcceptRegionalGenresButNeverMoodsOrOverlappingGroups() {
-        val config = ArtistTypographyConfig(ArtistFontMode.SMART, "standard", listOf(
-            ArtistFontGroup("a", setOf("Salsa", "Cumbia"), "serif"),
-            ArtistFontGroup("b", setOf("Salsa", "Rock", "mood:romantic"), "condensed"),
-        )).sanitized()
-        assertEquals(setOf("Rock"), config.groups[1].genres)
-        assertEquals("serif", config.fontForGenres(listOf("Salsa", "Pop"), 0, listOf("standard", "serif", "condensed")))
-        assertEquals("standard", config.fontForGenres(listOf("mood:romantic"), 0, listOf("standard", "serif")))
-    }
-
     @Test fun oldImagePositionsMigrateWithoutJumpingAndCanNowMoveAcrossFullHeader() {
         val old = ArtistImageLayout(4f, 0.2f, -0.8f)
         val migrated = old.forHeader(400f, 72f)
@@ -75,7 +62,6 @@ class MusicTagsTest {
         assertFalse("Salsa" in tags.getValue("2"))
         assertTrue(tags.getValue("3").isEmpty())
         assertTrue(tags.values.flatten().none { it in MusicTags.moods })
-        assertTrue("Salsa" in meta.cachedArtistTags("Artist", "Pop"))
     }
 
     @Test fun trackTagsAreCachedAndRequestsContainNoSessionHeaders(): Unit = runBlocking {

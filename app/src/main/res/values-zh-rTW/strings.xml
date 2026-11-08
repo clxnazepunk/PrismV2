@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">預設使用標準字體。藝人單獨設定優先，標誌和簽名圖片互不影響。</string>
     <string name="artist_font_fixed">固定字體</string>
     <string name="artist_font_random">每次造訪隨機</string>
-    <string name="artist_font_smart">智慧字體</string>
     <string name="artist_font_original">Prism原有自動樣式</string>
     <string name="artist_font_fallback">預設及備用字體</string>
-    <string name="artist_font_genres_hint">使用常見及已識別的地區曲風，不含心情。缺少資料時使用預設字體。</string>
-    <string name="artist_font_add_group">新增分組</string>
-    <string name="artist_font_used">已用於其他分組</string>
     <string name="detail_salsa">薩爾薩</string>
     <string name="detail_cumbia">昆比亞</string>
     <string name="detail_regional_mexican">墨西哥地區音樂</string>

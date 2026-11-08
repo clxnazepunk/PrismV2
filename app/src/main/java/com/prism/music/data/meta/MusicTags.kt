@@ -7,7 +7,7 @@ import java.text.Normalizer
 /** Detail is kept beside legacy genres so radio/recommendation categories keep their existing meaning. */
 object MusicTags {
     val detailedGenres = listOf("Salsa", "Cumbia", "Regional Mexican", "Ballad", "Reggaeton", "Latin")
-    val typographyGenres: List<String> get() = Genres.all + detailedGenres
+    val genresAll: List<String> get() = Genres.all + detailedGenres
     val moods = listOf("mood:romantic", "mood:sad", "mood:happy", "mood:calm", "mood:energetic", "mood:party")
     private fun clean(raw: String) = Normalizer.normalize(raw.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace(Regex("[^a-z0-9]+"), " ").trim()

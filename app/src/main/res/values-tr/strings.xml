@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Varsayılan standart yazı tipidir. Kişisel sanatçı seçimi önceliklidir; logo ve imza resimleri bağımsızdır.</string>
     <string name="artist_font_fixed">Sabit yazı tipi</string>
     <string name="artist_font_random">Her ziyarette rastgele</string>
-    <string name="artist_font_smart">Akıllı tipografi</string>
     <string name="artist_font_original">Prism özgün otomatik stili</string>
     <string name="artist_font_fallback">Varsayılan ve yedek yazı tipi</string>
-    <string name="artist_font_genres_hint">Genel ve tanınan yöresel türler, ruh halleri hariç. Veri yoksa varsayılan yazı tipi.</string>
-    <string name="artist_font_add_group">Yeni grup ekle</string>
-    <string name="artist_font_used">Başka grupta kullanılıyor</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Meksika yöresel</string>

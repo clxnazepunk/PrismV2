@@ -5156,12 +5156,8 @@
     <string name="artist_font_hint">الخط القياسي افتراضيًا. اختيارات الفنان الفردية لها الأولوية؛ الشعارات وصور التوقيع مستقلة.</string>
     <string name="artist_font_fixed">خط ثابت</string>
     <string name="artist_font_random">عشوائي عند كل زيارة</string>
-    <string name="artist_font_smart">خط ذكي</string>
     <string name="artist_font_original">النمط التلقائي الأصلي لـ Prism</string>
     <string name="artist_font_fallback">الخط الافتراضي والبديل</string>
-    <string name="artist_font_genres_hint">أنواع عامة وإقليمية معروفة دون حالات مزاجية. عند غياب البيانات يُستخدم الخط الافتراضي.</string>
-    <string name="artist_font_add_group">إضافة مجموعة جديدة</string>
-    <string name="artist_font_used">مستخدم في مجموعة أخرى</string>
     <string name="detail_salsa">سالسا</string>
     <string name="detail_cumbia">كومبيا</string>
     <string name="detail_regional_mexican">مكسيكي إقليمي</string>

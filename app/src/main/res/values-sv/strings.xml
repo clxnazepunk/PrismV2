@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Standardtypsnitt som förval. Individuella val har företräde; logotyper och signaturbilder är oberoende.</string>
     <string name="artist_font_fixed">Fast typsnitt</string>
     <string name="artist_font_random">Slumpmässigt vid varje besök</string>
-    <string name="artist_font_smart">Smart typografi</string>
     <string name="artist_font_original">Prisms ursprungliga automatiska stil</string>
     <string name="artist_font_fallback">Standardtypsnitt och reserv</string>
-    <string name="artist_font_genres_hint">Allmänna och kända regionala genrer utan stämningar. Utan data används standardtypsnittet.</string>
-    <string name="artist_font_add_group">Lägg till ny grupp</string>
-    <string name="artist_font_used">Används redan i annan grupp</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional mexikansk</string>

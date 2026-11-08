@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Προεπιλεγμένη απλή γραφή. Οι ατομικές επιλογές υπερισχύουν· λογότυπα και εικόνες υπογραφής είναι ανεξάρτητα.</string>
     <string name="artist_font_fixed">Σταθερή γραμματοσειρά</string>
     <string name="artist_font_random">Τυχαία σε κάθε επίσκεψη</string>
-    <string name="artist_font_smart">Έξυπνη τυπογραφία</string>
     <string name="artist_font_original">Αρχικό αυτόματο στιλ Prism</string>
     <string name="artist_font_fallback">Προεπιλεγμένη και εφεδρική γραμματοσειρά</string>
-    <string name="artist_font_genres_hint">Γενικά και αναγνωρισμένα τοπικά είδη χωρίς διαθέσεις. Χωρίς δεδομένα ισχύει η προεπιλεγμένη γραμματοσειρά.</string>
-    <string name="artist_font_add_group">Προσθήκη νέας ομάδας</string>
-    <string name="artist_font_used">Χρησιμοποιείται σε άλλη ομάδα</string>
     <string name="detail_salsa">Σάλσα</string>
     <string name="detail_cumbia">Κούμπια</string>
     <string name="detail_regional_mexican">Τοπική μεξικανική</string>

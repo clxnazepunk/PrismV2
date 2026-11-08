@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">معیاری فونٹ بطور ڈیفالٹ۔ انفرادی فنکار کے انتخاب کو ترجیح ہے؛ لوگو اور دستخط کی تصاویر الگ ہیں۔</string>
     <string name="artist_font_fixed">مقرر فونٹ</string>
     <string name="artist_font_random">ہر دورے پر بے ترتیب</string>
-    <string name="artist_font_smart">ذہین ٹائپوگرافی</string>
     <string name="artist_font_original">Prism کا اصل خودکار انداز</string>
     <string name="artist_font_fallback">ڈیفالٹ اور متبادل فونٹ</string>
-    <string name="artist_font_genres_hint">عمومی اور پہچانی علاقائی اصناف، مزاج کے بغیر۔ معلومات نہ ہوں تو ڈیفالٹ فونٹ۔</string>
-    <string name="artist_font_add_group">نیا گروپ شامل کریں</string>
-    <string name="artist_font_used">دوسرے گروپ میں استعمال ہو رہا ہے</string>
     <string name="detail_salsa">سالسا</string>
     <string name="detail_cumbia">کمبیا</string>
     <string name="detail_regional_mexican">علاقائی میکسیکن</string>

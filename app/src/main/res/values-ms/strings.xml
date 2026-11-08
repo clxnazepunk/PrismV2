@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">Fon standard secara lalai. Pilihan individu diutamakan; logo dan imej tandatangan berasingan.</string>
     <string name="artist_font_fixed">Fon tetap</string>
     <string name="artist_font_random">Rawak setiap lawatan</string>
-    <string name="artist_font_smart">Tipografi pintar</string>
     <string name="artist_font_original">Gaya automatik asal Prism</string>
     <string name="artist_font_fallback">Fon lalai dan sandaran</string>
-    <string name="artist_font_genres_hint">Genre umum dan serantau yang dikenali tanpa suasana. Tanpa data menggunakan fon lalai.</string>
-    <string name="artist_font_add_group">Tambah kumpulan baharu</string>
-    <string name="artist_font_used">Sudah digunakan kumpulan lain</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Serantau Mexico</string>

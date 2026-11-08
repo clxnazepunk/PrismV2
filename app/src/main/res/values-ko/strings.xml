@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">기본은 표준 글꼴입니다. 아티스트별 선택이 우선하며 로고와 서명 이미지는 별개입니다.</string>
     <string name="artist_font_fixed">고정 글꼴</string>
     <string name="artist_font_random">방문할 때마다 무작위</string>
-    <string name="artist_font_smart">스마트 글꼴</string>
     <string name="artist_font_original">Prism 원래 자동 스타일</string>
     <string name="artist_font_fallback">기본 및 대체 글꼴</string>
-    <string name="artist_font_genres_hint">일반 장르와 인식된 지역 장르를 사용하며 분위기는 제외합니다. 데이터가 없으면 기본 글꼴입니다.</string>
-    <string name="artist_font_add_group">새 그룹 추가</string>
-    <string name="artist_font_used">다른 그룹에서 사용 중</string>
     <string name="detail_salsa">살사</string>
     <string name="detail_cumbia">쿰비아</string>
     <string name="detail_regional_mexican">멕시코 지역 음악</string>

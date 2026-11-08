@@ -4964,12 +4964,8 @@
     <string name="artist_font_hint">Fonte padrão por predefinição. Escolhas individuais têm prioridade; logos e imagens de assinatura são independentes.</string>
     <string name="artist_font_fixed">Fonte fixa</string>
     <string name="artist_font_random">Aleatória a cada visita</string>
-    <string name="artist_font_smart">Tipografia inteligente</string>
     <string name="artist_font_original">Estilo automático original do Prism</string>
     <string name="artist_font_fallback">Fonte padrão e alternativa</string>
-    <string name="artist_font_genres_hint">Gêneros gerais e regionais reconhecidos, sem humores. Sem dados, usa a fonte padrão.</string>
-    <string name="artist_font_add_group">Adicionar novo grupo</string>
-    <string name="artist_font_used">Já usado em outro grupo</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional mexicana</string>

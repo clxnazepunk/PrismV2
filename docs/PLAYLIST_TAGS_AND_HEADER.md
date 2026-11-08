@@ -13,7 +13,7 @@ Fuente oficial: https://www.last.fm/api/show/track.getTopTags
 
 Cliente HTTP independiente, sin sesiones YouTube/Spotify. Solo envía artista, título y clave de API. Verifica artista/título de la respuesta, descarta etiquetas débiles y descriptivas. Caché7días en Room existente, sin migración de tablas. Máximo40canciones sin caché por apertura/actualización, solicitudes separadas300ms, salida tras3errores de conexión/servicio o error de API. Actualizar permite continuar con canciones pendientes. En listas grandes puede faltar cobertura y deben permanecer sin mood; no se inventa una clasificación.
 
-La clave opcional se guarda en artist_prefs junto con otras preferencias de artistas y viaja en el respaldo Biblioteca. Los géneros detallados compatibles se pueden seleccionar en grupos de tipografía inteligente; los moods nunca aparecen en ese selector. El género general y el estilo predeterminado siguen siendo alternativa.
+La clave opcional se guarda en artist_prefs junto con otras preferencias de artistas y viaja en el respaldo Biblioteca. La tipografía inteligente y su editor de grupos se han retirado por petición del propietario; solo se conservan fuente fija, aleatoria y automática original. Configuraciones SMART antiguas migran a fija sin perder la fuente predeterminada.
 
 ## Cabecera
 

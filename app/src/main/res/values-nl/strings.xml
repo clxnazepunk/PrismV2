@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Standaardlettertype als basis. Individuele keuzes gaan voor; logo en handtekeningafbeelding zijn onafhankelijk.</string>
     <string name="artist_font_fixed">Vast lettertype</string>
     <string name="artist_font_random">Willekeurig bij elk bezoek</string>
-    <string name="artist_font_smart">Slimme typografie</string>
     <string name="artist_font_original">Oorspronkelijke automatische Prism-stijl</string>
     <string name="artist_font_fallback">Standaard- en vervangend lettertype</string>
-    <string name="artist_font_genres_hint">Algemene en herkende regionale genres zonder stemmingen. Zonder gegevens geldt het standaardlettertype.</string>
-    <string name="artist_font_add_group">Nieuwe groep toevoegen</string>
-    <string name="artist_font_used">Al gebruikt in een andere groep</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regionaal Mexicaans</string>

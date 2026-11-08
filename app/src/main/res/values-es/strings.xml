@@ -4964,12 +4964,8 @@
     <string name="artist_font_hint">Estándar por defecto. Las elecciones individuales del artista tienen prioridad; logos y firmas de imagen son independientes.</string>
     <string name="artist_font_fixed">Tipografía fija</string>
     <string name="artist_font_random">Aleatoria en cada visita</string>
-    <string name="artist_font_smart">Tipografía inteligente</string>
     <string name="artist_font_original">Estilo automático original de Prism</string>
     <string name="artist_font_fallback">Tipografía predeterminada y alternativa</string>
-    <string name="artist_font_genres_hint">Usa géneros generales y estilos regionales reconocidos, sin moods. Si faltan datos, utiliza la tipografía predeterminada.</string>
-    <string name="artist_font_add_group">Agregar nuevo grupo</string>
-    <string name="artist_font_used">Ya utilizado en otro grupo</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional mexicana</string>

@@ -5028,12 +5028,8 @@
     <string name="artist_font_hint">Výchozí je standardní písmo. Volby pro interpreta mají přednost; loga a obrázky podpisů jsou nezávislé.</string>
     <string name="artist_font_fixed">Pevné písmo</string>
     <string name="artist_font_random">Náhodné při každé návštěvě</string>
-    <string name="artist_font_smart">Chytré písmo</string>
     <string name="artist_font_original">Původní automatický styl Prism</string>
     <string name="artist_font_fallback">Výchozí a náhradní písmo</string>
-    <string name="artist_font_genres_hint">Obecné a rozpoznané regionální žánry bez nálad. Bez dat se použije výchozí písmo.</string>
-    <string name="artist_font_add_group">Přidat novou skupinu</string>
-    <string name="artist_font_used">Použito v jiné skupině</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regionální mexická</string>

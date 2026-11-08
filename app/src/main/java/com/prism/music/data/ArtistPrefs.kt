@@ -27,8 +27,9 @@ class ArtistPrefs(context: Context) {
         prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
     )
 
+    private val typographyJson = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
     private fun readTypography() = prefs.getString(TYPE, null)?.let {
-        runCatching { InnerTube.json.decodeFromString(ArtistTypographyConfig.serializer(), it).sanitized() }.getOrNull()
+        runCatching { typographyJson.decodeFromString(ArtistTypographyConfig.serializer(), it).sanitized() }.getOrNull()
     } ?: ArtistTypographyConfig()
 
     val typography = MutableStateFlow(readTypography())
@@ -41,7 +42,7 @@ class ArtistPrefs(context: Context) {
 
     fun setTypography(value: ArtistTypographyConfig) {
         val next = value.sanitized()
-        prefs.edit().putString(TYPE, InnerTube.json.encodeToString(ArtistTypographyConfig.serializer(), next)).apply()
+        prefs.edit().putString(TYPE, typographyJson.encodeToString(ArtistTypographyConfig.serializer(), next)).apply()
         typography.value = next
     }
 

@@ -4930,12 +4930,8 @@
     <string name="artist_font_hint">Standard by default. Individual artist choices take priority; logos and image signatures remain independent.</string>
     <string name="artist_font_fixed">Fixed font</string>
     <string name="artist_font_random">Random on each visit</string>
-    <string name="artist_font_smart">Smart typography</string>
     <string name="artist_font_original">Original Prism automatic style</string>
     <string name="artist_font_fallback">Default font and fallback</string>
-    <string name="artist_font_genres_hint">Uses broad genres and supported regional styles, without moods. Missing data uses the default font.</string>
-    <string name="artist_font_add_group">Add new group</string>
-    <string name="artist_font_used">Already used in another group</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional Mexican</string>

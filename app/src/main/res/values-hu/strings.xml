@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Alapból szabványos betűtípus. Az egyéni választás elsőbbséget élvez; a logó és az aláírás képe független.</string>
     <string name="artist_font_fixed">Rögzített betűtípus</string>
     <string name="artist_font_random">Véletlen minden látogatáskor</string>
-    <string name="artist_font_smart">Intelligens tipográfia</string>
     <string name="artist_font_original">Eredeti automatikus Prism-stílus</string>
     <string name="artist_font_fallback">Alapértelmezett és tartalék betűtípus</string>
-    <string name="artist_font_genres_hint">Általános és felismert regionális műfajok hangulatok nélkül. Adat nélkül alapértelmezett betűtípus.</string>
-    <string name="artist_font_add_group">Új csoport hozzáadása</string>
-    <string name="artist_font_used">Másik csoport már használja</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regionális mexikói</string>

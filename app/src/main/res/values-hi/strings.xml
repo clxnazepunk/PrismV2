@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">डिफ़ॉल्ट सामान्य फ़ॉन्ट है। कलाकार के व्यक्तिगत विकल्प को प्राथमिकता है; लोगो और हस्ताक्षर चित्र स्वतंत्र हैं।</string>
     <string name="artist_font_fixed">निश्चित फ़ॉन्ट</string>
     <string name="artist_font_random">हर विज़िट पर यादृच्छिक</string>
-    <string name="artist_font_smart">स्मार्ट टाइपोग्राफी</string>
     <string name="artist_font_original">Prism की मूल स्वचालित शैली</string>
     <string name="artist_font_fallback">डिफ़ॉल्ट और वैकल्पिक फ़ॉन्ट</string>
-    <string name="artist_font_genres_hint">सामान्य और पहचानी गई क्षेत्रीय शैलियाँ, मूड नहीं। डेटा न हो तो डिफ़ॉल्ट फ़ॉन्ट।</string>
-    <string name="artist_font_add_group">नया समूह जोड़ें</string>
-    <string name="artist_font_used">दूसरे समूह में उपयोग हो रहा है</string>
     <string name="detail_salsa">साल्सा</string>
     <string name="detail_cumbia">कुम्बिया</string>
     <string name="detail_regional_mexican">क्षेत्रीय मैक्सिकन</string>

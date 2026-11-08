@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Karaniwang font bilang default. Nauuna ang pinili para sa artista; hiwalay ang logo at larawang lagda.</string>
     <string name="artist_font_fixed">Nakapirming font</string>
     <string name="artist_font_random">Random sa bawat pagbisita</string>
-    <string name="artist_font_smart">Matalinong tipograpiya</string>
     <string name="artist_font_original">Orihinal na awtomatikong estilo ng Prism</string>
     <string name="artist_font_fallback">Default at pamalit na font</string>
-    <string name="artist_font_genres_hint">Pangkalahatan at kinikilalang rehiyonal na genre, walang moods. Default na font kapag walang datos.</string>
-    <string name="artist_font_add_group">Magdagdag ng bagong grupo</string>
-    <string name="artist_font_used">Ginagamit na sa ibang grupo</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Rehiyonal na Mehikano</string>

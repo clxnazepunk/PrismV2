@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">Font standar secara bawaan. Pilihan per artis diutamakan; logo dan gambar tanda tangan tetap terpisah.</string>
     <string name="artist_font_fixed">Font tetap</string>
     <string name="artist_font_random">Acak setiap kunjungan</string>
-    <string name="artist_font_smart">Tipografi cerdas</string>
     <string name="artist_font_original">Gaya otomatis asli Prism</string>
     <string name="artist_font_fallback">Font bawaan dan cadangan</string>
-    <string name="artist_font_genres_hint">Genre umum dan regional yang dikenali, tanpa suasana hati. Tanpa data memakai font bawaan.</string>
-    <string name="artist_font_add_group">Tambah grup baru</string>
-    <string name="artist_font_used">Sudah digunakan grup lain</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional Meksiko</string>

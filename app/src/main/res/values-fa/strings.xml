@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">پیش‌فرض قلم استاندارد است. انتخاب هر هنرمند اولویت دارد؛ لوگو و تصویر امضا مستقل‌اند.</string>
     <string name="artist_font_fixed">قلم ثابت</string>
     <string name="artist_font_random">تصادفی در هر بازدید</string>
-    <string name="artist_font_smart">قلم هوشمند</string>
     <string name="artist_font_original">سبک خودکار اصلی Prism</string>
     <string name="artist_font_fallback">قلم پیش‌فرض و جایگزین</string>
-    <string name="artist_font_genres_hint">سبک‌های عمومی و منطقه‌ای شناخته‌شده بدون حال‌وهوا. بدون داده قلم پیش‌فرض استفاده می‌شود.</string>
-    <string name="artist_font_add_group">افزودن گروه جدید</string>
-    <string name="artist_font_used">در گروه دیگری استفاده شده</string>
     <string name="detail_salsa">سالسا</string>
     <string name="detail_cumbia">کومبیا</string>
     <string name="detail_regional_mexican">محلی مکزیکی</string>

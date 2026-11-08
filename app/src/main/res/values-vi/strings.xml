@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">Mặc định dùng chữ tiêu chuẩn. Lựa chọn riêng của nghệ sĩ ưu tiên; logo và ảnh chữ ký độc lập.</string>
     <string name="artist_font_fixed">Kiểu chữ cố định</string>
     <string name="artist_font_random">Ngẫu nhiên mỗi lần truy cập</string>
-    <string name="artist_font_smart">Kiểu chữ thông minh</string>
     <string name="artist_font_original">Kiểu tự động gốc của Prism</string>
     <string name="artist_font_fallback">Kiểu chữ mặc định và dự phòng</string>
-    <string name="artist_font_genres_hint">Thể loại chung và vùng được nhận diện, không có tâm trạng. Thiếu dữ liệu dùng kiểu chữ mặc định.</string>
-    <string name="artist_font_add_group">Thêm nhóm mới</string>
-    <string name="artist_font_used">Đã dùng trong nhóm khác</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Nhạc vùng Mexico</string>

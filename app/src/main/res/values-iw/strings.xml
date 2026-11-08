@@ -4964,12 +4964,8 @@
     <string name="artist_font_hint">גופן רגיל כברירת מחדל. בחירות אישיות קודמות; סמלים ותמונות חתימה עצמאיים.</string>
     <string name="artist_font_fixed">גופן קבוע</string>
     <string name="artist_font_random">אקראי בכל ביקור</string>
-    <string name="artist_font_smart">טיפוגרפיה חכמה</string>
     <string name="artist_font_original">הסגנון האוטומטי המקורי של Prism</string>
     <string name="artist_font_fallback">גופן ברירת מחדל וחלופי</string>
-    <string name="artist_font_genres_hint">ז׳אנרים כלליים ואזוריים מזוהים ללא מצבי רוח. בלי נתונים משמש גופן ברירת המחדל.</string>
-    <string name="artist_font_add_group">הוספת קבוצה חדשה</string>
-    <string name="artist_font_used">כבר בשימוש בקבוצה אחרת</string>
     <string name="detail_salsa">סלסה</string>
     <string name="detail_cumbia">קומביה</string>
     <string name="detail_regional_mexican">מקסיקני אזורי</string>

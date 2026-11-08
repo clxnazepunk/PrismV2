@@ -4900,12 +4900,8 @@
     <string name="artist_font_hint">Standardmäßig Standardschrift. Individuelle Künstlerwahl hat Vorrang; Logos und Unterschriftsbilder sind unabhängig.</string>
     <string name="artist_font_fixed">Feste Schrift</string>
     <string name="artist_font_random">Zufällig bei jedem Besuch</string>
-    <string name="artist_font_smart">Intelligente Typografie</string>
     <string name="artist_font_original">Ursprünglicher automatischer Prism-Stil</string>
     <string name="artist_font_fallback">Standard- und Ersatzschrift</string>
-    <string name="artist_font_genres_hint">Allgemeine und erkannte regionale Genres ohne Stimmungen. Ohne Daten gilt die Standardschrift.</string>
-    <string name="artist_font_add_group">Neue Gruppe hinzufügen</string>
-    <string name="artist_font_used">Bereits in anderer Gruppe verwendet</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional Mexican</string>

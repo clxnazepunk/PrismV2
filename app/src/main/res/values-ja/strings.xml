@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">初期設定は標準書体です。個別の設定を優先し、ロゴや署名画像は独立しています。</string>
     <string name="artist_font_fixed">固定書体</string>
     <string name="artist_font_random">訪問ごとにランダム</string>
-    <string name="artist_font_smart">スマート書体</string>
     <string name="artist_font_original">Prism本来の自動スタイル</string>
     <string name="artist_font_fallback">標準および代替の書体</string>
-    <string name="artist_font_genres_hint">一般的なジャンルと対応する地域音楽を使用し、ムードは除外します。データがなければ標準書体です。</string>
-    <string name="artist_font_add_group">新しいグループを追加</string>
-    <string name="artist_font_used">他のグループで使用中</string>
     <string name="detail_salsa">サルサ</string>
     <string name="detail_cumbia">クンビア</string>
     <string name="detail_regional_mexican">メキシコ地域音楽</string>

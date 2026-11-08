@@ -4836,12 +4836,8 @@
     <string name="artist_font_hint">ใช้แบบอักษรมาตรฐานเป็นค่าเริ่มต้น การเลือกเฉพาะศิลปินมีความสำคัญกว่า โลโก้และภาพลายเซ็นแยกจากกัน</string>
     <string name="artist_font_fixed">แบบอักษรคงที่</string>
     <string name="artist_font_random">สุ่มทุกครั้งที่เข้าชม</string>
-    <string name="artist_font_smart">แบบอักษรอัจฉริยะ</string>
     <string name="artist_font_original">รูปแบบอัตโนมัติดั้งเดิมของ Prism</string>
     <string name="artist_font_fallback">แบบอักษรเริ่มต้นและสำรอง</string>
-    <string name="artist_font_genres_hint">ใช้แนวเพลงทั่วไปและท้องถิ่นที่รู้จัก ไม่รวมอารมณ์ หากไม่มีข้อมูลจะใช้แบบอักษรเริ่มต้น</string>
-    <string name="artist_font_add_group">เพิ่มกลุ่มใหม่</string>
-    <string name="artist_font_used">ใช้ในกลุ่มอื่นแล้ว</string>
     <string name="detail_salsa">ซัลซา</string>
     <string name="detail_cumbia">คุมเบีย</string>
     <string name="detail_regional_mexican">เพลงท้องถิ่นเม็กซิกัน</string>

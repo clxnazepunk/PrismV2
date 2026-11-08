@@ -4964,12 +4964,8 @@
     <string name="artist_font_hint">Font standard implicit. Alegerile individuale au prioritate; siglele și imaginile semnăturii sunt independente.</string>
     <string name="artist_font_fixed">Font fix</string>
     <string name="artist_font_random">Aleatoriu la fiecare vizită</string>
-    <string name="artist_font_smart">Tipografie inteligentă</string>
     <string name="artist_font_original">Stilul automat original Prism</string>
     <string name="artist_font_fallback">Font implicit și de rezervă</string>
-    <string name="artist_font_genres_hint">Genuri generale și regionale recunoscute, fără stări. Fără date se folosește fontul implicit.</string>
-    <string name="artist_font_add_group">Adaugă grup nou</string>
-    <string name="artist_font_used">Deja folosit în alt grup</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regional mexican</string>

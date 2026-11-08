@@ -5028,12 +5028,8 @@
     <string name="artist_font_hint">По умолчанию стандартный шрифт. Индивидуальный выбор важнее; логотипы и изображения подписи независимы.</string>
     <string name="artist_font_fixed">Фиксированный шрифт</string>
     <string name="artist_font_random">Случайный при каждом посещении</string>
-    <string name="artist_font_smart">Умные шрифты</string>
     <string name="artist_font_original">Исходный автоматический стиль Prism</string>
     <string name="artist_font_fallback">Основной и резервный шрифт</string>
-    <string name="artist_font_genres_hint">Общие и распознанные региональные жанры без настроений. Без данных используется основной шрифт.</string>
-    <string name="artist_font_add_group">Добавить группу</string>
-    <string name="artist_font_used">Уже используется в другой группе</string>
     <string name="detail_salsa">Сальса</string>
     <string name="detail_cumbia">Кумбия</string>
     <string name="detail_regional_mexican">Региональная мексиканская</string>

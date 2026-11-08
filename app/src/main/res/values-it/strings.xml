@@ -4964,12 +4964,8 @@
     <string name="artist_font_hint">Carattere standard predefinito. Le scelte individuali hanno priorità; loghi e immagini di firma sono indipendenti.</string>
     <string name="artist_font_fixed">Carattere fisso</string>
     <string name="artist_font_random">Casuale a ogni visita</string>
-    <string name="artist_font_smart">Tipografia intelligente</string>
     <string name="artist_font_original">Stile automatico originale di Prism</string>
     <string name="artist_font_fallback">Carattere predefinito e alternativo</string>
-    <string name="artist_font_genres_hint">Generi generali e regionali riconosciuti, senza stati d’animo. Senza dati si usa il carattere predefinito.</string>
-    <string name="artist_font_add_group">Aggiungi gruppo</string>
-    <string name="artist_font_used">Già usato in un altro gruppo</string>
     <string name="detail_salsa">Salsa</string>
     <string name="detail_cumbia">Cumbia</string>
     <string name="detail_regional_mexican">Regionale messicana</string>
