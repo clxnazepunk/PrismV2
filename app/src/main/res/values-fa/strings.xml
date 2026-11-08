@@ -4881,4 +4881,5 @@
     <string name="artist_signature_api">API امضا</string>
     <string name="artist_profile_save">ذخیرهٔ نمایه برای حالت آفلاین</string>
     <string name="artist_profile_remove">توقف نگهداری نمایه</string>
+    <string name="artist_identity_backup_hint">پشتیبان‌های %1$s شامل نمایه‌های ذخیره‌شدهٔ هنرمندان، جلدهای سفارشی، نشان‌ها و امضاها هستند.</string>
 </resources>

@@ -4945,4 +4945,5 @@
     <string name="artist_signature_api">API de assinaturas</string>
     <string name="artist_profile_save">Salvar perfil offline</string>
     <string name="artist_profile_remove">Deixar de guardar o perfil</string>
+    <string name="artist_identity_backup_hint">Os backups de %1$s incluem perfis de artistas salvos, capas personalizadas, logos e assinaturas.</string>
 </resources>

@@ -4945,4 +4945,5 @@
     <string name="artist_signature_api">API de signatures</string>
     <string name="artist_profile_save">Enregistrer le profil hors connexion</string>
     <string name="artist_profile_remove">Ne plus conserver le profil</string>
+    <string name="artist_identity_backup_hint">Les sauvegardes de %1$s incluent les profils d’artistes enregistrés, les pochettes personnalisées, les logos et les signatures.</string>
 </resources>

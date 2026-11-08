@@ -4817,4 +4817,5 @@
     <string name="artist_signature_api">API chữ ký</string>
     <string name="artist_profile_save">Lưu hồ sơ ngoại tuyến</string>
     <string name="artist_profile_remove">Ngừng lưu hồ sơ</string>
+    <string name="artist_identity_backup_hint">Bản sao lưu %1$s bao gồm hồ sơ nghệ sĩ đã lưu, ảnh bìa tùy chỉnh, biểu trưng và chữ ký.</string>
 </resources>

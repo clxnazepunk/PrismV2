@@ -4881,4 +4881,5 @@
     <string name="artist_signature_api">API υπογραφών</string>
     <string name="artist_profile_save">Αποθήκευση προφίλ εκτός σύνδεσης</string>
     <string name="artist_profile_remove">Διακοπή αποθήκευσης προφίλ</string>
+    <string name="artist_identity_backup_hint">Τα αντίγραφα ασφαλείας του %1$s περιλαμβάνουν αποθηκευμένα προφίλ καλλιτεχνών, εξώφυλλα, λογότυπα και υπογραφές.</string>
 </resources>

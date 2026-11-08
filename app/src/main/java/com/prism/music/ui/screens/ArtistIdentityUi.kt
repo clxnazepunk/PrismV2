@@ -129,6 +129,8 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
                 }
             }, enabled = !busy) { Text(tr(R.string.refresh_the_list)) }
         }
+        Text(tr(R.string.artist_identity_backup_hint, tr(R.string.library)),
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         HorizontalDivider()
         Text(tr(R.string.signature_style), style = MaterialTheme.typography.titleMedium)
     }

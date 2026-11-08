@@ -4945,4 +4945,5 @@
     <string name="artist_signature_api">API לחתימות</string>
     <string name="artist_profile_save">שמירת פרופיל ללא חיבור</string>
     <string name="artist_profile_remove">הפסקת שמירת הפרופיל</string>
+    <string name="artist_identity_backup_hint">הגיבויים של %1$s כוללים פרופילי אמנים שמורים, עטיפות מותאמות, סמלים וחתימות.</string>
 </resources>

@@ -5009,4 +5009,5 @@
     <string name="artist_signature_api">API podpisów</string>
     <string name="artist_profile_save">Zapisz profil offline</string>
     <string name="artist_profile_remove">Przestań przechowywać profil</string>
+    <string name="artist_identity_backup_hint">Kopie zapasowe %1$s obejmują zapisane profile wykonawców, własne okładki, logo i podpisy.</string>
 </resources>

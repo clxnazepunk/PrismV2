@@ -4881,4 +4881,5 @@
     <string name="artist_signature_api">Signatur-API</string>
     <string name="artist_profile_save">Spara profilen offline</string>
     <string name="artist_profile_remove">Sluta spara profilen</string>
+    <string name="artist_identity_backup_hint">Säkerhetskopior av %1$s innehåller sparade artistprofiler, egna omslag, logotyper och signaturer.</string>
 </resources>

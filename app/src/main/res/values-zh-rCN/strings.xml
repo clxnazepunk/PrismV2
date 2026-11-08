@@ -4817,4 +4817,5 @@
     <string name="artist_signature_api">签名 API</string>
     <string name="artist_profile_save">离线保存艺人资料</string>
     <string name="artist_profile_remove">取消保存艺人资料</string>
+    <string name="artist_identity_backup_hint">%1$s 的备份包括已保存的艺人资料、自定义封面、标志和签名。</string>
 </resources>

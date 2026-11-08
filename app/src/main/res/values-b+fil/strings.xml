@@ -4881,4 +4881,5 @@
     <string name="artist_signature_api">API ng lagda</string>
     <string name="artist_profile_save">I-save ang profile offline</string>
     <string name="artist_profile_remove">Huwag nang panatilihin ang profile</string>
+    <string name="artist_identity_backup_hint">Kasama sa mga backup ng %1$s ang mga naka-save na profile ng artist, sariling cover, logo at lagda.</string>
 </resources>
