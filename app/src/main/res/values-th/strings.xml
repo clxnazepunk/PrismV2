@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">ผู้ร่วมพัฒนา BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">ปรับแต่ง</string>
+    <string name="artist_zoom">ขนาด</string>
+    <string name="artist_horizontal">ตำแหน่งแนวนอน</string>
+    <string name="artist_vertical">ตำแหน่งแนวตั้ง</string>
+    <string name="artist_zoom_hint">ขยายภาพขนาดเล็กได้สูงสุด 12 เท่า แต่ไม่เพิ่มรายละเอียด</string>
+    <string name="artist_display_auto">แสดงอัตโนมัติ</string>
+    <string name="artist_display_priority">โลโก้ก่อน ตามด้วยลายเซ็นและข้อความ เลือกเพื่อแสดงร่วมกัน</string>
+    <string name="artist_native_text">ข้อความ</string>
+    <string name="artist_signature_caption">แสดงชื่อศิลปินใต้ลายเซ็น</string>
+    <string name="artist_invert">กลับสี</string>
 </resources>

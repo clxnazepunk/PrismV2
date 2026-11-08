@@ -4950,4 +4950,14 @@
     <string name="third_party_bitchord_contributors">התורמים ל־BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">התאמה</string>
+    <string name="artist_zoom">גודל</string>
+    <string name="artist_horizontal">מיקום אופקי</string>
+    <string name="artist_vertical">מיקום אנכי</string>
+    <string name="artist_zoom_hint">ניתן להגדיל תמונות קטנות עד 12× ללא תוספת פרטים.</string>
+    <string name="artist_display_auto">תצוגה אוטומטית</string>
+    <string name="artist_display_priority">לוגו, אחריו חתימה ואז טקסט. יש לבחור כדי לשלב.</string>
+    <string name="artist_native_text">טקסט</string>
+    <string name="artist_signature_caption">הצגת שם האמן מתחת לחתימה</string>
+    <string name="artist_invert">היפוך צבע</string>
 </resources>

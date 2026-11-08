@@ -32,6 +32,10 @@ data class ArtistIdentity(
     val checkedAt: Long = 0,
     val api: String = "",
     val catalogue: Int = 0,
+    val display: ArtistDisplayChoice? = null,
+    val logoLayout: ArtistImageLayout = ArtistImageLayout(),
+    val signatureLayout: ArtistImageLayout = ArtistImageLayout(),
+    val signatureCaption: Boolean = true,
 ) {
     fun chosen(role: ArtistImageRole, automatic: Boolean = true): ArtistImageAsset? = when (role) {
         ArtistImageRole.LOGO -> localLogo ?: logo.takeIf { automatic }

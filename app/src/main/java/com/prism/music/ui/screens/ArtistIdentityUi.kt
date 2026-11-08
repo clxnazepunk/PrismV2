@@ -18,6 +18,11 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.prism.music.R
+import com.prism.music.data.artists.*
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
+import java.io.File
 import com.prism.music.data.artists.ArtistImageRole
 import com.prism.music.data.artists.ArtistImageSources
 import com.prism.music.data.model.ArtistPage
@@ -31,40 +36,82 @@ import kotlinx.coroutines.launch
 
 private const val ARTIST_IMAGE_MIME_TYPE = "image/*"
 
-/** Cached logo and handwriting are different resources. The handwriting is explicitly credited below. */
+/** Selection and edits are per artist; a failed image never hides the native fallback. */
 @Composable
 internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boolean, onEdit: () -> Unit) {
     val identities = LocalContainer.current.artistIdentities
     val entries by identities.entries.collectAsState()
     val automatic by identities.automatic.collectAsState()
     val api by identities.signatureApi.collectAsState()
-    val logo = remember(entries[page.id], automatic, api) { identities.asset(page.id, ArtistImageRole.LOGO)?.let { identities.store.file(it) } }
-    val signature = remember(entries[page.id], automatic, api) { identities.asset(page.id, ArtistImageRole.SIGNATURE)?.let { identities.store.file(it) } }
-    val context = LocalContext.current
+    val entry = entries[page.id] ?: ArtistIdentity()
+    val logo = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.LOGO)) }
+    val signature = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.SIGNATURE)) }
+    var logoFailed by remember(logo) { mutableStateOf(false) }
+    var signatureFailed by remember(signature) { mutableStateOf(false) }
     var logoLoaded by remember(logo) { mutableStateOf(false) }
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 4.dp)) {
-            if (!logoLoaded) ArtistSignature(page.name, type, ready, Modifier.fillMaxWidth(), onLongPress = onEdit)
-            if (logo != null) AsyncImage(
-                ImageRequest.Builder(context).data(logo).size(1200, 400).build(),
-                tr(R.string.artist_logo) + " · " + page.name,
-                modifier = Modifier.fillMaxWidth().height(100.dp).alpha(if (logoLoaded) 1f else 0f).clickable(onClick = onEdit),
-                contentScale = ContentScale.Fit, onSuccess = { logoLoaded = true }, onError = { logoLoaded = false },
-            )
+    var signatureLoaded by remember(signature) { mutableStateOf(false) }
+    val shown = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
+        ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
+    Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp,
+            onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
+        if (shown.signature && signature != null) {
+            ArtistMark(signature, tr(R.string.signature), entry.signatureLayout, 72.dp,
+                tint = entry.localSignature == null && signature.extension == "svg",
+                onEdit = onEdit, onSuccess = { signatureLoaded = true }, onError = { signatureFailed = true })
+            if (entry.signatureCaption && signatureLoaded && !shown.text) Text(page.name,
+                style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp))
         }
-        if (signature != null) {
-            var signatureLoaded by remember(signature) { mutableStateOf(false) }
-            AsyncImage(
-                ImageRequest.Builder(context).data(signature).size(1000, 320).build(),
-                tr(R.string.signature) + " · " + page.name,
-                modifier = Modifier.fillMaxWidth(0.66f).height(72.dp).alpha(if (signatureLoaded) 1f else 0f).clickable(onClick = onEdit),
-                colorFilter = if (entries[page.id]?.localSignature == null && signature.extension == "svg") androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
-                contentScale = ContentScale.Fit, onSuccess = { signatureLoaded = true }, onError = { signatureLoaded = false },
-            )
-            if (signatureLoaded) Text(page.name, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 2.dp))
-        }
+        if (shown.text || (shown.logo && !logoLoaded) || (shown.signature && !signatureLoaded))
+            ArtistSignature(page.name, type, ready, Modifier.fillMaxWidth(), onLongPress = onEdit)
     }
+}
+
+/** Fit enlarges small originals too; zoom is visual, never an unbounded image decode. */
+@Composable
+private fun ArtistMark(
+    file: File, label: String, layout: ArtistImageLayout, height: Dp,
+    tint: Boolean = false, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
+) {
+    val context = LocalContext.current
+    val fit = layout.bounded()
+    Box(Modifier.fillMaxWidth().height(height).clipToBounds().clickable(onClick = onEdit)) {
+        AsyncImage(
+            ImageRequest.Builder(context).data(file).size(1600, 800).build(), label,
+            Modifier.fillMaxSize().graphicsLayer {
+                scaleX = fit.scale; scaleY = fit.scale
+                translationX = size.width * fit.x; translationY = size.height * fit.y
+            },
+            contentScale = ContentScale.Fit,
+            colorFilter = if (tint) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
+            onSuccess = { onSuccess() }, onError = { onError() },
+        )
+    }
+}
+
+@Composable
+private fun ArtistLayoutEditor(
+    file: File, label: String, current: ArtistImageLayout, onSave: (ArtistImageLayout) -> Unit, onDismiss: () -> Unit,
+) {
+    var draft by remember(file, current) { mutableStateOf(current.bounded()) }
+    AlertDialog(onDismissRequest = onDismiss, title = { Text(tr(R.string.artist_adjust)) }, text = {
+        Column {
+            ArtistMark(file, label, draft, 100.dp)
+            Text(tr(R.string.artist_zoom))
+            Slider(draft.scale, { draft = draft.copy(scale = it) }, valueRange = 0.25f..12f)
+            Text(tr(R.string.artist_horizontal))
+            Slider(draft.x, { draft = draft.copy(x = it) }, valueRange = -1f..1f)
+            Text(tr(R.string.artist_vertical))
+            Slider(draft.y, { draft = draft.copy(y = it) }, valueRange = -1f..1f)
+            Text(tr(R.string.artist_zoom_hint), style = MaterialTheme.typography.bodySmall)
+            PrismTextButton(onClick = { draft = ArtistImageLayout() }) { Text(tr(R.string.reset)) }
+        }
+    }, confirmButton = {
+        PrismTextButton(onClick = { onSave(draft.bounded()) }) { Text(tr(R.string.save)) }
+    }, dismissButton = {
+        PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) }
+    })
 }
 
 /** Inside the existing signature sheet: keep its native typography picker as the fallback. */
@@ -81,6 +128,9 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
     val uriHandler = LocalUriHandler.current
     var role by remember { mutableStateOf(ArtistImageRole.LOGO) }
     var busy by remember { mutableStateOf(false) }
+    var adjusting by remember { mutableStateOf<ArtistImageRole?>(null) }
+    val current = entries[page.id] ?: ArtistIdentity()
+    fun change(update: (ArtistIdentity) -> ArtistIdentity) { scope.launch { identities.store.update(page.id, update) } }
     var apiText by remember(api) { mutableStateOf(api) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) scope.launch {
@@ -90,7 +140,35 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
             } finally { busy = false }
         }
     }
+    adjusting?.let { kind ->
+        identities.store.file(identities.asset(page.id, kind))?.let { file ->
+            ArtistLayoutEditor(file, tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature),
+                if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout,
+                onSave = { layout ->
+                    change { if (kind == ArtistImageRole.LOGO) it.copy(logoLayout = layout) else it.copy(signatureLayout = layout) }
+                    adjusting = null
+                }, onDismiss = { adjusting = null })
+        }
+    }
     Column(Modifier.padding(horizontal = 22.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(tr(R.string.artist_display_auto), Modifier.weight(1f))
+            Switch(current.display == null, { auto -> change { it.copy(display = if (auto) null else ArtistDisplayChoice()) } })
+        }
+        Text(tr(R.string.artist_display_priority), style = MaterialTheme.typography.bodySmall)
+        val choice = current.display ?: ArtistDisplayChoice()
+        for (index in 0..2) Row(verticalAlignment = Alignment.CenterVertically) {
+            val checked = when (index) { 0 -> choice.logo; 1 -> choice.signature; else -> choice.text }
+            Checkbox(checked, { value ->
+                val next = when (index) { 0 -> choice.copy(logo = value); 1 -> choice.copy(signature = value); else -> choice.copy(text = value) }
+                if (next.logo || next.signature || next.text) change { it.copy(display = next) }
+            })
+            Text(tr(when (index) { 0 -> R.string.artist_logo; 1 -> R.string.signature; else -> R.string.artist_native_text }))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(current.signatureCaption, { value -> change { it.copy(signatureCaption = value) } })
+            Text(tr(R.string.artist_signature_caption))
+        }
         for (kind in ArtistImageRole.entries) {
             val label = tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature)
             val entry = entries[page.id]
@@ -98,12 +176,27 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
             val shown = identities.asset(page.id, kind)
             Text(label, style = MaterialTheme.typography.titleMedium)
             shown?.let { asset ->
-                AsyncImage(identities.store.file(asset), label, Modifier.fillMaxWidth().height(74.dp), contentScale = ContentScale.Fit)
+                identities.store.file(asset)?.let { file ->
+                    ArtistMark(file, label, if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout, 74.dp,
+                        tint = kind == ArtistImageRole.SIGNATURE && local == null && file.extension == "svg")
+                }
                 asset.source?.takeIf { it.startsWith("https://") }?.let { source ->
                     PrismTextButton(onClick = { runCatching { uriHandler.openUri(source) } }) {
                         Text(asset.license ?: tr(R.string.source), style = MaterialTheme.typography.labelSmall)
                     }
                 }
+            }
+            if (shown != null) Row {
+                PrismTextButton(onClick = { adjusting = kind }, enabled = !busy) { Text(tr(R.string.artist_adjust)) }
+                PrismTextButton(onClick = {
+                    scope.launch {
+                        busy = true
+                        try { ArtistImageEdits.invert(context, identities.store, page.id, kind, shown) }
+                        catch (e: CancellationException) { throw e }
+                        catch (_: Exception) { Toast.makeText(context, tr(R.string.couldn_t_use_that_picture), Toast.LENGTH_SHORT).show() }
+                        finally { busy = false }
+                    }
+                }, enabled = !busy) { Text(tr(R.string.artist_invert)) }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 PrismTextButton(onClick = { role = kind; picker.launch(ARTIST_IMAGE_MIME_TYPE) }, enabled = !busy) { Text(tr(R.string.choose_a_photo)) }

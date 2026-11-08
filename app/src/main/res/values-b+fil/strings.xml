@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">Mga kontribyutor ng BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Ayusin</string>
+    <string name="artist_zoom">Laki</string>
+    <string name="artist_horizontal">Pahalang na posisyon</string>
+    <string name="artist_vertical">Patayong posisyon</string>
+    <string name="artist_zoom_hint">Maaaring palakihin ang maliit na larawan hanggang 12×; walang dagdag na detalye.</string>
+    <string name="artist_display_auto">Awtomatikong pagpapakita</string>
+    <string name="artist_display_priority">Logo muna, kasunod ang lagda, saka teksto. Pumili upang pagsamahin.</string>
+    <string name="artist_native_text">Teksto</string>
+    <string name="artist_signature_caption">Ipakita ang pangalan sa ilalim ng lagda</string>
+    <string name="artist_invert">Baligtarin ang kulay</string>
 </resources>

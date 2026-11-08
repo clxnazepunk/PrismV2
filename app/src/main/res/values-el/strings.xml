@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">Συντελεστές του BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Προσαρμογή</string>
+    <string name="artist_zoom">Μέγεθος</string>
+    <string name="artist_horizontal">Οριζόντια θέση</string>
+    <string name="artist_vertical">Κατακόρυφη θέση</string>
+    <string name="artist_zoom_hint">Οι μικρές εικόνες μεγεθύνονται έως 12× χωρίς πρόσθετη λεπτομέρεια.</string>
+    <string name="artist_display_auto">Αυτόματη προβολή</string>
+    <string name="artist_display_priority">Πρώτα λογότυπο, μετά υπογραφή και κείμενο. Επιλέξτε για συνδυασμό.</string>
+    <string name="artist_native_text">Κείμενο</string>
+    <string name="artist_signature_caption">Όνομα καλλιτέχνη κάτω από την υπογραφή</string>
+    <string name="artist_invert">Αντιστροφή χρώματος</string>
 </resources>

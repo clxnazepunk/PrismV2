@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">BitChord katkıda bulunanları</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Ayarla</string>
+    <string name="artist_zoom">Boyut</string>
+    <string name="artist_horizontal">Yatay konum</string>
+    <string name="artist_vertical">Dikey konum</string>
+    <string name="artist_zoom_hint">Küçük görseller 12× büyütülebilir; bu ayrıntı eklemez.</string>
+    <string name="artist_display_auto">Otomatik gösterim</string>
+    <string name="artist_display_priority">Önce logo, sonra imza ve metin. Birleştirmek için seçin.</string>
+    <string name="artist_native_text">Metin</string>
+    <string name="artist_signature_caption">İmzanın altında sanatçı adını göster</string>
+    <string name="artist_invert">Rengi ters çevir</string>
 </resources>

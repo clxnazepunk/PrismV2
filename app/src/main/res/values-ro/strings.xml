@@ -4950,4 +4950,14 @@
     <string name="third_party_bitchord_contributors">Contribuitori BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Ajustare</string>
+    <string name="artist_zoom">Dimensiune</string>
+    <string name="artist_horizontal">Poziție orizontală</string>
+    <string name="artist_vertical">Poziție verticală</string>
+    <string name="artist_zoom_hint">Imaginile mici pot fi mărite până la 12× fără detalii suplimentare.</string>
+    <string name="artist_display_auto">Afișare automată</string>
+    <string name="artist_display_priority">Întâi sigla, apoi semnătura și textul. Selectează pentru a combina.</string>
+    <string name="artist_native_text">Text</string>
+    <string name="artist_signature_caption">Arată numele artistului sub semnătură</string>
+    <string name="artist_invert">Inversează culoarea</string>
 </resources>

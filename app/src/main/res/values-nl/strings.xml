@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">Bijdragers aan BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Aanpassen</string>
+    <string name="artist_zoom">Grootte</string>
+    <string name="artist_horizontal">Horizontale positie</string>
+    <string name="artist_vertical">Verticale positie</string>
+    <string name="artist_zoom_hint">Kleine afbeeldingen kunnen tot 12× worden vergroot; dit voegt geen details toe.</string>
+    <string name="artist_display_auto">Automatische weergave</string>
+    <string name="artist_display_priority">Eerst logo, dan handtekening, dan tekst. Selecteer om te combineren.</string>
+    <string name="artist_native_text">Tekst</string>
+    <string name="artist_signature_caption">Artiestennaam onder handtekening tonen</string>
+    <string name="artist_invert">Kleur omkeren</string>
 </resources>

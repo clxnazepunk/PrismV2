@@ -569,6 +569,9 @@ private fun TopBar(
     val profileContext = androidx.compose.ui.platform.LocalContext.current
     val savedRevision by profileContainer.offline.savedArtistChanges.collectAsState()
     val profileSaved = remember(page.id, savedRevision) { profileContainer.offline.isArtistSaved(page.id) }
+    val pickArtistPhoto = rememberArtistPhotoPicker(page.id, profileContainer.covers) {
+        android.widget.Toast.makeText(profileContext, tr(R.string.couldn_t_use_that_picture), android.widget.Toast.LENGTH_SHORT).show()
+    }
     var menu by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().statusBarsPadding().height(60.dp)) {
@@ -622,16 +625,9 @@ private fun TopBar(
                         // A photo of your own for the artist (1.7.6), on their page and in Library.
                         val photoKey = c.covers.artistKey(page.id)
                         val ownPhoto = c.covers.custom(photoKey) != null
-                        val photoScope = androidx.compose.runtime.rememberCoroutineScope()
-                        val context = androidx.compose.ui.platform.LocalContext.current
-                        val picker = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia()) { uri ->
-                            if (uri != null) photoScope.launch {
-                                if (!c.covers.usePhoto(photoKey, uri)) android.widget.Toast.makeText(context, tr(R.string.couldn_t_use_that_picture), android.widget.Toast.LENGTH_SHORT).show()
-                            }
-                        }
                         DropdownMenuItem(
                             { Text(tr(R.string.use_your_own_photo)) },
-                            { menu = false; picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                            { menu = false; pickArtistPhoto() },
                             leadingIcon = { Icon(PrismIcons.Photo, null) },
                         )
                         if (ownPhoto) DropdownMenuItem(

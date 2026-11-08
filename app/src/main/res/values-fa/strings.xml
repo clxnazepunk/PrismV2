@@ -4886,4 +4886,14 @@
     <string name="third_party_bitchord_contributors">مشارکت‌کنندگان BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">تنظیم</string>
+    <string name="artist_zoom">اندازه</string>
+    <string name="artist_horizontal">موقعیت افقی</string>
+    <string name="artist_vertical">موقعیت عمودی</string>
+    <string name="artist_zoom_hint">تصاویر کوچک تا 12× بزرگ می‌شوند؛ جزئیاتی اضافه نمی‌شود.</string>
+    <string name="artist_display_auto">نمایش خودکار</string>
+    <string name="artist_display_priority">ابتدا لوگو، سپس امضا و متن. برای ترکیب انتخاب کنید.</string>
+    <string name="artist_native_text">متن</string>
+    <string name="artist_signature_caption">نمایش نام هنرمند زیر امضا</string>
+    <string name="artist_invert">معکوس کردن رنگ</string>
 </resources>

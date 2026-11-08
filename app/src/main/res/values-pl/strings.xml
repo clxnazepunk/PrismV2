@@ -5014,4 +5014,14 @@
     <string name="third_party_bitchord_contributors">Współtwórcy BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Dostosuj</string>
+    <string name="artist_zoom">Rozmiar</string>
+    <string name="artist_horizontal">Pozycja pozioma</string>
+    <string name="artist_vertical">Pozycja pionowa</string>
+    <string name="artist_zoom_hint">Małe obrazy można powiększyć do 12×; nie dodaje to szczegółów.</string>
+    <string name="artist_display_auto">Wyświetlanie automatyczne</string>
+    <string name="artist_display_priority">Najpierw logo, potem podpis i tekst. Zaznacz, aby łączyć.</string>
+    <string name="artist_native_text">Tekst</string>
+    <string name="artist_signature_caption">Pokaż nazwę wykonawcy pod podpisem</string>
+    <string name="artist_invert">Odwróć kolor</string>
 </resources>

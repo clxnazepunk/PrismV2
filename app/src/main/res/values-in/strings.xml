@@ -4822,4 +4822,14 @@
     <string name="third_party_bitchord_contributors">Kontributor BitChord</string>
     <string name="third_party_androidsvg">AndroidSVG</string>
     <string name="third_party_paul_lebeau">Paul LeBeau</string>
+    <string name="artist_adjust">Sesuaikan</string>
+    <string name="artist_zoom">Ukuran</string>
+    <string name="artist_horizontal">Posisi horizontal</string>
+    <string name="artist_vertical">Posisi vertikal</string>
+    <string name="artist_zoom_hint">Gambar kecil dapat diperbesar hingga 12×; detail tidak bertambah.</string>
+    <string name="artist_display_auto">Tampilan otomatis</string>
+    <string name="artist_display_priority">Logo, lalu tanda tangan, lalu teks. Pilih untuk menggabungkan.</string>
+    <string name="artist_native_text">Teks</string>
+    <string name="artist_signature_caption">Tampilkan nama artis di bawah tanda tangan</string>
+    <string name="artist_invert">Balik warna</string>
 </resources>
