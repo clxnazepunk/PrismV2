@@ -18,10 +18,15 @@ data class ArtistDisplayChoice(val logo: Boolean = true, val signature: Boolean 
 
 /** Independent of source pixel dimensions: even a tiny imported image can fill the header. */
 @Serializable
-data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Float = 0f) {
+data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Float = 0f, val headerCoordinates: Boolean = false) {
     fun bounded() = ArtistImageLayout(
         scale.takeIf { it.isFinite() }?.coerceIn(0.25f, 12f) ?: 1f,
         x.takeIf { it.isFinite() }?.coerceIn(-1f, 1f) ?: 0f,
         y.takeIf { it.isFinite() }?.coerceIn(-1f, 1f) ?: 0f,
+        headerCoordinates,
     )
+
+    /** Preserve the position of saves made with the original small image slots. */
+    fun forHeader(headerHeight: Float, slotHeight: Float): ArtistImageLayout =
+        if (headerCoordinates) bounded() else copy(y = y * slotHeight / headerHeight.coerceAtLeast(1f), headerCoordinates = true).bounded()
 }

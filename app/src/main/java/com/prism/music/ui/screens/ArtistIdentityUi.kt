@@ -1,6 +1,11 @@
 package com.prism.music.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -38,12 +43,19 @@ private const val ARTIST_IMAGE_MIME_TYPE = "image/*"
 
 /** Selection and edits are per artist; a failed image never hides the native fallback. */
 @Composable
-internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boolean, onEdit: () -> Unit) {
+internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boolean, onEdit: () -> Unit, canvasHeight: Dp = 100.dp,
+    preview: Pair<ArtistImageRole, ArtistImageLayout>? = null,
+) {
     val identities = LocalContainer.current.artistIdentities
     val entries by identities.entries.collectAsState()
     val automatic by identities.automatic.collectAsState()
     val api by identities.signatureApi.collectAsState()
-    val entry = entries[page.id] ?: ArtistIdentity()
+    val saved = entries[page.id] ?: ArtistIdentity()
+    val entry = when (preview?.first) {
+        ArtistImageRole.LOGO -> saved.copy(logoLayout = preview.second, display = ArtistDisplayChoice(true, false, false))
+        ArtistImageRole.SIGNATURE -> saved.copy(signatureLayout = preview.second, display = ArtistDisplayChoice(false, true, false))
+        null -> saved
+    }
     val logo = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.LOGO)) }
     val signature = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.SIGNATURE)) }
     var logoFailed by remember(logo) { mutableStateOf(false) }
@@ -53,10 +65,10 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val shown = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
         ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
     Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp,
+        if (shown.logo && logo != null) ArtistMark(logo, tr(R.string.artist_logo), entry.logoLayout, 100.dp, canvasHeight = canvasHeight,
             onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
         if (shown.signature && signature != null) {
-            ArtistMark(signature, tr(R.string.signature), entry.signatureLayout, 72.dp,
+            ArtistMark(signature, tr(R.string.signature), entry.signatureLayout, 72.dp, canvasHeight = canvasHeight,
                 tint = entry.localSignature == null && signature.extension == "svg",
                 onEdit = onEdit, onSuccess = { signatureLoaded = true }, onError = { signatureFailed = true })
             if (entry.signatureCaption && signatureLoaded && !shown.text) Text(page.name,
@@ -72,16 +84,17 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
 @Composable
 private fun ArtistMark(
     file: File, label: String, layout: ArtistImageLayout, height: Dp,
-    tint: Boolean = false, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
+    tint: Boolean = false, canvasHeight: Dp = height, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
-    Box(Modifier.fillMaxWidth().height(height).clipToBounds().clickable(onClick = onEdit)) {
+    val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
+    Box(Modifier.fillMaxWidth().height(height).clickable(onClick = onEdit)) {
         AsyncImage(
             ImageRequest.Builder(context).data(file).size(1600, 800).build(), label,
             Modifier.fillMaxSize().graphicsLayer {
                 scaleX = fit.scale; scaleY = fit.scale
-                translationX = size.width * fit.x; translationY = size.height * fit.y
+                translationX = size.width * fit.x; translationY = (if (fit.headerCoordinates) canvasPixels else size.height) * fit.y
             },
             contentScale = ContentScale.Fit,
             colorFilter = if (tint) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
@@ -92,31 +105,48 @@ private fun ArtistMark(
 
 @Composable
 private fun ArtistLayoutEditor(
-    file: File, label: String, current: ArtistImageLayout, onSave: (ArtistImageLayout) -> Unit, onDismiss: () -> Unit,
+    page: ArtistPage, role: ArtistImageRole, type: ArtistType, headerWidth: Dp, headerHeight: Dp,
+    current: ArtistImageLayout, onSave: (ArtistImageLayout) -> Unit, onDismiss: () -> Unit,
 ) {
-    var draft by remember(file, current) { mutableStateOf(current.bounded()) }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(tr(R.string.artist_adjust)) }, text = {
-        Column {
-            ArtistMark(file, label, draft, 100.dp)
-            Text(tr(R.string.artist_zoom))
-            Slider(draft.scale, { draft = draft.copy(scale = it) }, valueRange = 0.25f..12f)
-            Text(tr(R.string.artist_horizontal))
-            Slider(draft.x, { draft = draft.copy(x = it) }, valueRange = -1f..1f)
-            Text(tr(R.string.artist_vertical))
-            Slider(draft.y, { draft = draft.copy(y = it) }, valueRange = -1f..1f)
-            Text(tr(R.string.artist_zoom_hint), style = MaterialTheme.typography.bodySmall)
-            PrismTextButton(onClick = { draft = ArtistImageLayout() }) { Text(tr(R.string.reset)) }
+    val slot = if (role == ArtistImageRole.LOGO) 100f else 72f
+    var draft by remember(page.id, role) { mutableStateOf(current.forHeader(headerHeight.value, slot)) }
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Surface(Modifier.fillMaxSize()) {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(tr(R.string.artist_adjust), Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                    PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) }
+                    PrismTextButton(onClick = { onSave(draft.bounded()) }) { Text(tr(R.string.save)) }
+                }
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val ratio = maxWidth / headerWidth.coerceAtLeast(1.dp)
+                    Box(Modifier.fillMaxWidth().height(headerHeight * ratio).clipToBounds()) {
+                        Box(Modifier.wrapContentSize(Alignment.TopStart, unbounded = true)
+                            .requiredSize(headerWidth, headerHeight).graphicsLayer {
+                                transformOrigin = TransformOrigin(0f, 0f); scaleX = ratio; scaleY = ratio
+                            }) {
+                            ArtistHeader(page, type, true, headerHeight, preview = role to draft)
+                        }
+                    }
+                }
+                Column(Modifier.padding(22.dp)) {
+                    Text(tr(R.string.artist_zoom))
+                    Slider(draft.scale, { draft = draft.copy(scale = it) }, valueRange = 0.25f..12f)
+                    Text(tr(R.string.artist_horizontal))
+                    Slider(draft.x, { draft = draft.copy(x = it) }, valueRange = -1f..1f)
+                    Text(tr(R.string.artist_vertical))
+                    Slider(draft.y, { draft = draft.copy(y = it) }, valueRange = -1f..1f)
+                    Text(tr(R.string.artist_zoom_hint), style = MaterialTheme.typography.bodySmall)
+                    PrismTextButton(onClick = { draft = ArtistImageLayout(headerCoordinates = true) }) { Text(tr(R.string.reset)) }
+                }
+            }
         }
-    }, confirmButton = {
-        PrismTextButton(onClick = { onSave(draft.bounded()) }) { Text(tr(R.string.save)) }
-    }, dismissButton = {
-        PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) }
-    })
+    }
 }
 
 /** Inside the existing signature sheet: keep its native typography picker as the fallback. */
 @Composable
-internal fun ArtistIdentityControls(page: ArtistPage) {
+internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWidth: Dp, headerHeight: Dp) {
     val c = LocalContainer.current
     val identities = c.artistIdentities
     val entries by identities.entries.collectAsState()
@@ -142,7 +172,7 @@ internal fun ArtistIdentityControls(page: ArtistPage) {
     }
     adjusting?.let { kind ->
         identities.store.file(identities.asset(page.id, kind))?.let { file ->
-            ArtistLayoutEditor(file, tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature),
+            ArtistLayoutEditor(page, kind, type, headerWidth, headerHeight,
                 if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout,
                 onSave = { layout ->
                     change { if (kind == ArtistImageRole.LOGO) it.copy(logoLayout = layout) else it.copy(signatureLayout = layout) }
