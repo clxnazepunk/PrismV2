@@ -349,10 +349,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     LaunchedEffect(page.id, songs.size) {
         if (!showGenres) return@LaunchedEffect
         val todo = songs.filter { it.id !in genres }
-        if (todo.isNotEmpty()) c.meta.resolveGenres(todo, related = { s -> relatedArtists(c, s) }) { batch ->
+        if (todo.isNotEmpty()) c.meta.resolveGenres(todo, related = { s -> relatedArtists(c, s) }, guessMissing = false) { batch ->
             genres.putAll(batch)
             genreVersion++
         }
+        detailTags.putAll(c.meta.cachedSongTags(songs))
+        genreVersion++
         val extraTodo = songs.filter { it.id in genres && it.id !in extrasChecked }
         if (extraTodo.isEmpty()) return@LaunchedEffect
         c.meta.resolveExtraGenres(extraTodo, extraTodo.associate { it.id to genres.getValue(it.id) }) { batch ->

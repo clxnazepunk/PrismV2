@@ -627,6 +627,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         songs: List<Song>,
         related: (suspend (Song) -> List<String>)? = null,
         refineInline: Boolean = true,
+        guessMissing: Boolean = true,
         onBatch: (Map<String, String>) -> Unit,
     ) = coroutineScope {
         val known = cachedGenres(songs).toMutableMap()
@@ -653,7 +654,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         }
         results.close()
         val missing = songs.filter { it.id !in known }
-        if (missing.isNotEmpty()) {
+        if (missing.isNotEmpty() && guessMissing) {
             val fallback = known.values.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key ?: "Pop"
             onBatch(missing.associate { it.id to fallback })
         }

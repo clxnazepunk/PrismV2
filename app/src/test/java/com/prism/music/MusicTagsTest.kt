@@ -132,4 +132,31 @@ class MusicTagsTest {
         assertEquals(3, requests)
         assertTrue(dao.entries.isEmpty())
     }
+    @Test fun aPlaylistCanKeepUnknownSongsUnknownWithoutChangingLegacyDefaults(): Unit = runBlocking {
+        val dao = Dao()
+        val noNetwork = OkHttpClient.Builder().addInterceptor { error("Unknown artist must not request metadata") }.build()
+        val meta = MetaRepository(noNetwork, dao, tagKey = { "" })
+        val unknown = Song("unknown", "Untitled", emptyList())
+        val exact = mutableMapOf<String, String>()
+        meta.resolveGenres(listOf(unknown), refineInline = false, guessMissing = false) { exact += it }
+        assertTrue(exact.isEmpty())
+        meta.resolveGenres(listOf(unknown), refineInline = false) { exact += it }
+        assertEquals("Pop", exact["unknown"])
+    }
+
+    @Test fun largePlaylistsStopAtFortyUncachedTrackRequests(): Unit = runBlocking {
+        val dao = Dao()
+        var requests = 0
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            requests++
+            val title = chain.request().url.queryParameter("track")
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK")
+                .body("""{"toptags":{"@attr":{"artist":"Artist","track":"$title"},"tag":[{"name":"romantic","count":100}]}}""".toResponseBody("application/json".toMediaType())).build()
+        }.build()
+        val songs = (1..45).map { Song("$it", "Song $it", listOf(ArtistRef("Artist"))) }
+        MetaRepository(client, dao, tagKey = { "test" }, tagsHttp = client).resolveSongTags(songs) {}
+        assertEquals(40, requests)
+        assertEquals(40, dao.entries.size)
+    }
+
 }
