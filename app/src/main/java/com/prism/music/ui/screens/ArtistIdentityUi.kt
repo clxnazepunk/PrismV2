@@ -304,13 +304,3 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         Text(tr(R.string.signature_style), style = MaterialTheme.typography.titleMedium)
     }
 }
-
-internal fun rawArtistBlend(id: String): BlendMode = when (id) {
-    "multiply" -> BlendMode.Multiply
-    "screen" -> BlendMode.Screen
-    "darken" -> BlendMode.Darken
-    "lighten" -> BlendMode.Lighten
-    else -> BlendMode.SrcOver
-}
-
-private fun artistBlend(id: String): BlendMode = rawArtistBlend(id).takeIf { it.isSupported() } ?: BlendMode.SrcOver
