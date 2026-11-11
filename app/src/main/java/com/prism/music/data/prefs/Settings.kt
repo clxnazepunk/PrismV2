@@ -2249,7 +2249,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_screen_player", "lock_screen_layout", "lock_screen_volume", "lock_screen_like", "lock_screen_output", "lock_screen_paused", "lock_screen_hide_song",
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "playlist_moods", "playlist_recommendations", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
                 "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
                 // 1.7.8 ([SoundPrefs]).
