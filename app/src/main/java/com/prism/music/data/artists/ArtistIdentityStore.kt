@@ -47,7 +47,7 @@ data class ArtistIdentity(
 
     fun layout(role: ArtistImageRole, asset: ArtistImageAsset? = chosen(role)): ArtistImageLayout {
         val legacy = if (role == ArtistImageRole.LOGO) logoLayout else signatureLayout
-        return assetLayouts[asset?.file] ?: if (assets(role).size <= 1) legacy else ArtistImageLayout()
+        return asset?.let { assetLayouts[it.file] } ?: if (assets(role).size <= 1) legacy else ArtistImageLayout()
     }
 
     fun withLayout(role: ArtistImageRole, asset: ArtistImageAsset, layout: ArtistImageLayout): ArtistIdentity =

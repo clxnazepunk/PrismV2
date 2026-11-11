@@ -4,6 +4,9 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.size
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +27,7 @@ import com.prism.music.data.model.Song
 import com.prism.music.tr
 import com.prism.music.ui.components.LoadingState
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.components.PrismSpinner
 import com.prism.music.ui.components.SectionHeader
 import com.prism.music.ui.components.SongRow
 import com.prism.music.ui.theme.LocalContainer
@@ -99,7 +103,7 @@ internal fun LocalPlaylistSuggestions(
             page.songs
         }
 
-    suspend fun ranked(snapshot: List<Song>, pool: List<Song>, recent: Set<String>, limit: Int): List<Song> {
+    suspend fun ranked(snapshot: List<Song>, pool: List<Song>, recent: Set<String>, limit: Int): List<Song> = withContext(Dispatchers.Default) {
         val cached = c.meta.cachedSongTags(snapshot + pool)
         val tracks = snapshot + pool
         val genres = tracks.associate { song ->
@@ -110,7 +114,7 @@ internal fun LocalPlaylistSuggestions(
             .mapValues { (_, songs) -> songs.flatMap { genres[it.id].orEmpty() }.toSet() }
         val signals = genres.mapValues { it.value }.toMutableMap()
         pool.forEach { song -> if (signals[song.id].isNullOrEmpty()) signals[song.id] = artistGenres[song.primaryArtist.lowercase()].orEmpty() }
-        return PlaylistSuggestions.rank(snapshot, pool.filter(::allowed), signals, settings.behavior.playlistDiscovery, recent, limit)
+        PlaylistSuggestions.rank(snapshot, pool.filter(::allowed), signals, settings.behavior.playlistDiscovery, recent, limit)
     }
 
     fun load() {
@@ -122,10 +126,13 @@ internal fun LocalPlaylistSuggestions(
         scope.launch {
             try {
                 val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
-                val recent = state.recent() + state.songs.map { it.id }
+                val previous = state.songs.mapTo(hashSetOf()) { it.id }
+                val recent = state.recent() + previous
                 val fresh = fetch(snapshot, playlistGenres)
                 state.candidates = (fresh + state.candidates).distinctBy { it.id }.take(160)
-                state.songs = ranked(snapshot, state.candidates, recent, PlaylistSuggestions.LIMIT)
+                val different = state.candidates.filterNot { it.id in previous }
+                val pool = if (different.size >= PlaylistSuggestions.LIMIT) different else state.candidates
+                state.songs = ranked(snapshot, pool, recent, PlaylistSuggestions.LIMIT)
                 state.slotIds = state.songs.mapIndexed { index, song -> song.id to index }.toMap()
                 state.rememberShown(state.songs)
             } catch (e: CancellationException) {
@@ -175,7 +182,7 @@ internal fun LocalPlaylistSuggestions(
 
     LaunchedEffect(playlistId, online, hasSeeds) { if (!state.requested) load() }
     PlaylistRecommendationFooter(
-        enabled = settings.behavior.playlistRecommendations, hasSeeds = hasSeeds, online = online, loading = state.loading,
+        enabled = settings.behavior.playlistRecommendations, hasSeeds = hasSeeds, online = online, loading = state.loading || state.adding.isNotEmpty(),
         failed = state.failed, hasResults = visible.isNotEmpty() || state.adding.isNotEmpty(), onRefresh = ::load,
     ) {
         val reducedMotion = com.prism.music.ui.theme.LocalUi.current.reduceMotion
@@ -183,7 +190,7 @@ internal fun LocalPlaylistSuggestions(
             val song = slot.takeIf { candidate -> candidate.id in state.adding || visible.any { it.id == candidate.id } }
             AnimatedContent(song, contentKey = { it?.id }, transitionSpec = {
                 if (reducedMotion) androidx.compose.animation.EnterTransition.None togetherWith androidx.compose.animation.ExitTransition.None
-                else fadeIn() togetherWith fadeOut()
+                else (fadeIn() + slideInVertically { it / 6 }) togetherWith (fadeOut() + slideOutVertically { -it / 6 })
             }, label = "suggestion") { item ->
                 if (item != null) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     SongRow(item, Modifier.weight(1f), playing = current?.id == item.id) { c.player.playSingle(item) }
@@ -207,7 +214,8 @@ internal fun PlaylistRecommendationFooter(
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             SectionHeader(tr(R.string.playlist_recommended_songs), Modifier.weight(1f))
             IconButton(onClick = onRefresh, enabled = !loading && online && hasSeeds, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
-                Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
+                if (loading && hasResults) PrismSpinner(Modifier.size(18.dp))
+                else Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
             }
         }
         when {

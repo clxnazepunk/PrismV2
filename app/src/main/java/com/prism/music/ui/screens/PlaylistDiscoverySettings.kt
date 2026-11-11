@@ -1,6 +1,10 @@
 package com.prism.music.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.*
@@ -26,6 +30,10 @@ internal fun PlaylistDiscoverySettings(value: PlaylistDiscovery, onChange: (Play
         Label(tr(R.string.discovery_width) + " · " + width.roundToInt())
         Slider(width, { width = it }, Modifier.padding(horizontal = 20.dp), valueRange = 0f..100f,
             onValueChangeFinished = { onChange(value.copy(width = width.roundToInt())) })
+        Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(tr(R.string.discovery_similar), style = MaterialTheme.typography.labelSmall)
+            Text(tr(R.string.discovery_exploratory), style = MaterialTheme.typography.labelSmall)
+        }
         Toggle(tr(R.string.discovery_repetition), null, value.limitRepetition) { onChange(value.copy(limitRepetition = it)) }
         PrismTextButton(onClick = { onChange(PlaylistDiscovery()) }, modifier = Modifier.padding(horizontal = 12.dp)) {
             Text(tr(R.string.reset))

@@ -2677,7 +2677,7 @@ private fun LastFmGroup() {
     ) {
         if (lastFm.needsPersonalCredentials && (user == null || !ready)) LastFmCredentialsForm(lastFm)
         if (!ready) {
-            Item(tr(R.string.connect_last_fm), tr(R.string.lastfm_credentials_needed))
+            PrismTextButton(onClick = {}, enabled = false) { Text(tr(R.string.connect_last_fm)) }
             if (user == null) return@Group
         }
         if (user == null) {

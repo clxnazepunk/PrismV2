@@ -723,7 +723,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     }
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
-    suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), refreshEmpty: Boolean = false, onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
         val cached = cachedSongTags(songs)
         if (cached.isNotEmpty()) onBatch(cached)
         val apiKey = tagKey().trim()
@@ -734,7 +734,11 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             if (song.isLocal || song.isUpload || song.isRss || song.isEpisode || song.isLive ||
                 song.primaryArtist.isBlank() || song.title.isBlank()) continue
             val cachedEntry = dao.genre(songTagsKey(song))
-            if (cachedEntry != null && System.currentTimeMillis() - cachedEntry.fetchedAt < 7 * 24 * 60 * 60 * 1000L) continue
+            if (cachedEntry != null) {
+                val age = System.currentTimeMillis() - cachedEntry.fetchedAt
+                val ttl = if (refreshEmpty && cachedEntry.genre.orEmpty().split('|').none { it in MusicTags.moods }) 120_000L else 7 * 24 * 60 * 60 * 1000L
+                if (age < ttl) continue
+            }
             // A page can contain thousands of songs. Ask at most 40 uncached songs per explicit refresh/open.
             if (!budget.tryTake()) break
             val response = trackTagsLock.withLock {
@@ -762,9 +766,9 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             val attr = data.field("@attr")
             val artistIdentity = tagIdentity(song.primaryArtist)
             val trackIdentity = tagIdentity(cleanTitle(song.title))
-            if (artistIdentity.isBlank() || trackIdentity.isBlank() ||
-                tagIdentity(attr.str("artist").orEmpty()) != artistIdentity ||
-                tagIdentity(attr.str("track").orEmpty()) != trackIdentity) {
+            val wrongArtist = attr.str("artist")?.let { tagIdentity(it) != artistIdentity } == true
+            val wrongTrack = attr.str("track")?.let { tagIdentity(it) != trackIdentity } == true
+            if (artistIdentity.isBlank() || trackIdentity.isBlank() || wrongArtist || wrongTrack) {
                 hadError = true
                 continue
             }

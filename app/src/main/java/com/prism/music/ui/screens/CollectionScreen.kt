@@ -388,7 +388,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 loadingMoods = true
                 moodLookupFailed = false
                 try {
-                    moodLookupFailed = c.meta.resolveSongTags(snapshot, budget = tagBudget) { batch ->
+                    moodLookupFailed = c.meta.resolveSongTags(snapshot, budget = tagBudget, refreshEmpty = tagRefresh > 0) { batch ->
                         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                             if (batch.any { (id, tags) -> detailTags[id] != tags }) {
                                 detailTags.putAll(batch)
