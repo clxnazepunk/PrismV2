@@ -1,6 +1,12 @@
 package com.prism.music.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -16,6 +22,7 @@ import com.prism.music.data.meta.MusicTags
 import com.prism.music.tr
 import com.prism.music.ui.components.PrismChip
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.theme.LocalUi
 
 @Composable
 internal fun PlaylistFilterPanel(
@@ -32,7 +39,12 @@ internal fun PlaylistFilterPanel(
             )
             PrismTextButton(onClick = onToggle) { Text(tr(if (expanded) R.string.show_less else R.string.show_more)) }
         }
-        AnimatedVisibility(expanded) {
+        val reduceMotion = LocalUi.current.reduceMotion
+        AnimatedVisibility(
+            expanded,
+            enter = if (reduceMotion) EnterTransition.None else fadeIn() + expandVertically(expandFrom = Alignment.Top),
+            exit = if (reduceMotion) ExitTransition.None else fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+        ) {
             Column {
                 if (genres.isNotEmpty()) TagChips(genres, genre, onGenre, idle)
                 if (showMoods) {
