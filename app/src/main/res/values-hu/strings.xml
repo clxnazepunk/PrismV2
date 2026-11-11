@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Eredeti letöltése</string>
     <string name="artist_export_png">PNG exportálása háttérbeállításokkal</string>
     <string name="artist_font_gradient">Színátmenet</string>
+    <string name="show_moods">Hangulatok megjelenítése</string>
+    <string name="music_tag_key_format">Add meg a Last.fm 32 karakteres API-kulcsát.</string>
+    <string name="music_tag_saved">A kulcs mentve erre az eszközre.</string>
+    <string name="music_tag_check">Kapcsolat ellenőrzése</string>
+    <string name="music_tag_get_key">API-kulcs igénylése</string>
+    <string name="music_tag_connection_ok">A Last.fm-kapcsolat ellenőrizve.</string>
+    <string name="music_tag_key_rejected">A Last.fm elutasította a kulcsot.</string>
+    <string name="music_tag_connection_failed">A Last.fm nem érhető el. Próbáld újra.</string>
+    <string name="music_tag_scrobbling_unavailable">A hallgatási előzmények szinkronizálása ebben a verzióban nem érhető el.</string>
 </resources>

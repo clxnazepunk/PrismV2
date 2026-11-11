@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Origineel downloaden</string>
     <string name="artist_export_png">PNG met achtergrondaanpassingen exporteren</string>
     <string name="artist_font_gradient">Kleurverloop</string>
+    <string name="show_moods">Stemmingen tonen</string>
+    <string name="music_tag_key_format">Voer de Last.fm-API-sleutel van 32 tekens in.</string>
+    <string name="music_tag_saved">Sleutel opgeslagen op dit apparaat.</string>
+    <string name="music_tag_check">Verbinding controleren</string>
+    <string name="music_tag_get_key">Een API-sleutel ophalen</string>
+    <string name="music_tag_connection_ok">Verbinding met Last.fm geverifieerd.</string>
+    <string name="music_tag_key_rejected">Last.fm heeft de sleutel geweigerd.</string>
+    <string name="music_tag_connection_failed">Kan Last.fm niet bereiken. Probeer het opnieuw.</string>
+    <string name="music_tag_scrobbling_unavailable">Synchronisatie van luistergeschiedenis is in deze versie niet beschikbaar.</string>
 </resources>

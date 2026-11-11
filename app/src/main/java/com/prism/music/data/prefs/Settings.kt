@@ -299,6 +299,8 @@ data class BehaviorPrefs(
     val scrollShowsControls: Boolean = true,
     /** Playlists' genre chips, each song's genre and Group by genre (1.7.9, Reddit); off, a playlist is just its songs in order. */
     val playlistGenres: Boolean = true,
+    val playlistMoods: Boolean = true,
+    val playlistRecommendations: Boolean = true,
     /** Artist pages (1.8.2): a short Wikipedia bio. Off, nothing is ever asked of Wikipedia. */
     val artistBio: Boolean = false,
     /** Artist pages (1.8.2): "You and this artist", from the plays on this phone. */
@@ -2101,6 +2103,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
+        val playlistMoods = booleanPreferencesKey("playlist_moods")
+        val playlistRecommendations = booleanPreferencesKey("playlist_recommendations")
         val artistBio = booleanPreferencesKey("artist_bio")
         val artistYou = booleanPreferencesKey("artist_you")
         val artistEssentials = booleanPreferencesKey("artist_essentials")
@@ -2245,7 +2249,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_screen_player", "lock_screen_layout", "lock_screen_volume", "lock_screen_like", "lock_screen_output", "lock_screen_paused", "lock_screen_hide_song",
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "playlist_moods", "playlist_recommendations", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
                 "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
                 // 1.7.8 ([SoundPrefs]).
@@ -2562,6 +2566,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 queueLocked = p[K.queueLocked] ?: d.behavior.queueLocked,
                 scrollShowsControls = p[K.scrollShowsControls] ?: d.behavior.scrollShowsControls,
                 playlistGenres = p[K.playlistGenres] ?: d.behavior.playlistGenres,
+                playlistMoods = p[K.playlistMoods] ?: d.behavior.playlistMoods,
+                playlistRecommendations = p[K.playlistRecommendations] ?: d.behavior.playlistRecommendations,
                 artistBio = p[K.artistBio] ?: d.behavior.artistBio,
                 artistYou = p[K.artistYou] ?: d.behavior.artistYou,
                 artistEssentials = p[K.artistEssentials] ?: d.behavior.artistEssentials,
@@ -3229,6 +3235,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
+    fun setPlaylistMoods(v: Boolean) = edit { it[K.playlistMoods] = v }
+    fun setPlaylistRecommendations(v: Boolean) = edit { it[K.playlistRecommendations] = v }
     fun setArtistBio(v: Boolean) = edit { it[K.artistBio] = v }
     fun setArtistYou(v: Boolean) = edit { it[K.artistYou] = v }
     fun setArtistEssentials(v: Boolean) = edit { it[K.artistEssentials] = v }

@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import com.prism.music.data.artists.ArtistImageLayout
-import com.prism.music.ui.screens.ArtistMark
+import com.prism.music.ui.screens.ArtistProfileMark
+import com.prism.music.data.artists.ArtistImageRole
 import java.io.File
 import org.junit.Assert.*
 import org.junit.Rule
@@ -35,7 +36,7 @@ import org.robolectric.annotation.GraphicsMode
 class ArtistHeaderCanvasTest {
     @get:Rule val compose = androidx.compose.ui.test.junit4.v2.createComposeRule()
 
-    @Test fun lowResolutionRoundLogoExtendsAboveItsOldSlotAndStaysWithinPage() {
+    @Test fun lowResolutionRoundSignatureExtendsAboveItsOldSlotAndStaysWithinPage() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
         val bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
         android.graphics.Canvas(bitmap).drawCircle(12f, 12f, 12f, android.graphics.Paint().apply { color = android.graphics.Color.WHITE })
@@ -48,8 +49,8 @@ class ArtistHeaderCanvasTest {
                 MaterialTheme {
                     Box(Modifier.size(300.dp).background(Color.Black).clipToBounds().testTag("header")) {
                         Box(Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
-                            ArtistMark(file, "", ArtistImageLayout(4f, 0f, -0.3f, headerCoordinates = true),
-                                72.dp, canvasHeight = 300.dp, overflow = true, onSuccess = { loaded = true })
+                            ArtistProfileMark(ArtistImageRole.SIGNATURE, file, "", ArtistImageLayout(4f, 0f, -0.3f, headerCoordinates = true),
+                                canvasHeight = 300.dp, onSuccess = { loaded = true })
                         }
                     }
                 }
@@ -64,11 +65,11 @@ class ArtistHeaderCanvasTest {
         val output = File("build/artist-header-previews").apply { mkdirs() }
         File(output, "round-mark-expanded.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
         // The old 72dp slot starts at y228. This point must now be visible far above that slot.
-        assertTrue("Expanded round logo is still clipped to its small slot", pixels[150, 70].red > 0.8f)
+        assertTrue("Expanded round signature is still clipped to its small slot", pixels[150, 70].red > 0.8f)
         assertTrue("Image must stay inside the full page boundary", pixels[0, 0].red < 0.1f)
 
     }
-    @Test fun darkenBlendHidesWhiteMatteOverTheArtistBackground() {
+    @Test fun obsoleteBlendDoesNotAffectImportedSignature() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
         val bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
         bitmap.eraseColor(android.graphics.Color.WHITE)
@@ -83,8 +84,8 @@ class ArtistHeaderCanvasTest {
                 MaterialTheme {
                     Box(Modifier.size(300.dp).background(backdrop).clipToBounds().testTag("blend-header")) {
                         Box(Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
-                            ArtistMark(file, "", ArtistImageLayout(4f, 0f, -0.3f, headerCoordinates = true, blend = "darken"),
-                                72.dp, canvasHeight = 300.dp, overflow = true, onSuccess = { loaded = true })
+                            ArtistProfileMark(ArtistImageRole.SIGNATURE, file, "", ArtistImageLayout(4f, 0f, -0.3f, headerCoordinates = true, blend = "darken"),
+                                canvasHeight = 300.dp, onSuccess = { loaded = true })
                         }
                     }
                 }
@@ -96,10 +97,9 @@ class ArtistHeaderCanvasTest {
         }
         val image = compose.onNodeWithTag("blend-header").captureToImage()
         val output = File("build/artist-header-previews").apply { mkdirs() }
-        File(output, "darken-over-background.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
+        File(output, "original-signature.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
         val pixels = image.toPixelMap()
-        assertEquals(backdrop.red, pixels[70, 80].red, 0.04f)
-        assertEquals(backdrop.green, pixels[70, 80].green, 0.04f)
+        assertTrue("Old blend settings must not hide the original pixels", pixels[70, 80].red > 0.9f)
         assertTrue("Dark foreground must remain visible", pixels[150, 174].red < 0.1f)
     }
 

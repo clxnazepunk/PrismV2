@@ -271,7 +271,7 @@ fun SongRowLayout(
             // or, asked for (Reddit, 1.7.9.2), in the album's / playlist's / artist's own color on its page.
             val dark = com.prism.music.ui.theme.LocalIsDark.current
             Text(
-                song.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                song.displayTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 style = when {
                     !playing -> MaterialTheme.typography.bodyLarge
                     pageMark != null -> MaterialTheme.typography.bodyLarge.copy(color = pageMark, fontWeight = FontWeight.Medium)
@@ -286,7 +286,7 @@ fun SongRowLayout(
                 if (downloaded) Icon(PrismIcons.DownloadDone, tr(R.string.downloaded), mark, tint = scheme.ink3)
                 if (videoSaved) Icon(PrismIcons.Video, tr(R.string.video_saved), mark, tint = scheme.ink3)
                 Text(
-                    listOfNotNull(song.artistText, trailingInfo ?: song.album?.title?.takeIf { showAlbum }).joinToString(" · "),
+                    listOfNotNull(song.displayArtists, trailingInfo ?: song.album?.title?.takeIf { showAlbum }).joinToString(" · "),
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                 )
@@ -364,12 +364,12 @@ fun ItemCard(item: BrowseItem, modifier: Modifier = Modifier, width: Dp = Dp.Uns
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    item.title, maxLines = if (video) 1 else 2, overflow = TextOverflow.Ellipsis,
+                    item.displayTitle, maxLines = if (video) 1 else 2, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall.copy(lineHeight = MaterialTheme.typography.titleSmall.fontSize * 1.25f),
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )
                 if (item.subtitle.isNotBlank()) Text(
-                    com.prism.music.data.model.shownKinds(item.subtitle), maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    com.prism.music.data.model.shownKinds(item.displaySubtitle), maxLines = 1, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )
@@ -391,7 +391,7 @@ fun MoodTile(item: MoodItem, modifier: Modifier = Modifier, onClick: () -> Unit)
     ) {
         Box(Modifier.matchParentSize().background(Brush.radialGradient(listOf(Color.White.copy(alpha = 0.18f), Color.Transparent), radius = 260f, center = androidx.compose.ui.geometry.Offset(0f, 0f))))
         Text(
-            item.title, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2,
+            item.displayTitle, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2,
             modifier = Modifier.align(Alignment.BottomStart).padding(12.dp),
         )
     }

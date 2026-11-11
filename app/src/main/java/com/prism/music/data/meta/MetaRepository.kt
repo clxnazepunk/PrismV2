@@ -174,7 +174,7 @@ object Genres {
 class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     private val tagKey: () -> String = { com.prism.music.BuildConfig.LASTFM_API_KEY },
     private val tagsHttp: OkHttpClient = OkHttpClient.Builder().connectTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
-        .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).build(),
+        .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).followRedirects(false).build(),
 ) {
     /** Diagnostics hook (tests print it). */
     var trace: ((String) -> Unit)? = null
@@ -690,8 +690,36 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
 
     private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
-    private fun songTagsKey(song: Song) = "songtags1:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
+    private fun songTagsKey(song: Song) = "songtags2:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
+
+    enum class TagConnection { VALID, INVALID, UNAVAILABLE }
+
+    suspend fun checkTagConnection(key: String): TagConnection = withContext(Dispatchers.IO) {
+        val response = trackTags(key, "Radiohead", "Paranoid Android")
+        when {
+            response.field("toptags").field("tag") is JsonArray -> TagConnection.VALID
+            response.field("error")?.toString() in setOf("10", "26") -> TagConnection.INVALID
+            else -> TagConnection.UNAVAILABLE
+        }
+    }
+
+    private fun trackTags(apiKey: String, artist: String, title: String): JsonElement? {
+        val url = "https://ws.audioscrobbler.com/2.0/".toHttpUrl().newBuilder()
+            .addQueryParameter("method", "track.gettoptags").addQueryParameter("artist", artist)
+            .addQueryParameter("track", title).addQueryParameter("autocorrect", "0")
+            .addQueryParameter("api_key", apiKey).addQueryParameter("format", "json").build()
+        return try {
+            tagsHttp.newCall(Request.Builder().url(url).build()).execute().use { res ->
+                val json = InnerTube.json.parseToJsonElement(res.body.string())
+                json.takeIf { res.isSuccessful || it.field("error") != null }
+            }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            null
+        }
+    }
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
     suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
@@ -701,26 +729,27 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         if (apiKey.isBlank()) return@withContext
         var failures = 0
         for (song in songs.distinctBy { it.id }) {
-            if (song.primaryArtist.isBlank() || song.title.isBlank()) continue
+            if (song.isLocal || song.isUpload || song.isRss || song.isEpisode || song.isLive ||
+                song.primaryArtist.isBlank() || song.title.isBlank()) continue
             val cachedEntry = dao.genre(songTagsKey(song))
             if (cachedEntry != null && System.currentTimeMillis() - cachedEntry.fetchedAt < 7 * 24 * 60 * 60 * 1000L) continue
             // A page can contain thousands of songs. Ask at most 40 uncached songs per explicit refresh/open.
             if (!budget.tryTake()) break
             val response = trackTagsLock.withLock {
                 delay(300)
-                val url = "https://ws.audioscrobbler.com/2.0/".toHttpUrl().newBuilder()
-                    .addQueryParameter("method", "track.gettoptags").addQueryParameter("artist", song.primaryArtist)
-                    .addQueryParameter("track", cleanTitle(song.title)).addQueryParameter("autocorrect", "0")
-                    .addQueryParameter("api_key", apiKey).addQueryParameter("format", "json").build()
-                try {
-                    tagsHttp.newCall(Request.Builder().url(url).build()).execute().use { res ->
-                        if (!res.isSuccessful) null else InnerTube.json.parseToJsonElement(res.body.string())
-                    }
-                } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { null }
+                trackTags(apiKey, song.primaryArtist, cleanTitle(song.title))
             }
             if (response == null) { if (++failures >= 3) break; continue }
             failures = 0
-            if (response.field("error") != null) break
+            when (response.field("error")?.toString()) {
+                null -> Unit
+                "6", "7" -> {
+                    // No match for this track. It says nothing about the remaining playlist.
+                    dao.putGenre(GenreEntity(songTagsKey(song), "", System.currentTimeMillis()))
+                    continue
+                }
+                else -> break
+            }
             val data = response.field("toptags")
             val tags = data.field("tag") as? JsonArray ?: continue
             val attr = data.field("@attr")

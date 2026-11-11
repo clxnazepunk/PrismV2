@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Λήψη πρωτοτύπου</string>
     <string name="artist_export_png">Εξαγωγή PNG με ρυθμίσεις φόντου</string>
     <string name="artist_font_gradient">Διαβάθμιση</string>
+    <string name="show_moods">Εμφάνιση διαθέσεων</string>
+    <string name="music_tag_key_format">Εισαγάγετε το κλειδί API 32 χαρακτήρων του Last.fm.</string>
+    <string name="music_tag_saved">Το κλειδί αποθηκεύτηκε σε αυτήν τη συσκευή.</string>
+    <string name="music_tag_check">Έλεγχος σύνδεσης</string>
+    <string name="music_tag_get_key">Λήψη κλειδιού API</string>
+    <string name="music_tag_connection_ok">Η σύνδεση με το Last.fm επαληθεύτηκε.</string>
+    <string name="music_tag_key_rejected">Το Last.fm απέρριψε το κλειδί.</string>
+    <string name="music_tag_connection_failed">Αδυναμία σύνδεσης με το Last.fm. Δοκιμάστε ξανά.</string>
+    <string name="music_tag_scrobbling_unavailable">Ο συγχρονισμός του ιστορικού ακρόασης δεν είναι διαθέσιμος σε αυτήν την έκδοση.</string>
 </resources>

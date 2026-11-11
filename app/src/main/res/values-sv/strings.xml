@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Ladda ned original</string>
     <string name="artist_export_png">Exportera PNG med bakgrundsjusteringar</string>
     <string name="artist_font_gradient">Övertoning</string>
+    <string name="show_moods">Visa stämningar</string>
+    <string name="music_tag_key_format">Ange Last.fm-API-nyckeln på 32 tecken.</string>
+    <string name="music_tag_saved">Nyckeln sparades på den här enheten.</string>
+    <string name="music_tag_check">Kontrollera anslutningen</string>
+    <string name="music_tag_get_key">Skaffa en API-nyckel</string>
+    <string name="music_tag_connection_ok">Anslutningen till Last.fm har verifierats.</string>
+    <string name="music_tag_key_rejected">Last.fm avvisade nyckeln.</string>
+    <string name="music_tag_connection_failed">Det gick inte att ansluta till Last.fm. Försök igen.</string>
+    <string name="music_tag_scrobbling_unavailable">Synkronisering av lyssningshistoriken är inte tillgänglig i den här versionen.</string>
 </resources>

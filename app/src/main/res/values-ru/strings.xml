@@ -5055,4 +5055,13 @@
     <string name="artist_export_original">Скачать оригинал</string>
     <string name="artist_export_png">Экспорт PNG с настройками фона</string>
     <string name="artist_font_gradient">Градиент</string>
+    <string name="show_moods">Показывать настроения</string>
+    <string name="music_tag_key_format">Введите 32-значный ключ API Last.fm.</string>
+    <string name="music_tag_saved">Ключ сохранён на этом устройстве.</string>
+    <string name="music_tag_check">Проверить подключение</string>
+    <string name="music_tag_get_key">Получить ключ API</string>
+    <string name="music_tag_connection_ok">Подключение к Last.fm проверено.</string>
+    <string name="music_tag_key_rejected">Last.fm отклонил ключ.</string>
+    <string name="music_tag_connection_failed">Не удалось подключиться к Last.fm. Попробуйте ещё раз.</string>
+    <string name="music_tag_scrobbling_unavailable">Синхронизация истории прослушивания недоступна в этой сборке.</string>
 </resources>

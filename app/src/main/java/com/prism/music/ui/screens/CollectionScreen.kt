@@ -288,6 +288,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val downloads by c.downloadState.collectAsState()
     val songs by live.songs.collectAsState()
     val loadingMore by live.loadingMore.collectAsState()
+    val online by c.network.online.collectAsState()
     val page = live.page.copy(songs = songs)
     val playlistSuggestions = remember(page.id) { LocalPlaylistSuggestionsState() }
     // Plain map + a version counter: results land in batches, so the list re-sorts a handful
@@ -299,11 +300,17 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var genreVersion by remember(page.id) { mutableStateOf(0) }
     val detailTags = remember(page.id) { HashMap<String, Set<String>>() }
     var moodFilter by rememberSaveable(page.id) { mutableStateOf<String?>(null) }
+    var filtersOpen by rememberSaveable(page.id) { mutableStateOf(false) }
     var tagRefresh by remember(page.id) { mutableStateOf(0) }
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
     val tagBudget = remember(page.id, tagApiKey, tagRefresh) { com.prism.music.data.meta.TagLookupBudget() }
-    fun genresOf(id: String): List<String> = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty() +
-        detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }).distinct()
+    fun genresOf(id: String): List<String> {
+        val details = detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }
+        val hasSpecificGenre = details.any { it in com.prism.music.data.meta.MusicTags.detailedGenres }
+        val legacy = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty())
+            .filterNot { it == "Pop" && hasSpecificGenre }
+        return (legacy + details).distinct()
+    }
     fun displayGenre(id: String): String? = com.prism.music.data.meta.MusicTags.displayGenre(detailTags[id].orEmpty(), genres[id])
     var genreFilter by rememberSaveable(page.id) { mutableStateOf(initialGenre) }
     // Liked songs', Downloads' and each playlist's sort is kept, so leaving the page doesn't undo it.
@@ -330,10 +337,15 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     // Sorting is there for any list of songs; genres (chips, each song's genre, Group by genre) only while the listener
     // wants them (1.7.9, Reddit: "some people want that same order of the playlist").
     val sortable = type != CollectionType.ALBUM && songs.size > 1
-    val showGenres = sortable && settings.behavior.playlistGenres
+    val showGenres = type != CollectionType.ALBUM && songs.isNotEmpty() && settings.behavior.playlistGenres
+    val showMoods = (type == CollectionType.PRISM || type == CollectionType.PLAYLIST) &&
+        songs.isNotEmpty() && settings.behavior.playlistMoods
+    val moodKeyConfigured = tagApiKey.isNotBlank() || com.prism.music.BuildConfig.LASTFM_API_KEY.isNotBlank()
+    var loadingMoods by remember(page.id) { mutableStateOf(false) }
     // #310 (1.8.1): Downloads can leave the album's name out from under each song.
     val showAlbums = type != CollectionType.DOWNLOADS || settings.view.downloadsAlbums
-    LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; moodFilter = null; if (groupByGenre) toggleGenreGroups() } }
+    LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; if (groupByGenre) toggleGenreGroups() } }
+    LaunchedEffect(showMoods) { if (!showMoods) moodFilter = null }
     val showSearch = type != CollectionType.ALBUM || songs.size > 12
 
     // Starting a song waits on its stream (a few seconds through NewPipe), so on Wi-Fi the first track's is fetched
@@ -348,7 +360,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
 
     // Genres are detected quietly per artist, a few at a time; chips fill in as each batch lands.
     // Main genres come first, then any clear second genre an artist also has.
-    LaunchedEffect(page.id, songs.size) {
+    LaunchedEffect(page.id, songs.size, showGenres) {
         if (!showGenres) return@LaunchedEffect
         val todo = songs.filter { it.id !in genres }
         if (todo.isNotEmpty()) c.meta.resolveGenres(todo, related = { s -> relatedArtists(c, s) }, guessMissing = false) { batch ->
@@ -366,10 +378,18 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         extrasChecked += extraTodo.map { it.id }
     }
 
-    LaunchedEffect(page.id, songs, showGenres, tagApiKey, tagRefresh) {
-        if (!showGenres) return@LaunchedEffect
-        c.meta.resolveSongTags(songs, budget = tagBudget) { batch ->
-            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { detailTags.putAll(batch); genreVersion++ }
+    LaunchedEffect(page.id, songs, showMoods, filtersOpen, online, tagApiKey, tagRefresh) {
+        if (!showMoods || !filtersOpen) return@LaunchedEffect
+        detailTags.putAll(c.meta.cachedSongTags(songs))
+        genreVersion++
+        if (!online || !moodKeyConfigured) return@LaunchedEffect
+        loadingMoods = true
+        try {
+            c.meta.resolveSongTags(songs, budget = tagBudget) { batch ->
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { detailTags.putAll(batch); genreVersion++ }
+            }
+        } finally {
+            loadingMoods = false
         }
     }
     LaunchedEffect(page.id, songs, showGenres) {
@@ -418,7 +438,6 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         },
     )
     // Offline (#55): only songs on the phone (downloaded, cached whole, or files) play; the rest show greyed out.
-    val online by c.network.online.collectAsState()
     val ready = remember(songs, downloads, online) { if (online) null else songs.filter { c.availableOffline(it.id) }.map { it.id }.toSet() }
     val playable = remember(visible, ready) { if (ready == null) visible else visible.filter { it.id in ready } }
     val playFrom: (List<Song>, Song, QueueSource) -> Unit = { list, s, src ->
@@ -788,29 +807,21 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         }
                     }
                 }
-                if (showGenres && genreCounts.isNotEmpty()) item(key = "genres") {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        item { com.prism.music.ui.components.PrismChip(genreFilter == null, { genreFilter = null }, tr(R.string.all), idle = frosted) }
-                        items(genreCounts) { (g, n) ->
-                            com.prism.music.ui.components.PrismChip(genreFilter == g, { genreFilter = if (genreFilter == g) null else g }, "${com.prism.music.data.meta.Genres.shown(g)} · $n", idle = frosted)
-                        }
-                    }
-                }
-                if (showGenres) item("mood-filters") {
-                    Column {
-                        Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(tr(R.string.music_moods), Modifier.weight(1f), style = MaterialTheme.typography.labelLarge)
-                            com.prism.music.ui.components.PrismTextButton(onClick = { tagRefresh++ }) { Text(tr(R.string.refresh_the_list)) }
-                        }
-                        if (moodCounts.isNotEmpty()) LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            item { com.prism.music.ui.components.PrismChip(moodFilter == null, { moodFilter = null }, tr(R.string.all), idle = frosted) }
-                            items(moodCounts) { (mood, count) ->
-                                com.prism.music.ui.components.PrismChip(moodFilter == mood, { moodFilter = if (moodFilter == mood) null else mood },
-                                    "${com.prism.music.data.meta.MusicTags.shown(mood)} · $count", idle = frosted)
-                            }
-                        } else Text(tr(R.string.music_tag_hint), style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
-                    }
+                if (showGenres || showMoods) item("playlist-filters") {
+                    PlaylistFilterPanel(
+                        expanded = filtersOpen, onToggle = { filtersOpen = !filtersOpen },
+                        genres = if (showGenres) genreCounts else emptyList(), moods = if (showMoods) moodCounts else emptyList(),
+                        showMoods = showMoods, genre = genreFilter, mood = moodFilter,
+                        onGenre = { genreFilter = it }, onMood = { moodFilter = it },
+                        onRefresh = if (moodKeyConfigured && online && !loadingMoods) ({ tagRefresh++ }) else null,
+                        moodMessage = when {
+                            loadingMoods -> R.string.loading
+                            !moodKeyConfigured -> R.string.music_tag_hint
+                            !online -> R.string.you_re_offline
+                            else -> R.string.no_results
+                        },
+                        idle = frosted,
+                    )
                 }
                 if (visible.isEmpty()) item {
                     if (query.isNotBlank()) EmptyState(PrismIcons.Search, tr(R.string.no_matches), tr(R.string.nothing_in_matches, title, query.trim()) + if (loadingMore) tr(R.string.yet_more_songs_are_still_loading) else ".")
@@ -826,7 +837,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     visible.flatMap { s -> genresOf(s.id).ifEmpty { listOf(tr(R.string.sorting)) }.map { it to s } }
                         .groupBy({ it.first }, { it.second }).toList().sortedByDescending { it.second.size }.forEach { (g, songs) ->
                             item(key = "h:$g") {
-                                Text(com.prism.music.data.meta.Genres.shown(g), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
+                                Text(com.prism.music.data.meta.MusicTags.shown(g), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(start = 20.dp, top = 18.dp, bottom = 4.dp))
                             }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
@@ -851,7 +862,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 trailingInfo = if (skippedCount > 0 && type != CollectionType.DOWNLOADS && com.prism.music.download.PlaylistDownloads.isSkipped(s.id, skipped, standIns)) tr(R.string.skipped_in_downloads)
                                 else if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
-                                else genreVersion.let { displayGenre(s.id) }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
+                                else genreVersion.let { displayGenre(s.id) }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.MusicTags.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s) + skipAction(s),
                                 showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }
@@ -870,9 +881,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 8.dp),
                     )
                 }
-                if (type == CollectionType.PRISM && query.isBlank() && genreFilter == null && moodFilter == null &&
-                    com.prism.music.data.foryou.PlaylistSuggestions.seeds(songs).isNotEmpty()) item("playlist-suggestions") {
-                    LocalPlaylistSuggestions(page.id, page.title, songs, playlistSuggestions, scope)
+                if (type == CollectionType.PRISM && settings.behavior.playlistRecommendations) item("playlist-suggestions") {
+                    LocalPlaylistSuggestions(page.id, page.title, songs, playlistSuggestions, scope, online)
                 }
                 if (type == CollectionType.ALBUM) {
                     if (live.page.otherVersions.isNotEmpty()) item("versions") {

@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">ดาวน์โหลดต้นฉบับ</string>
     <string name="artist_export_png">ส่งออก PNG พร้อมการปรับพื้นหลัง</string>
     <string name="artist_font_gradient">ไล่สี</string>
+    <string name="show_moods">แสดงอารมณ์</string>
+    <string name="music_tag_key_format">ป้อนคีย์ API ของ Last.fm ที่มี 32 อักขระ</string>
+    <string name="music_tag_saved">บันทึกคีย์ไว้ในอุปกรณ์นี้แล้ว</string>
+    <string name="music_tag_check">ตรวจสอบการเชื่อมต่อ</string>
+    <string name="music_tag_get_key">รับคีย์ API</string>
+    <string name="music_tag_connection_ok">ยืนยันการเชื่อมต่อกับ Last.fm แล้ว</string>
+    <string name="music_tag_key_rejected">Last.fm ปฏิเสธคีย์</string>
+    <string name="music_tag_connection_failed">เชื่อมต่อกับ Last.fm ไม่ได้ ลองอีกครั้ง</string>
+    <string name="music_tag_scrobbling_unavailable">เวอร์ชันนี้ไม่รองรับการซิงค์ประวัติการฟัง</string>
 </resources>

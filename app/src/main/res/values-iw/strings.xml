@@ -4991,4 +4991,13 @@
     <string name="artist_export_original">הורדת המקור</string>
     <string name="artist_export_png">ייצוא PNG עם התאמות רקע</string>
     <string name="artist_font_gradient">מעבר צבע</string>
+    <string name="show_moods">הצגת מצבי רוח</string>
+    <string name="music_tag_key_format">יש להזין את מפתח ה־API של Last.fm בן 32 התווים.</string>
+    <string name="music_tag_saved">המפתח נשמר במכשיר זה.</string>
+    <string name="music_tag_check">בדיקת חיבור</string>
+    <string name="music_tag_get_key">קבלת מפתח API</string>
+    <string name="music_tag_connection_ok">החיבור ל־Last.fm אומת.</string>
+    <string name="music_tag_key_rejected">Last.fm דחה את המפתח.</string>
+    <string name="music_tag_connection_failed">לא ניתן להתחבר ל־Last.fm. יש לנסות שוב.</string>
+    <string name="music_tag_scrobbling_unavailable">סנכרון היסטוריית ההאזנה אינו זמין בגרסה זו.</string>
 </resources>

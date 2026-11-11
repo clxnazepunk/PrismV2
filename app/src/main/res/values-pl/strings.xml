@@ -5055,4 +5055,13 @@
     <string name="artist_export_original">Pobierz oryginał</string>
     <string name="artist_export_png">Eksportuj PNG z korektą tła</string>
     <string name="artist_font_gradient">Gradient</string>
+    <string name="show_moods">Pokaż nastroje</string>
+    <string name="music_tag_key_format">Wpisz 32-znakowy klucz API Last.fm.</string>
+    <string name="music_tag_saved">Klucz zapisano na tym urządzeniu.</string>
+    <string name="music_tag_check">Sprawdź połączenie</string>
+    <string name="music_tag_get_key">Pobierz klucz API</string>
+    <string name="music_tag_connection_ok">Połączenie z Last.fm zostało zweryfikowane.</string>
+    <string name="music_tag_key_rejected">Last.fm odrzucił klucz.</string>
+    <string name="music_tag_connection_failed">Nie można połączyć się z Last.fm. Spróbuj ponownie.</string>
+    <string name="music_tag_scrobbling_unavailable">Synchronizacja historii słuchania jest niedostępna w tej wersji.</string>
 </resources>

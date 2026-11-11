@@ -22,8 +22,48 @@ class MusicTagsTest {
         override suspend fun putMotion(e: MotionArtEntity) {}
     }
 
+    @Test fun explicitConnectionCheckDistinguishesRejectionAndNetworkFailure(): Unit = runBlocking {
+        var reply: Pair<Int, String>? = 200 to """{"toptags":{"tag":[]}}"""
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val (code, body) = reply ?: throw java.io.IOException("offline")
+            val request = chain.request()
+            assertEquals("track.gettoptags", request.url.queryParameter("method"))
+            assertEquals("Paranoid Android", request.url.queryParameter("track"))
+            assertNull(request.header("Cookie"))
+            Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(code).message("test")
+                .body(body.toResponseBody()).build()
+        }.build()
+        val meta = MetaRepository(OkHttpClient(), Dao(), tagsHttp = client)
+        assertEquals(MetaRepository.TagConnection.VALID, meta.checkTagConnection("test"))
+        reply = 403 to """{"error":10,"message":"Invalid API key"}"""
+        assertEquals(MetaRepository.TagConnection.INVALID, meta.checkTagConnection("test"))
+        reply = null
+        assertEquals(MetaRepository.TagConnection.UNAVAILABLE, meta.checkTagConnection("test"))
+    }
+
+    @Test fun aTrackWithoutLastFmMetadataDoesNotBlockFollowingTracks(): Unit = runBlocking {
+        val requested = mutableListOf<String>()
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val request = chain.request()
+            val title = requireNotNull(request.url.queryParameter("track"))
+            requested += title
+            val body = if (title == "Missing") """{"error":6,"message":"Track not found"}"""
+                else """{"toptags":{"@attr":{"artist":"Artist","track":"Found"},"tag":[{"name":"romantic","count":100}]}}"""
+            Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("OK")
+                .body(body.toResponseBody()).build()
+        }.build()
+        val meta = MetaRepository(OkHttpClient(), Dao(), tagKey = { "test" }, tagsHttp = client)
+        val songs = listOf("Missing", "Found").map { Song(it, it, listOf(ArtistRef("Artist"))) }
+        meta.resolveSongTags(songs) {}
+        meta.resolveSongTags(songs) {}
+        assertEquals(listOf("Missing", "Found"), requested)
+        assertEquals(emptySet<String>(), meta.cachedSongTags(songs)["Missing"])
+        assertEquals(setOf("mood:romantic"), meta.cachedSongTags(songs)["Found"])
+    }
+
     @Test fun regionalGenresStaySpecificWhileLegacyRadioCategoriesRemainUnchanged() {
-        assertTrue("Salsa" in MusicTags.genres("Salsa"))
+        assertEquals(setOf("Salsa"), MusicTags.genres("Salsa"))
+        assertEquals(setOf("Salsa", "Pop"), MusicTags.genres("Salsa|Pop"))
         assertTrue("Cumbia" in MusicTags.genres("Cumbia"))
         assertTrue("Regional Mexican" in MusicTags.genres("Banda Norteña"))
         assertTrue("Ballad" in MusicTags.genres("Baladas"))
@@ -39,6 +79,7 @@ class MusicTagsTest {
         assertTrue(MusicTags.explicit("romantic", includeMoods = false).isEmpty())
         assertFalse("mood:sad" in MusicTags.supportedTags(mapOf("romantic" to 100, "sad" to 2)))
         assertFalse("Pop" in MusicTags.supportedTags(mapOf("female vocalists" to 100)))
+        assertEquals(setOf("Salsa", "mood:romantic"), MusicTags.supportedTags(mapOf("Salsa" to 100, "romantic" to 80, "romántico" to 70)))
     }
 
     @Test fun oldImagePositionsMigrateWithoutJumpingAndCanNowMoveAcrossFullHeader() {

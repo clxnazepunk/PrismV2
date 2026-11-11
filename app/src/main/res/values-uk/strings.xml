@@ -5055,4 +5055,13 @@
     <string name="artist_export_original">Завантажити оригінал</string>
     <string name="artist_export_png">Експорт PNG з налаштуваннями тла</string>
     <string name="artist_font_gradient">Градієнт</string>
+    <string name="show_moods">Показувати настрої</string>
+    <string name="music_tag_key_format">Введіть 32-символьний ключ API Last.fm.</string>
+    <string name="music_tag_saved">Ключ збережено на цьому пристрої.</string>
+    <string name="music_tag_check">Перевірити підключення</string>
+    <string name="music_tag_get_key">Отримати ключ API</string>
+    <string name="music_tag_connection_ok">Підключення до Last.fm перевірено.</string>
+    <string name="music_tag_key_rejected">Last.fm відхилив ключ.</string>
+    <string name="music_tag_connection_failed">Не вдалося підключитися до Last.fm. Спробуйте ще раз.</string>
+    <string name="music_tag_scrobbling_unavailable">Синхронізація історії прослуховування недоступна в цій збірці.</string>
 </resources>

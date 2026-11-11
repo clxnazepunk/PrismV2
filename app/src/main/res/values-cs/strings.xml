@@ -5055,4 +5055,13 @@
     <string name="artist_export_original">Stáhnout originál</string>
     <string name="artist_export_png">Exportovat PNG s úpravami pozadí</string>
     <string name="artist_font_gradient">Přechod</string>
+    <string name="show_moods">Zobrazit nálady</string>
+    <string name="music_tag_key_format">Zadejte 32znakový klíč API Last.fm.</string>
+    <string name="music_tag_saved">Klíč uložen v tomto zařízení.</string>
+    <string name="music_tag_check">Ověřit připojení</string>
+    <string name="music_tag_get_key">Získat klíč API</string>
+    <string name="music_tag_connection_ok">Připojení k Last.fm ověřeno.</string>
+    <string name="music_tag_key_rejected">Last.fm klíč odmítl.</string>
+    <string name="music_tag_connection_failed">Připojení k Last.fm selhalo. Zkuste to znovu.</string>
+    <string name="music_tag_scrobbling_unavailable">Synchronizace historie poslechu není v této verzi dostupná.</string>
 </resources>

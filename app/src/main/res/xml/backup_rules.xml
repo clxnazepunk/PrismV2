@@ -3,6 +3,7 @@
 <full-backup-content>
     <exclude domain="sharedpref" path="discord.xml" />
     <exclude domain="sharedpref" path="lastfm.xml" />
+    <exclude domain="sharedpref" path="lastfm_tags.xml" />
     <exclude domain="sharedpref" path="connect_remote.xml" />
     <exclude domain="sharedpref" path="connect_handoff.xml" />
     <exclude domain="sharedpref" path="spotify_auth.xml" />

@@ -81,6 +81,8 @@ import com.prism.music.data.model.ArtistItem
 import com.prism.music.data.model.BrowseItem
 import com.prism.music.data.model.PlaylistItem
 import com.prism.music.data.model.SongItem
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
 import com.prism.music.ui.Load
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.components.Artwork
@@ -558,7 +560,7 @@ private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
         else -> ""
     }
     val detail = when (item) {
-        is SongItem -> item.song.artistText
+        is SongItem -> item.song.displayArtists
         is ArtistItem -> item.subtitle.removePrefix("Artist • ")
         else -> item.subtitle.split(" • ").drop(1).joinToString(" · ").ifBlank { item.subtitle }
     }
@@ -581,7 +583,7 @@ private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(tr(R.string.top_result), style = MaterialTheme.typography.labelSmall.copy(brush = com.prism.music.ui.theme.PrismTokens.spectrum(com.prism.music.ui.theme.LocalIsDark.current), letterSpacing = 0.1.em), fontWeight = FontWeight.Medium)
-            Text(item.title, style = MaterialTheme.typography.headlineSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(item.displayTitle, style = MaterialTheme.typography.headlineSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(listOf(kind, detail).filter { it.isNotBlank() }.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         // What this card started is playing: the button pauses and resumes it rather than starting it over (issue #5).
@@ -650,7 +652,7 @@ fun ResultRow(item: BrowseItem, onLongClick: (() -> Unit)? = null, onClick: () -
         )
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(item.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(item.displayTitle, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
                 if (item is com.prism.music.data.model.PodcastItem) listOf(tr(R.string.podcast), item.subtitle).filter { it.isNotBlank() }.joinToString(" • ")
                 else item.subtitle.ifBlank { when (item) { is ArtistItem -> tr(R.string.artist); is AlbumItem -> tr(R.string.album); is PlaylistItem -> tr(R.string.playlist); else -> "" } },

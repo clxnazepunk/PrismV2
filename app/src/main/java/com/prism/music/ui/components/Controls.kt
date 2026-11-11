@@ -176,6 +176,7 @@ fun PrismTextField(
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
+    visualTransformation: androidx.compose.ui.text.input.VisualTransformation = androidx.compose.ui.text.input.VisualTransformation.None,
 ) {
     val scheme = MaterialTheme.colorScheme
     val ink = scheme.onSurface
@@ -183,6 +184,7 @@ fun PrismTextField(
         value, onValueChange, modifier, enabled = enabled, textStyle = textStyle, label = label, placeholder = placeholder,
         leadingIcon = leadingIcon, trailingIcon = trailingIcon, supportingText = supportingText, isError = isError,
         keyboardOptions = keyboardOptions, keyboardActions = keyboardActions, singleLine = singleLine, maxLines = maxLines, minLines = minLines,
+        visualTransformation = visualTransformation,
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
             focusedContainerColor = glassFill(1.6f), unfocusedContainerColor = glassFill(1.1f), disabledContainerColor = glassFill(0.8f),

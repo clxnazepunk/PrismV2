@@ -37,9 +37,9 @@ object MusicTags {
     }
 
     fun genres(raw: String): Set<String> {
-        val details = explicit(raw, includeMoods = false)
-        val broad = raw.split("|", " / ").mapNotNull { Genres.normalize(it) }.toSet()
-        return details + broad
+        return raw.split("|", " / ").flatMap { part ->
+            explicit(part, includeMoods = false).ifEmpty { setOfNotNull(Genres.normalize(part)) }
+        }.toSet()
     }
 
     fun displayGenre(tags: Set<String>, legacy: String?): String? =
@@ -69,7 +69,7 @@ object MusicTags {
             count >= 10 && count * 2L >= top.toLong() &&
                 !Regex("vocalists|seen live|favo[u]?rites", RegexOption.IGNORE_CASE).containsMatchIn(raw)
         }.keys.flatMap { raw ->
-            explicit(raw) + listOfNotNull(Genres.normalize(raw))
+            explicit(raw).ifEmpty { setOfNotNull(Genres.normalize(raw)) }
         }.toSet()
     }
 }

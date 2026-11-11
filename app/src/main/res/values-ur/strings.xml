@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">اصل ڈاؤن لوڈ کریں</string>
     <string name="artist_export_png">پس منظر کی تبدیلیوں کے ساتھ PNG برآمد کریں</string>
     <string name="artist_font_gradient">گریڈینٹ</string>
+    <string name="show_moods">موڈ دکھائیں</string>
+    <string name="music_tag_key_format">Last.fm کی 32 حروف والی API کلید درج کریں۔</string>
+    <string name="music_tag_saved">کلید اس ڈیوائس پر محفوظ ہو گئی۔</string>
+    <string name="music_tag_check">کنکشن چیک کریں</string>
+    <string name="music_tag_get_key">API کلید حاصل کریں</string>
+    <string name="music_tag_connection_ok">Last.fm کنکشن کی تصدیق ہو گئی۔</string>
+    <string name="music_tag_key_rejected">Last.fm نے کلید مسترد کر دی۔</string>
+    <string name="music_tag_connection_failed">Last.fm سے رابطہ نہ ہو سکا۔ دوبارہ کوشش کریں۔</string>
+    <string name="music_tag_scrobbling_unavailable">اس ورژن میں سننے کی سرگزشت کی ہم وقت سازی دستیاب نہیں۔</string>
 </resources>

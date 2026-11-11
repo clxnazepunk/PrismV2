@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">Muat turun asal</string>
     <string name="artist_export_png">Eksport PNG dengan pelarasan latar</string>
     <string name="artist_font_gradient">Gradien</string>
+    <string name="show_moods">Paparkan suasana</string>
+    <string name="music_tag_key_format">Masukkan kunci API Last.fm 32 aksara.</string>
+    <string name="music_tag_saved">Kunci disimpan pada peranti ini.</string>
+    <string name="music_tag_check">Semak sambungan</string>
+    <string name="music_tag_get_key">Dapatkan kunci API</string>
+    <string name="music_tag_connection_ok">Sambungan Last.fm disahkan.</string>
+    <string name="music_tag_key_rejected">Last.fm menolak kunci.</string>
+    <string name="music_tag_connection_failed">Tidak dapat menyambung ke Last.fm. Cuba lagi.</string>
+    <string name="music_tag_scrobbling_unavailable">Penyegerakan sejarah pendengaran tidak tersedia dalam binaan ini.</string>
 </resources>

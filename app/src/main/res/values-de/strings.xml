@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Original herunterladen</string>
     <string name="artist_export_png">PNG mit Hintergrundanpassungen exportieren</string>
     <string name="artist_font_gradient">Farbverlauf</string>
+    <string name="show_moods">Stimmungen anzeigen</string>
+    <string name="music_tag_key_format">Gib den 32-stelligen Last.fm-API-Schlüssel ein.</string>
+    <string name="music_tag_saved">Schlüssel auf diesem Gerät gespeichert.</string>
+    <string name="music_tag_check">Verbindung prüfen</string>
+    <string name="music_tag_get_key">API-Schlüssel erhalten</string>
+    <string name="music_tag_connection_ok">Verbindung zu Last.fm bestätigt.</string>
+    <string name="music_tag_key_rejected">Last.fm hat den Schlüssel abgelehnt.</string>
+    <string name="music_tag_connection_failed">Last.fm ist nicht erreichbar. Versuche es erneut.</string>
+    <string name="music_tag_scrobbling_unavailable">Der Hörverlauf kann in dieser Version nicht synchronisiert werden.</string>
 </resources>

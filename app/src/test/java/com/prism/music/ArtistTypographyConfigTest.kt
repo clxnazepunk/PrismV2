@@ -65,14 +65,16 @@ class ArtistTypographyConfigTest {
         assertEquals("serif", artist.signature("artist"))
     }
 
-    @Test fun optionalTagKeyAndFontPreferencesReloadIndependently() {
+    @Test fun optionalTagKeyAndFontPreferencesReloadIndependently() = kotlinx.coroutines.runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         context.getSharedPreferences("artist_prefs", 0).edit().clear().commit()
         val artist = ArtistPrefs(context)
-        artist.setMusicTagKey(" test-key ")
+        val key = "0123456789abcdef".repeat(2)
+        org.junit.Assert.assertTrue(artist.setMusicTagKey(" $key "))
+        org.junit.Assert.assertFalse(artist.setMusicTagKey("not a key"))
         artist.setTypography(ArtistTypographyConfig(ArtistFontMode.RANDOM, "serif"))
         val next = ArtistPrefs(context)
-        assertEquals("test-key", next.musicTagKey.value)
+        assertEquals(key, next.musicTagKey.value)
         assertEquals(ArtistFontMode.RANDOM, next.typography.value.mode)
         next.setMusicTagKey("")
         artist.reload()

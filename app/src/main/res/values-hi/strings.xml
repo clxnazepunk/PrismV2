@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">मूल डाउनलोड करें</string>
     <string name="artist_export_png">पृष्ठभूमि बदलाव सहित PNG निर्यात करें</string>
     <string name="artist_font_gradient">ग्रेडिएंट</string>
+    <string name="show_moods">मूड दिखाएँ</string>
+    <string name="music_tag_key_format">Last.fm की 32 वर्णों वाली API कुंजी डालें।</string>
+    <string name="music_tag_saved">कुंजी इस डिवाइस पर सहेजी गई।</string>
+    <string name="music_tag_check">कनेक्शन जाँचें</string>
+    <string name="music_tag_get_key">API कुंजी पाएँ</string>
+    <string name="music_tag_connection_ok">Last.fm कनेक्शन सत्यापित हुआ।</string>
+    <string name="music_tag_key_rejected">Last.fm ने कुंजी अस्वीकार की।</string>
+    <string name="music_tag_connection_failed">Last.fm से कनेक्ट नहीं हो सका। फिर कोशिश करें।</string>
+    <string name="music_tag_scrobbling_unavailable">इस बिल्ड में सुनने का इतिहास सिंक नहीं किया जा सकता।</string>
 </resources>

@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">Tải bản gốc</string>
     <string name="artist_export_png">Xuất PNG với điều chỉnh nền</string>
     <string name="artist_font_gradient">Chuyển màu</string>
+    <string name="show_moods">Hiện tâm trạng</string>
+    <string name="music_tag_key_format">Nhập khóa API Last.fm gồm 32 ký tự.</string>
+    <string name="music_tag_saved">Đã lưu khóa trên thiết bị này.</string>
+    <string name="music_tag_check">Kiểm tra kết nối</string>
+    <string name="music_tag_get_key">Lấy khóa API</string>
+    <string name="music_tag_connection_ok">Đã xác minh kết nối với Last.fm.</string>
+    <string name="music_tag_key_rejected">Last.fm từ chối khóa.</string>
+    <string name="music_tag_connection_failed">Không thể kết nối với Last.fm. Hãy thử lại.</string>
+    <string name="music_tag_scrobbling_unavailable">Bản này không hỗ trợ đồng bộ lịch sử nghe.</string>
 </resources>

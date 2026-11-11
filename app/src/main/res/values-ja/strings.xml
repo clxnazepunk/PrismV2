@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">元の画像を保存</string>
     <string name="artist_export_png">背景調整を適用したPNGを保存</string>
     <string name="artist_font_gradient">グラデーション</string>
+    <string name="show_moods">ムードを表示</string>
+    <string name="music_tag_key_format">Last.fm の32文字の API キーを入力してください。</string>
+    <string name="music_tag_saved">この端末にキーを保存しました。</string>
+    <string name="music_tag_check">接続を確認</string>
+    <string name="music_tag_get_key">API キーを取得</string>
+    <string name="music_tag_connection_ok">Last.fm への接続を確認しました。</string>
+    <string name="music_tag_key_rejected">Last.fm がキーを拒否しました。</string>
+    <string name="music_tag_connection_failed">Last.fm に接続できませんでした。もう一度お試しください。</string>
+    <string name="music_tag_scrobbling_unavailable">このビルドでは再生履歴の同期を利用できません。</string>
 </resources>

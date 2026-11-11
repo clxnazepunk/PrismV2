@@ -387,7 +387,12 @@ private fun SettingsPage(
             SettingsSection.HOME -> item { HomeLibraryLook() }
             SettingsSection.LIBRARY -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { RecommendationsPage(); MusicTagSettings() } }
             SettingsSection.DISCORD -> item { DiscordGroup() }
-            SettingsSection.LASTFM -> item { LastFmGroup() }
+            SettingsSection.LASTFM -> item {
+                Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                    MusicTagSettings()
+                    LastFmGroup()
+                }
+            }
             SettingsSection.SPOTIFY -> item { SpotifyPage() }
             // 1.8.0: Region (the country Prism Music is asked as) beside the language, from Recommendations & Replay.
             SettingsSection.LANGUAGE -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LanguageSettings(); ContentCountrySetting() } }
@@ -2670,7 +2675,7 @@ private fun LastFmGroup() {
         info = tr(R.string.sends_what_you_listen_to_scrobbles_all),
     ) {
         if (!lastFm.available) {
-            Note(tr(R.string.this_copy_of_prism_was_built))
+            Note(tr(R.string.music_tag_scrobbling_unavailable))
             return@Group
         }
         if (user == null) {
@@ -2865,6 +2870,7 @@ private fun LibraryLookGroup() {
             Spacer(Modifier.height(6.dp))
             Toggle(tr(R.string.full_width_playlist_pictures), tr(R.string.edge_to_edge_like_an_artist), s.playlistHeroCover) { prefs.setPlaylistHeroCover(it) }
             Toggle(tr(R.string.genres_on_playlists), tr(R.string.genres_on_playlists_detail), s.behavior.playlistGenres) { prefs.setPlaylistGenres(it) }
+            Toggle(tr(R.string.playlist_recommended_songs), null, s.behavior.playlistRecommendations) { prefs.setPlaylistRecommendations(it) }
             // #310 (1.8.1): off, Downloads lists each song with just its artist under it.
             Toggle(
                 tr(R.string.album_names_in_downloads), tr(R.string.album_names_in_downloads_detail), s.view.downloadsAlbums,

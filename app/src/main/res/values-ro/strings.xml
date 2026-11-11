@@ -4991,4 +4991,13 @@
     <string name="artist_export_original">Descarcă originalul</string>
     <string name="artist_export_png">Exportă PNG cu ajustările fundalului</string>
     <string name="artist_font_gradient">Gradient</string>
+    <string name="show_moods">Afișează stările de spirit</string>
+    <string name="music_tag_key_format">Introdu cheia API Last.fm de 32 de caractere.</string>
+    <string name="music_tag_saved">Cheia a fost salvată pe acest dispozitiv.</string>
+    <string name="music_tag_check">Verifică conexiunea</string>
+    <string name="music_tag_get_key">Obține o cheie API</string>
+    <string name="music_tag_connection_ok">Conexiunea la Last.fm a fost verificată.</string>
+    <string name="music_tag_key_rejected">Last.fm a respins cheia.</string>
+    <string name="music_tag_connection_failed">Conexiunea la Last.fm nu a reușit. Încearcă din nou.</string>
+    <string name="music_tag_scrobbling_unavailable">Sincronizarea istoricului de ascultare nu este disponibilă în această versiune.</string>
 </resources>

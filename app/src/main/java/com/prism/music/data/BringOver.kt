@@ -117,7 +117,7 @@ object BringOver {
             genres = genres,
         )
         val saved = PREFS.associateWith { name ->
-            prefs(name).all.mapNotNull { (k, v) -> if (isLocal(k)) null else encode(v)?.let { k to it } }.toMap()
+            prefs(name).all.mapNotNull { (k, v) -> if (isLocal(k) || (name == "artist_prefs" && k == LEGACY_TAG_KEY)) null else encode(v)?.let { k to it } }.toMap()
         }.filterValues { it.isNotEmpty() }
         return BringContent(history, saved, library, look)
     }

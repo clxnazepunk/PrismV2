@@ -1,5 +1,8 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
+
 import com.prism.music.R
 import com.prism.music.tr
 import androidx.compose.animation.Crossfade
@@ -341,7 +344,7 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
             // #328: the title, artists and album of the version picked to play in its place, if any.
             @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
             if (settings.shows(PlayerPart.TITLE)) PlayerMarquee(
-                song.title, MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp, lineHeight = 28.sp), Color.White, true,
+                song.displayTitle, MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp, lineHeight = 28.sp), Color.White, true,
                 Modifier.combinedClickable(enabled = song.album?.id != null || menuHeld != null, onLongClick = menuHeld) {
                     song.album?.id?.let { onCollapse(); nav.go(Routes.album(it)) }
                 },
@@ -351,7 +354,7 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
             if (settings.shows(PlayerPart.ARTIST)) Box {
                 PlayerMarquee(
                     // #289: each name its own link, if asked for.
-                    artistLinkText(song.artistText, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) },
+                    artistLinkText(song.displayArtists, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) },
                     MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W500, fontSize = 17.sp, lineHeight = 22.sp),
                     Color.White.copy(alpha = 0.6f), true,
                     Modifier.combinedClickable(enabled = linked.isNotEmpty() || menuHeld != null, onLongClick = menuHeld) {

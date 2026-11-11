@@ -50,6 +50,18 @@ class PlaylistSuggestionsTest {
         assertEquals(listOf(song("new")), out)
     }
 
+    @Test fun emptyPlaylistMakesNoRequestsAndSingleTrackCanSeedRadio() = runBlocking {
+        var requests = 0
+        val radio: suspend (Song) -> List<Song> = { seed ->
+            requests++
+            listOf(seed, song("new"))
+        }
+        assertTrue(PlaylistSuggestions.load(emptyList(), radio = radio).isEmpty())
+        assertEquals(0, requests)
+        assertEquals(listOf(song("new")), PlaylistSuggestions.load(listOf(song("seed")), radio = radio))
+        assertEquals(1, requests)
+    }
+
     @Test fun privateOnlyPlaylistMakesNoRequests() = runBlocking {
         var asked = false
         val out = PlaylistSuggestions.load(listOf(song("private").copy(isUpload = true))) {
