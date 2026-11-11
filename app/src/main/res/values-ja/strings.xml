@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm がキーを拒否しました。</string>
     <string name="music_tag_connection_failed">Last.fm に接続できませんでした。もう一度お試しください。</string>
     <string name="music_tag_scrobbling_unavailable">このビルドでは再生履歴の同期を利用できません。</string>
+    <string name="discovery_genre">ジャンルの類似度</string>
+    <string name="discovery_similar">類似</string>
+    <string name="discovery_exploratory">探索的</string>
+    <string name="discovery_artist">アーティストの発見</string>
+    <string name="discovery_familiar">おなじみ</string>
+    <string name="discovery_new">発見</string>
+    <string name="discovery_width">音楽の探索</string>
+    <string name="discovery_repetition">重複を減らす</string>
+    <string name="lastfm_credentials_needed">アカウントを接続するには、同じ Last.fm アプリの API キーと共有シークレットを入力してください。</string>
+    <string name="lastfm_secret">共有シークレット</string>
+    <string name="moods_none">これらの曲に対応するムードは見つかりませんでした。</string>
+    <string name="moods_refresh">ムードを更新</string>
+    <string name="artist_next_image">次の保存画像</string>
+    <string name="artist_brightness">明るさ</string>
+    <string name="artist_grayscale">グレースケール</string>
+    <string name="artist_saved_image">保存画像 %1$d</string>
+    <string name="artist_make_first">先頭に移動</string>
+    <string name="artist_move_earlier">前へ移動</string>
+    <string name="artist_move_later">後ろへ移動</string>
 </resources>

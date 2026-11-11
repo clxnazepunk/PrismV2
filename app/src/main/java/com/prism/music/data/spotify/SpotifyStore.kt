@@ -18,14 +18,14 @@ interface TokenBox {
  * AES-GCM under a key that lives in the Android Keystore ([ALIAS]): the key never leaves the phone's secure hardware (or
  * its keystore daemon), so the sealed tokens in shared_prefs are useless anywhere else, a copied file included.
  */
-class KeystoreBox : TokenBox {
+class KeystoreBox(private val alias: String = ALIAS) : TokenBox {
     private fun key(): SecretKey {
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-        (ks.getKey(ALIAS, null) as? SecretKey)?.let { return it }
+        (ks.getKey(alias, null) as? SecretKey)?.let { return it }
         val gen = KeyGenerator.getInstance(android.security.keystore.KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         gen.init(
             android.security.keystore.KeyGenParameterSpec.Builder(
-                ALIAS, android.security.keystore.KeyProperties.PURPOSE_ENCRYPT or android.security.keystore.KeyProperties.PURPOSE_DECRYPT,
+                alias, android.security.keystore.KeyProperties.PURPOSE_ENCRYPT or android.security.keystore.KeyProperties.PURPOSE_DECRYPT,
             ).setBlockModes(android.security.keystore.KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(android.security.keystore.KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256).build(),
@@ -46,7 +46,7 @@ class KeystoreBox : TokenBox {
     }.getOrNull()
 
     /** The key goes with the tokens (Disconnect). */
-    fun forget() = runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(ALIAS) }
+    fun forget() = runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(alias) }
 
     companion object {
         const val ALIAS = "prism_spotify_tokens"

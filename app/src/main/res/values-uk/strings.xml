@@ -5064,4 +5064,23 @@
     <string name="music_tag_key_rejected">Last.fm відхилив ключ.</string>
     <string name="music_tag_connection_failed">Не вдалося підключитися до Last.fm. Спробуйте ще раз.</string>
     <string name="music_tag_scrobbling_unavailable">Синхронізація історії прослуховування недоступна в цій збірці.</string>
+    <string name="discovery_genre">Подібність жанрів</string>
+    <string name="discovery_similar">Подібні</string>
+    <string name="discovery_exploratory">Дослідницькі</string>
+    <string name="discovery_artist">Відкриття виконавців</string>
+    <string name="discovery_familiar">Знайомі</string>
+    <string name="discovery_new">Відкривати</string>
+    <string name="discovery_width">Музичне дослідження</string>
+    <string name="discovery_repetition">Зменшити повтори</string>
+    <string name="lastfm_credentials_needed">Для підключення облікового запису введіть ключ API та спільний секрет з одного застосунку Last.fm.</string>
+    <string name="lastfm_secret">Спільний секрет</string>
+    <string name="moods_none">Для цих пісень не знайдено підтримуваних настроїв.</string>
+    <string name="moods_refresh">Оновити настрої</string>
+    <string name="artist_next_image">Наступне збережене зображення</string>
+    <string name="artist_brightness">Яскравість</string>
+    <string name="artist_grayscale">Відтінки сірого</string>
+    <string name="artist_saved_image">Збережене зображення %1$d</string>
+    <string name="artist_make_first">Перемістити на початок</string>
+    <string name="artist_move_earlier">Перемістити вище</string>
+    <string name="artist_move_later">Перемістити нижче</string>
 </resources>

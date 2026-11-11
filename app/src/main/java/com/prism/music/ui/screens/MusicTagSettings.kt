@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.ArtistPrefs
 import com.prism.music.data.isMusicTagKey
+import com.prism.music.data.lastfm.LastFm
 import com.prism.music.data.meta.MetaRepository.TagConnection
 import com.prism.music.tr
 import com.prism.music.ui.components.PrismTextButton
@@ -32,6 +33,54 @@ internal fun MusicTagSettings() {
     Group(tr(R.string.moods_genres)) {
         Toggle(tr(R.string.show_moods), null, settings.behavior.playlistMoods) { c.settings.setPlaylistMoods(it) }
         MusicTagKeyForm(c.artistPrefs, c.meta::checkTagConnection)
+    }
+}
+
+@Composable
+internal fun LastFmCredentialsForm(lastFm: LastFm) {
+    val saved by LocalContainer.current.artistPrefs.musicTagKey.collectAsState()
+    var key by remember(saved) { mutableStateOf(saved) }
+    var secret by remember { mutableStateOf("") }
+    var busy by remember { mutableStateOf(false) }
+    var status by remember { mutableStateOf<Int?>(null) }
+    val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+    val focus = LocalFocusManager.current
+    Column(Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(tr(R.string.lastfm_credentials_needed), style = MaterialTheme.typography.bodySmall)
+        for ((value, id, setter) in listOf(
+            Triple(key, R.string.music_tag_api, { value: String -> key = value }),
+            Triple(secret, R.string.lastfm_secret, { value: String -> secret = value }),
+        )) {
+            PrismTextField(value, setter, Modifier.fillMaxWidth(), enabled = !busy,
+                label = { Text(tr(id)) }, singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+                visualTransformation = PasswordVisualTransformation())
+        }
+        status?.let { id ->
+            Text(if (id == R.string.couldn_t_save_it) tr(id, tr(R.string.lastfm_secret)) else tr(id),
+                Modifier.semantics { liveRegion = LiveRegionMode.Polite }, style = MaterialTheme.typography.bodySmall)
+        }
+        Row {
+            PrismTextButton(onClick = {
+                focus.clearFocus()
+                if (!isMusicTagKey(key.trim()) || !isMusicTagKey(secret.trim())) {
+                    status = R.string.lastfm_credentials_needed
+                } else {
+                    busy = true
+                    scope.launch {
+                        try {
+                            val stored = lastFm.setCredentials(key, secret)
+                            status = if (stored) R.string.music_tag_saved else R.string.couldn_t_save_it
+                            if (stored) secret = ""
+                        } finally { busy = false }
+                    }
+                }
+            }, enabled = !busy) { Text(tr(R.string.save)) }
+            PrismTextButton(onClick = {
+                runCatching { uriHandler.openUri("https://www.last.fm/api/account/create") }
+            }) { Text(tr(R.string.music_tag_get_key)) }
+        }
     }
 }
 

@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm ने कुंजी अस्वीकार की।</string>
     <string name="music_tag_connection_failed">Last.fm से कनेक्ट नहीं हो सका। फिर कोशिश करें।</string>
     <string name="music_tag_scrobbling_unavailable">इस बिल्ड में सुनने का इतिहास सिंक नहीं किया जा सकता।</string>
+    <string name="discovery_genre">शैली की समानता</string>
+    <string name="discovery_similar">समान</string>
+    <string name="discovery_exploratory">खोजपरक</string>
+    <string name="discovery_artist">कलाकारों की खोज</string>
+    <string name="discovery_familiar">परिचित</string>
+    <string name="discovery_new">खोजें</string>
+    <string name="discovery_width">संगीत की खोज</string>
+    <string name="discovery_repetition">दोहराव कम करें</string>
+    <string name="lastfm_credentials_needed">खाता जोड़ने के लिए उसी Last.fm ऐप की API कुंजी और साझा सीक्रेट डालें।</string>
+    <string name="lastfm_secret">साझा सीक्रेट</string>
+    <string name="moods_none">इन गानों के लिए कोई समर्थित मूड नहीं मिला।</string>
+    <string name="moods_refresh">मूड रीफ़्रेश करें</string>
+    <string name="artist_next_image">अगली सहेजी गई छवि</string>
+    <string name="artist_brightness">चमक</string>
+    <string name="artist_grayscale">धूसर रंग</string>
+    <string name="artist_saved_image">सहेजी गई छवि %1$d</string>
+    <string name="artist_make_first">सबसे पहले ले जाएँ</string>
+    <string name="artist_move_earlier">आगे ले जाएँ</string>
+    <string name="artist_move_later">पीछे ले जाएँ</string>
 </resources>

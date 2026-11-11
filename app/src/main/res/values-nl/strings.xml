@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm heeft de sleutel geweigerd.</string>
     <string name="music_tag_connection_failed">Kan Last.fm niet bereiken. Probeer het opnieuw.</string>
     <string name="music_tag_scrobbling_unavailable">Synchronisatie van luistergeschiedenis is in deze versie niet beschikbaar.</string>
+    <string name="discovery_genre">Genreovereenkomst</string>
+    <string name="discovery_similar">Vergelijkbaar</string>
+    <string name="discovery_exploratory">Verkennend</string>
+    <string name="discovery_artist">Artiesten ontdekken</string>
+    <string name="discovery_familiar">Vertrouwd</string>
+    <string name="discovery_new">Ontdekken</string>
+    <string name="discovery_width">Muzikale verkenning</string>
+    <string name="discovery_repetition">Herhaling verminderen</string>
+    <string name="lastfm_credentials_needed">Voer de API-sleutel en het gedeelde geheim van dezelfde Last.fm-app in om je account te verbinden.</string>
+    <string name="lastfm_secret">Gedeeld geheim</string>
+    <string name="moods_none">Geen ondersteunde stemmingen gevonden voor deze nummers.</string>
+    <string name="moods_refresh">Stemmingen vernieuwen</string>
+    <string name="artist_next_image">Volgende opgeslagen afbeelding</string>
+    <string name="artist_brightness">Helderheid</string>
+    <string name="artist_grayscale">Grijswaarden</string>
+    <string name="artist_saved_image">Opgeslagen afbeelding %1$d</string>
+    <string name="artist_make_first">Naar het begin verplaatsen</string>
+    <string name="artist_move_earlier">Naar voren verplaatsen</string>
+    <string name="artist_move_later">Naar achteren verplaatsen</string>
 </resources>

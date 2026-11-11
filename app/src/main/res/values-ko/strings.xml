@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm에서 키를 거부했습니다.</string>
     <string name="music_tag_connection_failed">Last.fm에 연결할 수 없습니다. 다시 시도하세요.</string>
     <string name="music_tag_scrobbling_unavailable">이 빌드에서는 청취 기록 동기화를 사용할 수 없습니다.</string>
+    <string name="discovery_genre">장르 유사도</string>
+    <string name="discovery_similar">비슷한 장르</string>
+    <string name="discovery_exploratory">새로운 장르</string>
+    <string name="discovery_artist">아티스트 발견</string>
+    <string name="discovery_familiar">익숙한 아티스트</string>
+    <string name="discovery_new">새 아티스트</string>
+    <string name="discovery_width">음악 탐색</string>
+    <string name="discovery_repetition">반복 줄이기</string>
+    <string name="lastfm_credentials_needed">계정을 연결하려면 같은 Last.fm 앱의 API 키와 공유 시크릿을 입력하세요.</string>
+    <string name="lastfm_secret">공유 시크릿</string>
+    <string name="moods_none">이 곡들에 지원되는 분위기가 없습니다.</string>
+    <string name="moods_refresh">분위기 새로고침</string>
+    <string name="artist_next_image">다음 저장 이미지</string>
+    <string name="artist_brightness">밝기</string>
+    <string name="artist_grayscale">회색조</string>
+    <string name="artist_saved_image">저장 이미지 %1$d</string>
+    <string name="artist_make_first">맨 앞으로 이동</string>
+    <string name="artist_move_earlier">앞으로 이동</string>
+    <string name="artist_move_later">뒤로 이동</string>
 </resources>

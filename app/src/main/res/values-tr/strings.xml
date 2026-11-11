@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm anahtarı reddetti.</string>
     <string name="music_tag_connection_failed">Last.fm bağlantısı kurulamadı. Tekrar deneyin.</string>
     <string name="music_tag_scrobbling_unavailable">Bu sürümde dinleme geçmişi eşitlenemiyor.</string>
+    <string name="discovery_genre">Tür benzerliği</string>
+    <string name="discovery_similar">Benzer</string>
+    <string name="discovery_exploratory">Keşif odaklı</string>
+    <string name="discovery_artist">Sanatçı keşfi</string>
+    <string name="discovery_familiar">Tanıdık</string>
+    <string name="discovery_new">Keşfet</string>
+    <string name="discovery_width">Müzikal keşif</string>
+    <string name="discovery_repetition">Tekrarı azalt</string>
+    <string name="lastfm_credentials_needed">Hesabını bağlamak için aynı Last.fm uygulamasının API anahtarını ve paylaşılan sırrını gir.</string>
+    <string name="lastfm_secret">Paylaşılan sır</string>
+    <string name="moods_none">Bu parçalar için desteklenen ruh hâli bulunamadı.</string>
+    <string name="moods_refresh">Ruh hâllerini yenile</string>
+    <string name="artist_next_image">Sonraki kayıtlı görsel</string>
+    <string name="artist_brightness">Parlaklık</string>
+    <string name="artist_grayscale">Gri tonlama</string>
+    <string name="artist_saved_image">Kayıtlı görsel %1$d</string>
+    <string name="artist_make_first">Başa taşı</string>
+    <string name="artist_move_earlier">Öne taşı</string>
+    <string name="artist_move_later">Arkaya taşı</string>
 </resources>

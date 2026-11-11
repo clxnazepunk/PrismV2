@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm نے کلید مسترد کر دی۔</string>
     <string name="music_tag_connection_failed">Last.fm سے رابطہ نہ ہو سکا۔ دوبارہ کوشش کریں۔</string>
     <string name="music_tag_scrobbling_unavailable">اس ورژن میں سننے کی سرگزشت کی ہم وقت سازی دستیاب نہیں۔</string>
+    <string name="discovery_genre">صنف کی مماثلت</string>
+    <string name="discovery_similar">ملتی جلتی</string>
+    <string name="discovery_exploratory">تلاش پر مبنی</string>
+    <string name="discovery_artist">فنکاروں کی دریافت</string>
+    <string name="discovery_familiar">مانوس</string>
+    <string name="discovery_new">دریافت</string>
+    <string name="discovery_width">موسیقی کی تلاش</string>
+    <string name="discovery_repetition">تکرار کم کریں</string>
+    <string name="lastfm_credentials_needed">اکاؤنٹ جوڑنے کے لیے اسی Last.fm ایپ کی API کلید اور مشترکہ راز درج کریں۔</string>
+    <string name="lastfm_secret">مشترکہ راز</string>
+    <string name="moods_none">ان گانوں کے لیے معاون موڈ نہیں ملے۔</string>
+    <string name="moods_refresh">موڈ تازہ کریں</string>
+    <string name="artist_next_image">اگلی محفوظ تصویر</string>
+    <string name="artist_brightness">چمک</string>
+    <string name="artist_grayscale">سرمئی پیمانہ</string>
+    <string name="artist_saved_image">محفوظ تصویر %1$d</string>
+    <string name="artist_make_first">سب سے پہلے منتقل کریں</string>
+    <string name="artist_move_earlier">آگے منتقل کریں</string>
+    <string name="artist_move_later">پیچھے منتقل کریں</string>
 </resources>

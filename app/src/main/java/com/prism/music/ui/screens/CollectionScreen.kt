@@ -342,6 +342,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         songs.isNotEmpty() && settings.behavior.playlistMoods
     val moodKeyConfigured = tagApiKey.isNotBlank() || com.prism.music.BuildConfig.LASTFM_API_KEY.isNotBlank()
     var loadingMoods by remember(page.id) { mutableStateOf(false) }
+    var moodLookupFailed by remember(page.id) { mutableStateOf(false) }
     // #310 (1.8.1): Downloads can leave the album's name out from under each song.
     val showAlbums = type != CollectionType.DOWNLOADS || settings.view.downloadsAlbums
     LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; if (groupByGenre) toggleGenreGroups() } }
@@ -378,18 +379,27 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         extrasChecked += extraTodo.map { it.id }
     }
 
-    LaunchedEffect(page.id, songs, showMoods, filtersOpen, online, tagApiKey, tagRefresh) {
+    LaunchedEffect(page.id, live, showMoods, filtersOpen, online, tagApiKey, tagRefresh) {
         if (!showMoods || !filtersOpen) return@LaunchedEffect
-        detailTags.putAll(c.meta.cachedSongTags(songs))
-        genreVersion++
-        if (!online || !moodKeyConfigured) return@LaunchedEffect
-        loadingMoods = true
-        try {
-            c.meta.resolveSongTags(songs, budget = tagBudget) { batch ->
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { detailTags.putAll(batch); genreVersion++ }
+        live.songs.collect { snapshot ->
+            detailTags.putAll(c.meta.cachedSongTags(snapshot))
+            genreVersion++
+            if (online && moodKeyConfigured) {
+                loadingMoods = true
+                moodLookupFailed = false
+                try {
+                    moodLookupFailed = c.meta.resolveSongTags(snapshot, budget = tagBudget, refreshEmpty = tagRefresh > 0) { batch ->
+                        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                            if (batch.any { (id, tags) -> detailTags[id] != tags }) {
+                                detailTags.putAll(batch)
+                                genreVersion++
+                            }
+                        }
+                    } == com.prism.music.data.meta.MetaRepository.TagResult.ERROR
+                } finally {
+                    loadingMoods = false
+                }
             }
-        } finally {
-            loadingMoods = false
         }
     }
     LaunchedEffect(page.id, songs, showGenres) {
@@ -818,7 +828,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             loadingMoods -> R.string.loading
                             !moodKeyConfigured -> R.string.music_tag_hint
                             !online -> R.string.you_re_offline
-                            else -> R.string.no_results
+                            moodLookupFailed -> R.string.music_tag_connection_failed
+                            else -> R.string.moods_none
                         },
                         idle = frosted,
                     )
@@ -882,7 +893,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     )
                 }
                 if (type == CollectionType.PRISM && settings.behavior.playlistRecommendations) item("playlist-suggestions") {
-                    LocalPlaylistSuggestions(page.id, page.title, songs, playlistSuggestions, scope, online)
+                    LocalPlaylistSuggestions(page.id, page.title, songs, playlistSuggestions, scope, online,
+                        remember(songs, genreVersion) { songs.associate { it.id to genresOf(it.id).toSet() } })
                 }
                 if (type == CollectionType.ALBUM) {
                     if (live.page.otherVersions.isNotEmpty()) item("versions") {

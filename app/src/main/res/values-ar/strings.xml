@@ -5192,4 +5192,23 @@
     <string name="music_tag_key_rejected">رفض Last.fm المفتاح.</string>
     <string name="music_tag_connection_failed">تعذر الاتصال بـ Last.fm. حاول مجددًا.</string>
     <string name="music_tag_scrobbling_unavailable">مزامنة سجل الاستماع غير متاحة في هذا الإصدار.</string>
+    <string name="discovery_genre">تشابه الأنواع</string>
+    <string name="discovery_similar">متشابهة</string>
+    <string name="discovery_exploratory">استكشافية</string>
+    <string name="discovery_artist">اكتشاف الفنانين</string>
+    <string name="discovery_familiar">مألوفون</string>
+    <string name="discovery_new">اكتشاف</string>
+    <string name="discovery_width">الاستكشاف الموسيقي</string>
+    <string name="discovery_repetition">تقليل التكرار</string>
+    <string name="lastfm_credentials_needed">لربط حسابك، أدخل مفتاح API والسر المشترك من تطبيق Last.fm نفسه.</string>
+    <string name="lastfm_secret">السر المشترك</string>
+    <string name="moods_none">لم يتم العثور على حالات مزاجية مدعومة لهذه الأغاني.</string>
+    <string name="moods_refresh">تحديث الحالات المزاجية</string>
+    <string name="artist_next_image">الصورة المحفوظة التالية</string>
+    <string name="artist_brightness">السطوع</string>
+    <string name="artist_grayscale">تدرج الرمادي</string>
+    <string name="artist_saved_image">الصورة المحفوظة %1$d</string>
+    <string name="artist_make_first">نقل إلى البداية</string>
+    <string name="artist_move_earlier">نقل للأمام</string>
+    <string name="artist_move_later">نقل للخلف</string>
 </resources>

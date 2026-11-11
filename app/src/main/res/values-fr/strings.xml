@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">Last.fm a refusé la clé.</string>
     <string name="music_tag_connection_failed">Connexion à Last.fm impossible. Réessayez.</string>
     <string name="music_tag_scrobbling_unavailable">La synchronisation de l’historique d’écoute est indisponible dans cette version.</string>
+    <string name="discovery_genre">Similarité des genres</string>
+    <string name="discovery_similar">Similaires</string>
+    <string name="discovery_exploratory">Exploratoires</string>
+    <string name="discovery_artist">Découverte d’artistes</string>
+    <string name="discovery_familiar">Familiers</string>
+    <string name="discovery_new">Découvrir</string>
+    <string name="discovery_width">Exploration musicale</string>
+    <string name="discovery_repetition">Réduire les répétitions</string>
+    <string name="lastfm_credentials_needed">Pour connecter votre compte, saisissez la clé API et le secret partagé de la même application Last.fm.</string>
+    <string name="lastfm_secret">Secret partagé</string>
+    <string name="moods_none">Aucune ambiance prise en charge pour ces titres.</string>
+    <string name="moods_refresh">Actualiser les ambiances</string>
+    <string name="artist_next_image">Image enregistrée suivante</string>
+    <string name="artist_brightness">Luminosité</string>
+    <string name="artist_grayscale">Niveaux de gris</string>
+    <string name="artist_saved_image">Image enregistrée %1$d</string>
+    <string name="artist_make_first">Déplacer en premier</string>
+    <string name="artist_move_earlier">Avancer</string>
+    <string name="artist_move_later">Reculer</string>
 </resources>

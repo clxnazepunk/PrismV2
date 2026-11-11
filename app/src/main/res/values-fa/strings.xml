@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm کلید را نپذیرفت.</string>
     <string name="music_tag_connection_failed">اتصال به Last.fm ممکن نبود. دوباره تلاش کنید.</string>
     <string name="music_tag_scrobbling_unavailable">همگام‌سازی سابقهٔ شنیدن در این نسخه در دسترس نیست.</string>
+    <string name="discovery_genre">شباهت سبک</string>
+    <string name="discovery_similar">مشابه</string>
+    <string name="discovery_exploratory">اکتشافی</string>
+    <string name="discovery_artist">کشف هنرمندان</string>
+    <string name="discovery_familiar">آشنا</string>
+    <string name="discovery_new">کشف</string>
+    <string name="discovery_width">کاوش موسیقی</string>
+    <string name="discovery_repetition">کاهش تکرار</string>
+    <string name="lastfm_credentials_needed">برای اتصال حساب، کلید API و رمز مشترک همان برنامه Last.fm را وارد کنید.</string>
+    <string name="lastfm_secret">رمز مشترک</string>
+    <string name="moods_none">برای این آهنگ‌ها حال‌وهوای پشتیبانی‌شده‌ای یافت نشد.</string>
+    <string name="moods_refresh">به‌روزرسانی حال‌وهوا</string>
+    <string name="artist_next_image">تصویر ذخیره‌شدهٔ بعدی</string>
+    <string name="artist_brightness">روشنایی</string>
+    <string name="artist_grayscale">خاکستری</string>
+    <string name="artist_saved_image">تصویر ذخیره‌شدهٔ %1$d</string>
+    <string name="artist_make_first">انتقال به ابتدا</string>
+    <string name="artist_move_earlier">انتقال به جلو</string>
+    <string name="artist_move_later">انتقال به عقب</string>
 </resources>

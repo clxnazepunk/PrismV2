@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm ปฏิเสธคีย์</string>
     <string name="music_tag_connection_failed">เชื่อมต่อกับ Last.fm ไม่ได้ ลองอีกครั้ง</string>
     <string name="music_tag_scrobbling_unavailable">เวอร์ชันนี้ไม่รองรับการซิงค์ประวัติการฟัง</string>
+    <string name="discovery_genre">ความคล้ายของแนวเพลง</string>
+    <string name="discovery_similar">คล้ายกัน</string>
+    <string name="discovery_exploratory">สำรวจ</string>
+    <string name="discovery_artist">ค้นพบศิลปิน</string>
+    <string name="discovery_familiar">คุ้นเคย</string>
+    <string name="discovery_new">ค้นพบ</string>
+    <string name="discovery_width">สำรวจเพลง</string>
+    <string name="discovery_repetition">ลดการซ้ำ</string>
+    <string name="lastfm_credentials_needed">หากต้องการเชื่อมบัญชี ให้ใส่คีย์ API และรหัสลับที่ใช้ร่วมกันของแอป Last.fm เดียวกัน</string>
+    <string name="lastfm_secret">รหัสลับที่ใช้ร่วมกัน</string>
+    <string name="moods_none">ไม่พบอารมณ์ที่รองรับสำหรับเพลงเหล่านี้</string>
+    <string name="moods_refresh">รีเฟรชอารมณ์</string>
+    <string name="artist_next_image">ภาพที่บันทึกถัดไป</string>
+    <string name="artist_brightness">ความสว่าง</string>
+    <string name="artist_grayscale">ระดับสีเทา</string>
+    <string name="artist_saved_image">ภาพที่บันทึก %1$d</string>
+    <string name="artist_make_first">ย้ายไปต้นรายการ</string>
+    <string name="artist_move_earlier">ย้ายขึ้น</string>
+    <string name="artist_move_later">ย้ายลง</string>
 </resources>

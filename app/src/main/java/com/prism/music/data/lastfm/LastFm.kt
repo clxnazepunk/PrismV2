@@ -6,6 +6,8 @@ import android.content.Context
 import com.prism.music.BuildConfig
 import com.prism.music.data.model.Song
 import com.prism.music.playback.AudioDiagnostics
+import com.prism.music.data.spotify.KeystoreBox
+import com.prism.music.data.spotify.TokenBox
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +38,10 @@ import java.security.MessageDigest
  * scrobbled. It's the listener's own account, connected by them, so this isn't telemetry. The API key and secret
  * are Prism's (local.properties: lastfm.apiKey, lastfm.secret); a build without them doesn't offer it.
  */
-class LastFm(private val context: Context, private val http: OkHttpClient, private val scope: CoroutineScope) {
+class LastFm(
+    context: Context, private val http: OkHttpClient, private val scope: CoroutineScope,
+    private val credentialBox: TokenBox = KeystoreBox("prism_lastfm_credentials"),
+) {
     /** The listener's choices (Settings → Recommendations & Replay → Last.fm). */
     data class Options(
         val scrobble: Boolean = true,
@@ -48,7 +53,33 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
     @Serializable
     private data class Scrobble(val artist: String, val track: String, val album: String? = null, val timestamp: Long, val duration: Int = 0)
 
-    val available: Boolean get() = KEY.isNotBlank() && SECRET.isNotBlank()
+    data class Credentials(val key: String, val secret: String) {
+        override fun toString() = "Credentials([redacted])"
+    }
+
+    private val credentialPrefs = context.getSharedPreferences("lastfm_tags", Context.MODE_PRIVATE)
+    private val personal = MutableStateFlow(
+        credentialPrefs.getString("scrobble_key", null)?.let { key ->
+            credentialPrefs.getString("scrobble_secret", null)?.let(credentialBox::open)?.let { secret -> Credentials(key, secret) }
+        }
+    )
+    private val bundled get() = BuildConfig.LASTFM_API_KEY.isNotBlank() && BuildConfig.LASTFM_SECRET.isNotBlank()
+    private fun credentials() = if (bundled) Credentials(BuildConfig.LASTFM_API_KEY, BuildConfig.LASTFM_SECRET) else personal.value
+    private val _ready = MutableStateFlow(credentials() != null)
+    val ready: StateFlow<Boolean> = _ready
+    val available: Boolean get() = _ready.value
+    val needsPersonalCredentials: Boolean get() = !bundled
+
+    suspend fun setCredentials(key: String, secret: String): Boolean = withContext(Dispatchers.IO) {
+        val next = Credentials(key.trim(), secret.trim())
+        if (!needsPersonalCredentials || _user.value != null ||
+            !com.prism.music.data.isMusicTagKey(next.key) || !com.prism.music.data.isMusicTagKey(next.secret)) return@withContext false
+        val sealed = runCatching { credentialBox.seal(next.secret) }.getOrNull() ?: return@withContext false
+        if (!credentialPrefs.edit().putString("scrobble_key", next.key).putString("scrobble_secret", sealed).commit()) return@withContext false
+        personal.value = next
+        _ready.value = true
+        true
+    }
 
     private val prefs = context.getSharedPreferences("lastfm", Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true }
@@ -76,10 +107,11 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
     // ---- Signing in
 
     /** Last.fm's page that asks the listener to let Prism scrobble; it comes back to prism://lastfm?token=… */
-    fun authUrl(): String = "https://www.last.fm/api/auth/?api_key=$KEY&cb=" + java.net.URLEncoder.encode("prism://lastfm", "UTF-8")
+    fun authUrl(): String = "https://www.last.fm/api/auth/?api_key=${credentials()?.key.orEmpty()}&cb=" + java.net.URLEncoder.encode("prism://lastfm", "UTF-8")
 
     /** Swaps the token Last.fm sent back for a session. False when Last.fm refused it. */
     suspend fun finishSignIn(token: String): Boolean = runCatching {
+        if (!available) return false
         val res = call(mapOf("method" to "auth.getSession", "token" to token))
         val session = res["session"]?.jsonObject ?: return false
         val key = session["key"]?.jsonPrimitive?.contentOrNull ?: return false
@@ -195,7 +227,8 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
      */
     suspend fun recentTracksPage(page: Int, perPage: Int = 200, from: Long? = null): String = withContext(Dispatchers.IO) {
         val name = _user.value ?: throw IOException("Last.fm isn't connected")
-        val url = recentTracksUrl(name, page, perPage, from, KEY)
+        val key = credentials()?.key ?: throw IOException("Last.fm credentials unavailable")
+        val url = recentTracksUrl(name, page, perPage, from, key)
         val req = Request.Builder().url(url).header("User-Agent", "Prism/${BuildConfig.VERSION_NAME}").build()
         http.newCall(req).execute().use { r ->
             val body = r.body.string()
@@ -210,13 +243,14 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
 
     /** One request to Last.fm's API (POST, JSON answer). Signed calls carry the session and the signature. */
     private suspend fun call(params: Map<String, String>, signed: Boolean = true): JsonObject = withContext(Dispatchers.IO) {
+        val credentials = credentials() ?: throw IOException("Last.fm credentials unavailable")
         val all = HashMap(params).apply {
-            put("api_key", KEY)
+            put("api_key", credentials.key)
             if (signed && params["method"] != "auth.getSession") prefs.getString("session", null)?.let { put("sk", it) }
         }
         val form = FormBody.Builder().apply {
             all.forEach { (k, v) -> add(k, v) }
-            add("api_sig", signature(all, SECRET))
+            add("api_sig", signature(all, credentials.secret))
             add("format", "json")
         }.build()
         val req = Request.Builder().url(API).post(form).header("User-Agent", "Prism/${BuildConfig.VERSION_NAME}").build()
@@ -232,8 +266,6 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
     }
 
     companion object {
-        private val KEY get() = BuildConfig.LASTFM_API_KEY
-        private val SECRET get() = BuildConfig.LASTFM_SECRET
         private const val API = "https://ws.audioscrobbler.com/2.0/"
         private const val BATCH = 50
         private const val MAX_QUEUE = 2_000

@@ -5064,4 +5064,23 @@
     <string name="music_tag_key_rejected">Last.fm odrzucił klucz.</string>
     <string name="music_tag_connection_failed">Nie można połączyć się z Last.fm. Spróbuj ponownie.</string>
     <string name="music_tag_scrobbling_unavailable">Synchronizacja historii słuchania jest niedostępna w tej wersji.</string>
+    <string name="discovery_genre">Podobieństwo gatunków</string>
+    <string name="discovery_similar">Podobne</string>
+    <string name="discovery_exploratory">Odkrywcze</string>
+    <string name="discovery_artist">Odkrywanie wykonawców</string>
+    <string name="discovery_familiar">Znani</string>
+    <string name="discovery_new">Odkrywaj</string>
+    <string name="discovery_width">Odkrywanie muzyki</string>
+    <string name="discovery_repetition">Ogranicz powtórzenia</string>
+    <string name="lastfm_credentials_needed">Aby połączyć konto, wpisz klucz API i współdzielony sekret z tej samej aplikacji Last.fm.</string>
+    <string name="lastfm_secret">Współdzielony sekret</string>
+    <string name="moods_none">Nie znaleziono obsługiwanych nastrojów dla tych utworów.</string>
+    <string name="moods_refresh">Odśwież nastroje</string>
+    <string name="artist_next_image">Następny zapisany obraz</string>
+    <string name="artist_brightness">Jasność</string>
+    <string name="artist_grayscale">Skala szarości</string>
+    <string name="artist_saved_image">Zapisany obraz %1$d</string>
+    <string name="artist_make_first">Przenieś na początek</string>
+    <string name="artist_move_earlier">Przenieś wcześniej</string>
+    <string name="artist_move_later">Przenieś później</string>
 </resources>

@@ -5064,4 +5064,23 @@
     <string name="music_tag_key_rejected">Last.fm отклонил ключ.</string>
     <string name="music_tag_connection_failed">Не удалось подключиться к Last.fm. Попробуйте ещё раз.</string>
     <string name="music_tag_scrobbling_unavailable">Синхронизация истории прослушивания недоступна в этой сборке.</string>
+    <string name="discovery_genre">Сходство жанров</string>
+    <string name="discovery_similar">Похожие</string>
+    <string name="discovery_exploratory">Новые</string>
+    <string name="discovery_artist">Открытие исполнителей</string>
+    <string name="discovery_familiar">Знакомые</string>
+    <string name="discovery_new">Открывать</string>
+    <string name="discovery_width">Музыкальное исследование</string>
+    <string name="discovery_repetition">Меньше повторов</string>
+    <string name="lastfm_credentials_needed">Для подключения аккаунта введите ключ API и общий секрет одного приложения Last.fm.</string>
+    <string name="lastfm_secret">Общий секрет</string>
+    <string name="moods_none">Для этих треков не найдены поддерживаемые настроения.</string>
+    <string name="moods_refresh">Обновить настроения</string>
+    <string name="artist_next_image">Следующее сохранённое изображение</string>
+    <string name="artist_brightness">Яркость</string>
+    <string name="artist_grayscale">Оттенки серого</string>
+    <string name="artist_saved_image">Сохранённое изображение %1$d</string>
+    <string name="artist_make_first">Переместить в начало</string>
+    <string name="artist_move_earlier">Переместить выше</string>
+    <string name="artist_move_later">Переместить ниже</string>
 </resources>

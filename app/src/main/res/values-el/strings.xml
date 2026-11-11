@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Το Last.fm απέρριψε το κλειδί.</string>
     <string name="music_tag_connection_failed">Αδυναμία σύνδεσης με το Last.fm. Δοκιμάστε ξανά.</string>
     <string name="music_tag_scrobbling_unavailable">Ο συγχρονισμός του ιστορικού ακρόασης δεν είναι διαθέσιμος σε αυτήν την έκδοση.</string>
+    <string name="discovery_genre">Ομοιότητα ειδών</string>
+    <string name="discovery_similar">Παρόμοια</string>
+    <string name="discovery_exploratory">Εξερευνητικά</string>
+    <string name="discovery_artist">Ανακάλυψη καλλιτεχνών</string>
+    <string name="discovery_familiar">Γνωστοί</string>
+    <string name="discovery_new">Ανακάλυψη</string>
+    <string name="discovery_width">Μουσική εξερεύνηση</string>
+    <string name="discovery_repetition">Μείωση επαναλήψεων</string>
+    <string name="lastfm_credentials_needed">Για σύνδεση λογαριασμού, εισαγάγετε το κλειδί API και το κοινό μυστικό της ίδιας εφαρμογής Last.fm.</string>
+    <string name="lastfm_secret">Κοινό μυστικό</string>
+    <string name="moods_none">Δεν βρέθηκαν υποστηριζόμενες διαθέσεις για αυτά τα τραγούδια.</string>
+    <string name="moods_refresh">Ανανέωση διαθέσεων</string>
+    <string name="artist_next_image">Επόμενη αποθηκευμένη εικόνα</string>
+    <string name="artist_brightness">Φωτεινότητα</string>
+    <string name="artist_grayscale">Κλίμακα του γκρι</string>
+    <string name="artist_saved_image">Αποθηκευμένη εικόνα %1$d</string>
+    <string name="artist_make_first">Μετακίνηση στην αρχή</string>
+    <string name="artist_move_earlier">Μετακίνηση προς τα πάνω</string>
+    <string name="artist_move_later">Μετακίνηση προς τα κάτω</string>
 </resources>

@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm từ chối khóa.</string>
     <string name="music_tag_connection_failed">Không thể kết nối với Last.fm. Hãy thử lại.</string>
     <string name="music_tag_scrobbling_unavailable">Bản này không hỗ trợ đồng bộ lịch sử nghe.</string>
+    <string name="discovery_genre">Độ tương đồng thể loại</string>
+    <string name="discovery_similar">Tương tự</string>
+    <string name="discovery_exploratory">Khám phá</string>
+    <string name="discovery_artist">Khám phá nghệ sĩ</string>
+    <string name="discovery_familiar">Quen thuộc</string>
+    <string name="discovery_new">Khám phá</string>
+    <string name="discovery_width">Khám phá âm nhạc</string>
+    <string name="discovery_repetition">Giảm lặp lại</string>
+    <string name="lastfm_credentials_needed">Để kết nối tài khoản, nhập khóa API và mã bí mật dùng chung của cùng ứng dụng Last.fm.</string>
+    <string name="lastfm_secret">Mã bí mật dùng chung</string>
+    <string name="moods_none">Không tìm thấy tâm trạng được hỗ trợ cho các bài này.</string>
+    <string name="moods_refresh">Làm mới tâm trạng</string>
+    <string name="artist_next_image">Ảnh đã lưu tiếp theo</string>
+    <string name="artist_brightness">Độ sáng</string>
+    <string name="artist_grayscale">Thang xám</string>
+    <string name="artist_saved_image">Ảnh đã lưu %1$d</string>
+    <string name="artist_make_first">Chuyển lên đầu</string>
+    <string name="artist_move_earlier">Chuyển lên trước</string>
+    <string name="artist_move_later">Chuyển ra sau</string>
 </resources>

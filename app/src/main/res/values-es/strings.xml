@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">Last.fm rechazó la clave.</string>
     <string name="music_tag_connection_failed">No se pudo conectar con Last.fm. Inténtalo de nuevo.</string>
     <string name="music_tag_scrobbling_unavailable">El registro de escuchas en Last.fm no está disponible en esta compilación.</string>
+    <string name="discovery_genre">Similitud de géneros</string>
+    <string name="discovery_similar">Similares</string>
+    <string name="discovery_exploratory">Exploratorios</string>
+    <string name="discovery_artist">Descubrimiento de artistas</string>
+    <string name="discovery_familiar">Conocidos</string>
+    <string name="discovery_new">Descubrir</string>
+    <string name="discovery_width">Exploración musical</string>
+    <string name="discovery_repetition">Reducir repeticiones</string>
+    <string name="lastfm_credentials_needed">Para conectar tu cuenta, introduce la clave API y el secreto compartido de la misma aplicación de Last.fm.</string>
+    <string name="lastfm_secret">Secreto compartido</string>
+    <string name="moods_none">No se encontraron estados de ánimo compatibles para estas canciones.</string>
+    <string name="moods_refresh">Actualizar estados de ánimo</string>
+    <string name="artist_next_image">Siguiente imagen guardada</string>
+    <string name="artist_brightness">Brillo</string>
+    <string name="artist_grayscale">Escala de grises</string>
+    <string name="artist_saved_image">Imagen guardada %1$d</string>
+    <string name="artist_make_first">Mover al principio</string>
+    <string name="artist_move_earlier">Mover hacia delante</string>
+    <string name="artist_move_later">Mover hacia atrás</string>
 </resources>

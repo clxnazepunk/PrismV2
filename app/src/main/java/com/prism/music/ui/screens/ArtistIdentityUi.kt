@@ -9,6 +9,11 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.request.transformations
 import com.prism.music.R
 import com.prism.music.data.artists.*
 import androidx.compose.ui.draw.clipToBounds
@@ -51,12 +57,11 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val entries by identities.entries.collectAsState()
     val automatic by identities.automatic.collectAsState()
     val api by identities.signatureApi.collectAsState()
-    val saved = entries[page.id] ?: ArtistIdentity()
-    val entry = when (preview?.first) {
-        ArtistImageRole.LOGO -> saved.copy(logoLayout = requireNotNull(preview).second)
-        ArtistImageRole.SIGNATURE -> saved.copy(signatureLayout = preview.second)
-        null -> saved
-    }
+    val entry = entries[page.id] ?: ArtistIdentity()
+    val scope = rememberCoroutineScope()
+    fun cycle(role: ArtistImageRole): (() -> Unit)? =
+        if (preview == null && entry.assets(role).size > 1) ({ scope.launch { identities.store.update(page.id) { it.cycle(role) } }; Unit }) else null
+    fun layout(role: ArtistImageRole) = preview?.takeIf { it.first == role }?.second ?: entry.layout(role)
     val logo = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.LOGO)) }
     val signature = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.SIGNATURE)) }
     var logoFailed by remember(logo) { mutableStateOf(false) }
@@ -67,11 +72,11 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
         ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
     val shown = preview?.first?.let { selected.preview(it) } ?: selected
     Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        if (shown.logo && logo != null) ArtistProfileMark(ArtistImageRole.LOGO, logo, tr(R.string.artist_logo), entry.logoLayout, canvasHeight,
-            onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
+        if (shown.logo && logo != null) ArtistProfileMark(ArtistImageRole.LOGO, logo, tr(R.string.artist_logo), layout(ArtistImageRole.LOGO), canvasHeight,
+            onCycle = cycle(ArtistImageRole.LOGO), onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
         if (shown.signature && signature != null) {
-            ArtistProfileMark(ArtistImageRole.SIGNATURE, signature, tr(R.string.signature), entry.signatureLayout, canvasHeight,
-                tint = entry.localSignature == null && signature.extension == "svg",
+            ArtistProfileMark(ArtistImageRole.SIGNATURE, signature, tr(R.string.signature), layout(ArtistImageRole.SIGNATURE), canvasHeight,
+                onCycle = cycle(ArtistImageRole.SIGNATURE), tint = entry.localSignature == null && signature.extension == "svg",
                 onEdit = onEdit, onSuccess = { signatureLoaded = true }, onError = { signatureFailed = true })
             if (entry.signatureCaption && signatureLoaded && !shown.text) Text(page.name,
                 style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
@@ -87,30 +92,40 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
 internal fun ArtistProfileMark(
     role: ArtistImageRole, file: File, label: String, layout: ArtistImageLayout, canvasHeight: Dp,
     tint: Boolean = false, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
+    onCycle: (() -> Unit)? = null,
 ) {
     ArtistMark(file, label, layout, if (role == ArtistImageRole.LOGO) 100.dp else 72.dp,
         tint = tint, canvasHeight = canvasHeight, overflow = true,
-        onEdit = onEdit, onSuccess = onSuccess, onError = onError)
+        onEdit = onEdit, onSuccess = onSuccess, onError = onError, onCycle = onCycle)
 }
 
 /** Fit enlarges small originals too; zoom is visual, never an unbounded image decode. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 internal fun ArtistMark(
     file: File, label: String, layout: ArtistImageLayout, height: Dp,
     tint: Boolean = false, canvasHeight: Dp = height, overflow: Boolean = false, onEdit: () -> Unit = {}, onSuccess: () -> Unit = {}, onError: () -> Unit = {},
+    onCycle: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
-    Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).clickable(onClick = onEdit)) {
+    Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).combinedClickable(onClick = onCycle ?: onEdit,
+        onClickLabel = tr(if (onCycle == null) R.string.artist_adjust else R.string.artist_next_image),
+        onLongClick = onCycle?.let { onEdit }, onLongClickLabel = if (onCycle != null) tr(R.string.artist_adjust) else null)) {
         AsyncImage(
-            ImageRequest.Builder(context).data(file).size(1600, 800).build(), label,
+            ImageRequest.Builder(context).data(file).apply {
+                if (fit.hasEffects) {
+                    size(ArtistRasterSize(file, 1024))
+                    transformations(ArtistVisualEffects(fit))
+                } else size(1600, 800)
+            }.build(), label,
             Modifier.fillMaxSize().graphicsLayer {
                 scaleX = fit.scale; scaleY = fit.scale
                 translationX = size.width * fit.x; translationY = (if (fit.headerCoordinates) canvasPixels else size.height) * fit.y
             },
             contentScale = ContentScale.Fit,
-            colorFilter = if (tint) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
+            colorFilter = if (tint && !fit.hasEffects) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
             onSuccess = { onSuccess() }, onError = { onError() },
         )
     }
@@ -151,10 +166,49 @@ private fun ArtistLayoutEditor(
                     Text(tr(R.string.artist_vertical))
                     Slider(draft.y, { draft = draft.copy(y = it) }, valueRange = -1f..1f)
                     Text(tr(R.string.artist_zoom_hint), style = MaterialTheme.typography.bodySmall)
+                    EffectSlider(R.string.artist_brightness, draft.brightness, -100f..100f) { draft = draft.copy(brightness = it) }
+                    EffectSlider(R.string.glow, draft.glow, 0f..100f) { draft = draft.copy(glow = it) }
+                    EffectSlider(R.string.shadow, draft.shadow, 0f..100f) { draft = draft.copy(shadow = it) }
+                    EffectToggle(R.string.artist_grayscale, draft.grayscale) { draft = draft.copy(grayscale = it) }
+                    EffectToggle(R.string.artist_invert, draft.inverted) { draft = draft.copy(inverted = it) }
+                    EffectToggle(R.string.artist_remove_background, draft.removeBackground) { draft = draft.copy(removeBackground = it) }
+                    if (draft.removeBackground) EffectSlider(R.string.artist_background_tolerance, draft.backgroundTolerance, 0f..100f) {
+                        draft = draft.copy(backgroundTolerance = it)
+                    }
                     PrismTextButton(onClick = { draft = ArtistImageLayout(headerCoordinates = true) }) { Text(tr(R.string.reset)) }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun EffectSlider(label: Int, value: Int, range: ClosedFloatingPointRange<Float>, onChange: (Int) -> Unit) {
+    var position by remember(value) { mutableFloatStateOf(value.toFloat()) }
+    Text(tr(label) + " · " + position.toInt())
+    Slider(position, { position = it }, valueRange = range, onValueChangeFinished = { onChange(position.toInt()) })
+}
+
+@Composable
+private fun EffectToggle(label: Int, enabled: Boolean, onChange: (Boolean) -> Unit) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text(tr(label), Modifier.weight(1f))
+        com.prism.music.ui.components.PrismSwitch(enabled, onChange)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ArtistIconAction(
+    icon: androidx.compose.ui.graphics.vector.ImageVector, label: Int, enabled: Boolean = true, onClick: () -> Unit,
+) {
+    val description = tr(label)
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text(description) } },
+        state = rememberTooltipState(),
+    ) {
+        IconButton(onClick = onClick, enabled = enabled) { Icon(icon, description) }
     }
 }
 
@@ -189,7 +243,7 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         if (destination != null && file != null) scope.launch {
             busy = true
             try {
-                ArtistImageExports.write(context, identities.store, ArtistImageAsset(file, 1f), layout.copy(blend = "normal", removeBackground = false), destination, rendered)
+                ArtistImageExports.write(context, identities.store, ArtistImageAsset(file, 1f), layout, destination, rendered)
                 Toast.makeText(context, tr(R.string.saved, name), Toast.LENGTH_SHORT).show()
             }
             catch (e: CancellationException) { throw e }
@@ -206,11 +260,11 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         }
     }
     adjusting?.let { kind ->
-        identities.store.file(identities.asset(page.id, kind))?.let { file ->
+        identities.asset(page.id, kind)?.let { asset ->
             ArtistLayoutEditor(page, kind, type, headerWidth, headerHeight,
-                if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout,
+                current.layout(kind, asset),
                 onSave = { layout ->
-                    change { if (kind == ArtistImageRole.LOGO) it.copy(logoLayout = layout) else it.copy(signatureLayout = layout) }
+                    change { it.withLayout(kind, asset, layout) }
                     adjusting = null
                 }, onDismiss = { adjusting = null })
         }
@@ -236,13 +290,13 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         }
         for (kind in ArtistImageRole.entries) {
             val label = tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature)
-            val entry = entries[page.id]
-            val local = if (kind == ArtistImageRole.LOGO) entry?.localLogo else entry?.localSignature
+            val local = current.local(kind)
+            val savedAssets = current.assets(kind)
             val shown = identities.asset(page.id, kind)
             Text(label, style = MaterialTheme.typography.titleMedium)
             shown?.let { asset ->
                 identities.store.file(asset)?.let { file ->
-                    ArtistMark(file, label, if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout, 74.dp,
+                    ArtistMark(file, label, current.layout(kind, shown), 74.dp,
                         tint = kind == ArtistImageRole.SIGNATURE && local == null && file.extension == "svg")
                 }
                 asset.source?.takeIf { it.startsWith("https://") }?.let { source ->
@@ -255,26 +309,57 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
                 Column {
                     PrismTextButton(onClick = {
                         exportFile = shown.file
-                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout)
+                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), current.layout(kind, shown))
                         exportRendered = false
                         val request = ArtistExportRequest(ArtistImageExports.mime(shown.file), ArtistImageExports.name(page.name, kind, shown.file, false))
                         exportName = request.name; saveDocument.launch(request)
                     }, enabled = !busy) { Text(tr(R.string.artist_export_original)) }
                     PrismTextButton(onClick = {
                         exportFile = shown.file
-                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), if (kind == ArtistImageRole.LOGO) current.logoLayout else current.signatureLayout)
+                        exportLayout = kotlinx.serialization.json.Json.encodeToString(ArtistImageLayout.serializer(), current.layout(kind, shown))
                         exportRendered = true
                         val request = ArtistExportRequest(ArtistImageExports.mime("export.png"), ArtistImageExports.name(page.name, kind, shown.file, true))
                         exportName = request.name; saveDocument.launch(request)
                     }, enabled = !busy) { Text(tr(R.string.artist_export_png)) }
                 }
             }
-            if (shown != null) Row {
-                PrismTextButton(onClick = { adjusting = kind }, enabled = !busy) { Text(tr(R.string.artist_adjust)) }
+            if (savedAssets.isNotEmpty()) LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                itemsIndexed(savedAssets, key = { _, asset -> asset.file }) { index, asset ->
+                    val selected = asset.file == local?.file
+                    val description = tr(R.string.artist_saved_image, index + 1)
+                    Surface(
+                        modifier = Modifier.size(68.dp).semantics { this.selected = selected },
+                        shape = com.prism.music.ui.theme.LocalUi.current.card,
+                        color = if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        onClick = { change { it.select(kind, asset.file) } },
+                    ) {
+                        AsyncImage(identities.store.file(asset), description, contentScale = ContentScale.Fit,
+                            modifier = Modifier.padding(6.dp))
+                    }
+                }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                PrismTextButton(onClick = { role = kind; picker.launch(ARTIST_IMAGE_MIME_TYPE) }, enabled = !busy) { Text(tr(R.string.choose_a_photo)) }
-                if (local != null) PrismTextButton(onClick = { scope.launch { identities.store.clearLocal(page.id, kind) } }, enabled = !busy) { Text(tr(R.string.reset)) }
+                ArtistIconAction(com.prism.music.ui.theme.PrismIcons.Photo, R.string.choose_a_photo,
+                    !busy && savedAssets.size < ArtistIdentityStore.MAX_ASSETS_PER_ROLE) {
+                    role = kind
+                    picker.launch(ARTIST_IMAGE_MIME_TYPE)
+                }
+                if (shown != null) ArtistIconAction(com.prism.music.ui.theme.PrismIcons.Edit, R.string.artist_adjust, !busy) { adjusting = kind }
+                if (local != null) {
+                    val index = savedAssets.indexOfFirst { it.file == local.file }
+                    ArtistIconAction(com.prism.music.ui.theme.PrismIcons.Star, R.string.artist_make_first, !busy && index > 0) {
+                        change { it.reorder(kind, local.file, 0) }
+                    }
+                    ArtistIconAction(com.prism.music.ui.theme.PrismIcons.ChevronUp, R.string.artist_move_earlier, !busy && index > 0) {
+                        change { it.reorder(kind, local.file, index - 1) }
+                    }
+                    ArtistIconAction(com.prism.music.ui.theme.PrismIcons.ChevronDown, R.string.artist_move_later, !busy && index in 0 until savedAssets.lastIndex) {
+                        change { it.reorder(kind, local.file, index + 1) }
+                    }
+                    ArtistIconAction(com.prism.music.ui.theme.PrismIcons.Delete, R.string.remove, !busy) {
+                        scope.launch { identities.store.removeLocal(page.id, kind, local.file) }
+                    }
+                }
             }
         }
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

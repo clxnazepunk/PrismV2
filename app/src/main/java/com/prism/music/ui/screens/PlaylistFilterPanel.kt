@@ -50,10 +50,10 @@ internal fun PlaylistFilterPanel(
                 if (showMoods) {
                     Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(tr(R.string.music_moods), Modifier.weight(1f), style = MaterialTheme.typography.labelLarge)
-                        if (onRefresh != null) PrismTextButton(onClick = onRefresh) { Text(tr(R.string.refresh_the_list)) }
+                        PrismTextButton(onClick = { onRefresh?.invoke() }, enabled = onRefresh != null) { Text(tr(R.string.moods_refresh)) }
                     }
                     if (moods.isNotEmpty()) TagChips(moods, mood, onMood, idle)
-                    else Text(tr(moodMessage), Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    if (moods.isEmpty() || moodMessage == R.string.loading || moodMessage == R.string.music_tag_connection_failed) Text(tr(moodMessage), Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.bodySmall)
                 }
             }

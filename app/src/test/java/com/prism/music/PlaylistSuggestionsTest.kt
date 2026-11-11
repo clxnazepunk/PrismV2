@@ -13,6 +13,32 @@ import org.junit.Test
 class PlaylistSuggestionsTest {
     private fun song(id: String) = Song(id, id)
 
+    @Test fun discoveryTuningChangesGenreAndArtistRankingsAcrossTheWholePlaylist() {
+        val lead = com.prism.music.data.model.ArtistRef("Lead")
+        val guest = com.prism.music.data.model.ArtistRef("New")
+        val rock = song("rock").copy(artists = listOf(lead))
+        val salsa = song("salsa").copy(artists = listOf(com.prism.music.data.model.ArtistRef("Other")))
+        val similar = song("familiar").copy(artists = listOf(lead))
+        val exploratory = song("new").copy(artists = listOf(guest))
+        val tags = mapOf(rock.id to setOf("Rock"), salsa.id to setOf("Salsa"),
+            similar.id to setOf("Salsa"), exploratory.id to setOf("Jazz"))
+        val existing = listOf(rock, salsa)
+        val candidates = listOf(similar, exploratory)
+        val close = com.prism.music.data.foryou.PlaylistDiscovery(genre = 0, artist = 0, width = 0)
+        val wide = close.copy(genre = 2, artist = 2, width = 100)
+        assertEquals(similar, PlaylistSuggestions.rank(existing, candidates, tags, close, emptySet()).first())
+        assertEquals(exploratory, PlaylistSuggestions.rank(existing, candidates, tags, wide, emptySet()).first())
+        assertEquals(exploratory, PlaylistSuggestions.rank(existing, candidates, tags, close, setOf(similar.id)).first())
+        assertEquals(setOf(rock, salsa), PlaylistSuggestions.discoverySeeds(existing, tags, 1).toSet())
+    }
+
+    @Test fun addingReplacesOnlyTheChosenSlotAndRejectsDuplicates() {
+        val old = listOf(song("a"), song("b"), song("c"))
+        assertEquals(listOf(song("a"), song("fresh"), song("c")), PlaylistSuggestions.replaceSlot(old, "b", song("fresh")))
+        assertEquals(old, PlaylistSuggestions.replaceSlot(old, "b", song("a")))
+        assertEquals(listOf(song("a"), song("c")), PlaylistSuggestions.replaceSlot(old, "b", null))
+    }
+
     @Test fun excludesExistingDuplicatesAndPrivateContentWithoutChangingOrder() {
         val existing = listOf(song("a"), song("b"))
         val candidates = listOf(song("b"), song("c"), song("c"), song("local:1"),

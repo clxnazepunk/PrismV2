@@ -17,6 +17,31 @@ class ArtistIdentityStoreTest {
     private val svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><path d="M0 0L20 20"/></svg>""".toByteArray()
     private fun directory() = Files.createTempDirectory("prism-artists").toFile()
 
+    @Test fun eachRoleKeepsIndependentOrderSelectionAndEffectsAfterReload(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val store = ArtistIdentityStore(dir)
+            val svg = """<svg xmlns="http://www.w3.org/2000/svg" width="20" height="10"/>""".toByteArray()
+            val first = store.install("artist", ArtistImageRole.LOGO, svg, true)
+            store.update("artist") { it.withLayout(ArtistImageRole.LOGO, first, ArtistImageLayout(scale = 4f, inverted = true)) }
+            val second = store.install("artist", ArtistImageRole.LOGO, svg, true)
+            val signature = store.install("artist", ArtistImageRole.SIGNATURE, svg, true)
+            store.update("artist") { it.cycle(ArtistImageRole.LOGO).reorder(ArtistImageRole.LOGO, second.file, 0) }
+            val reopened = ArtistIdentityStore(dir)
+            val entry = reopened.entries.value.getValue("artist")
+            assertEquals(listOf(second, first), entry.assets(ArtistImageRole.LOGO))
+            assertEquals(first, entry.chosen(ArtistImageRole.LOGO))
+            assertEquals(second, entry.cycle(ArtistImageRole.LOGO).chosen(ArtistImageRole.LOGO))
+            assertEquals(signature, entry.chosen(ArtistImageRole.SIGNATURE))
+            assertEquals(4f, entry.layout(ArtistImageRole.LOGO).scale, 0f)
+            assertTrue(entry.layout(ArtistImageRole.LOGO).inverted)
+            reopened.removeLocal("artist", ArtistImageRole.LOGO, first.file)
+            assertNull(reopened.file(first))
+            assertNotNull(reopened.file(second))
+            assertNotNull(reopened.file(signature))
+        } finally { dir.deleteRecursively() }
+    }
+
     @Test fun logoSignatureAndArtistsWithSimilarIdsStayIndependent(): Unit = runBlocking {
         val dir = directory()
         try {

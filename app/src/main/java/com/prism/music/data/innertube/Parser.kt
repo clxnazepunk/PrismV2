@@ -101,9 +101,21 @@ object Parser {
 
     private fun isSeparator(t: String) = t.isBlank() || t.trim() == "•" || t.trim() == "&" || t.trim() == ","
 
+    private val featuredSeparator = Regex("""(?:feat\.?|ft\.?|featuring|con)""", RegexOption.IGNORE_CASE)
+
     fun artistsFromRuns(runs: List<JsonObject>): List<ArtistRef> {
-        val linked = runs.filter { pageType(it["navigationEndpoint"]) in setOf(ARTIST, CHANNEL) }.map {
-            ArtistRef(it.str("text") ?: "", it.str("navigationEndpoint", "browseEndpoint", "browseId"))
+        val linked = mutableListOf<ArtistRef>()
+        var guests = false
+        for (run in runs) {
+            val nav = run["navigationEndpoint"]
+            val text = run.str("text").orEmpty()
+            if (pageType(nav) in setOf(ARTIST, CHANNEL)) {
+                if (text.isNotBlank()) linked += ArtistRef(text, nav.str("browseEndpoint", "browseId"), guests)
+            } else if (linked.isNotEmpty() && nav == null && featuredSeparator.matches(text.trim())) {
+                guests = true
+            } else if (text.trim() == "•") {
+                guests = false
+            }
         }
         if (linked.isNotEmpty()) return linked
         // Unlinked: "Artist • Album • 3:10" or "Song • Artist • 3:10"
@@ -414,9 +426,13 @@ object Parser {
             ?: r.str("overlay", "musicItemThumbnailOverlayRenderer", "content", "musicPlayButtonRenderer", "playNavigationEndpoint", "watchEndpoint", "videoId")
             ?: return null
         val title = flexColumn(r, 0).joinToString("") { it.str("text") ?: "" }.takeIf { it.isNotBlank() } ?: return null
-        val artists = flexColumn(r, 1).mapNotNull { run ->
+        val artists = mutableListOf<ArtistRef>()
+        var guests = false
+        for (run in flexColumn(r, 1)) {
             val name = run.str("text")?.trim().orEmpty()
-            if (isSeparator(name)) null else ArtistRef(name, run.str("navigationEndpoint", "browseEndpoint", "browseId"))
+            val nav = run["navigationEndpoint"]
+            if (artists.isNotEmpty() && nav == null && featuredSeparator.matches(name)) guests = true
+            else if (!isSeparator(name)) artists += ArtistRef(name, nav.str("browseEndpoint", "browseId"), guests)
         }
         val albumRun = flexColumn(r, 2).firstOrNull()
         return Song(

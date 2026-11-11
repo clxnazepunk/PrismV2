@@ -26,6 +26,8 @@ data class ArtistDisplayChoice(val logo: Boolean = true, val signature: Boolean 
 @Serializable
 data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Float = 0f, val headerCoordinates: Boolean = false,
     val blend: String = "normal", val removeBackground: Boolean = false, val backgroundTolerance: Int = 32,
+    val brightness: Int = 0, val glow: Int = 0, val shadow: Int = 0,
+    val grayscale: Boolean = false, val inverted: Boolean = false,
 ) {
     fun bounded() = ArtistImageLayout(
         scale.takeIf { it.isFinite() }?.coerceIn(0.25f, 12f) ?: 1f,
@@ -34,7 +36,10 @@ data class ArtistImageLayout(val scale: Float = 1f, val x: Float = 0f, val y: Fl
         headerCoordinates,
         blend.takeIf { it in setOf("normal", "multiply", "screen", "darken", "lighten") } ?: "normal",
         removeBackground, backgroundTolerance.coerceIn(0, 100),
+        brightness.coerceIn(-100, 100), glow.coerceIn(0, 100), shadow.coerceIn(0, 100), grayscale, inverted,
     )
+
+    val hasEffects: Boolean get() = removeBackground || brightness != 0 || glow != 0 || shadow != 0 || grayscale || inverted
 
     /** Preserve the position of saves made with the original small image slots. */
     fun forHeader(headerHeight: Float, slotHeight: Float): ArtistImageLayout =

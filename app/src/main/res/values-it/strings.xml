@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">Last.fm ha rifiutato la chiave.</string>
     <string name="music_tag_connection_failed">Impossibile connettersi a Last.fm. Riprova.</string>
     <string name="music_tag_scrobbling_unavailable">La sincronizzazione della cronologia di ascolto non è disponibile in questa versione.</string>
+    <string name="discovery_genre">Somiglianza dei generi</string>
+    <string name="discovery_similar">Simili</string>
+    <string name="discovery_exploratory">Esplorativi</string>
+    <string name="discovery_artist">Scoperta di artisti</string>
+    <string name="discovery_familiar">Familiari</string>
+    <string name="discovery_new">Scopri</string>
+    <string name="discovery_width">Esplorazione musicale</string>
+    <string name="discovery_repetition">Riduci le ripetizioni</string>
+    <string name="lastfm_credentials_needed">Per collegare l’account, inserisci la chiave API e il segreto condiviso della stessa app Last.fm.</string>
+    <string name="lastfm_secret">Segreto condiviso</string>
+    <string name="moods_none">Nessuno stato d’animo supportato trovato per questi brani.</string>
+    <string name="moods_refresh">Aggiorna stati d’animo</string>
+    <string name="artist_next_image">Immagine salvata successiva</string>
+    <string name="artist_brightness">Luminosità</string>
+    <string name="artist_grayscale">Scala di grigi</string>
+    <string name="artist_saved_image">Immagine salvata %1$d</string>
+    <string name="artist_make_first">Sposta all’inizio</string>
+    <string name="artist_move_earlier">Sposta prima</string>
+    <string name="artist_move_later">Sposta dopo</string>
 </resources>

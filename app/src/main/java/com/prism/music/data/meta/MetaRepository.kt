@@ -694,6 +694,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     private val trackTagsLock = Mutex()
 
     enum class TagConnection { VALID, INVALID, UNAVAILABLE }
+    enum class TagResult { READY, NO_KEY, ERROR }
 
     suspend fun checkTagConnection(key: String): TagConnection = withContext(Dispatchers.IO) {
         val response = trackTags(key, "Radiohead", "Paranoid Android")
@@ -722,24 +723,33 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     }
 
     /** Explicit opt-in key, no Spotify or YouTube session, and only the requested visible batch. */
-    suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun resolveSongTags(songs: List<Song>, budget: TagLookupBudget = TagLookupBudget(), refreshEmpty: Boolean = false, onBatch: suspend (Map<String, Set<String>>) -> Unit) = withContext(Dispatchers.IO) {
         val cached = cachedSongTags(songs)
         if (cached.isNotEmpty()) onBatch(cached)
         val apiKey = tagKey().trim()
-        if (apiKey.isBlank()) return@withContext
+        if (apiKey.isBlank()) return@withContext TagResult.NO_KEY
         var failures = 0
+        var hadError = false
         for (song in songs.distinctBy { it.id }) {
             if (song.isLocal || song.isUpload || song.isRss || song.isEpisode || song.isLive ||
                 song.primaryArtist.isBlank() || song.title.isBlank()) continue
             val cachedEntry = dao.genre(songTagsKey(song))
-            if (cachedEntry != null && System.currentTimeMillis() - cachedEntry.fetchedAt < 7 * 24 * 60 * 60 * 1000L) continue
+            if (cachedEntry != null) {
+                val age = System.currentTimeMillis() - cachedEntry.fetchedAt
+                val ttl = if (refreshEmpty && cachedEntry.genre.orEmpty().split('|').none { it in MusicTags.moods }) 120_000L else 7 * 24 * 60 * 60 * 1000L
+                if (age < ttl) continue
+            }
             // A page can contain thousands of songs. Ask at most 40 uncached songs per explicit refresh/open.
             if (!budget.tryTake()) break
             val response = trackTagsLock.withLock {
                 delay(300)
                 trackTags(apiKey, song.primaryArtist, cleanTitle(song.title))
             }
-            if (response == null) { if (++failures >= 3) break; continue }
+            if (response == null) {
+                hadError = true
+                if (++failures >= 3) break
+                continue
+            }
             failures = 0
             when (response.field("error")?.toString()) {
                 null -> Unit
@@ -748,22 +758,27 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
                     dao.putGenre(GenreEntity(songTagsKey(song), "", System.currentTimeMillis()))
                     continue
                 }
-                else -> break
+                else -> return@withContext TagResult.ERROR
             }
             val data = response.field("toptags")
-            val tags = data.field("tag") as? JsonArray ?: continue
+            val tags = data.field("tag") as? JsonArray
+            if (tags == null) { hadError = true; continue }
             val attr = data.field("@attr")
             val artistIdentity = tagIdentity(song.primaryArtist)
             val trackIdentity = tagIdentity(cleanTitle(song.title))
-            if (artistIdentity.isBlank() || trackIdentity.isBlank() ||
-                tagIdentity(attr.str("artist").orEmpty()) != artistIdentity ||
-                tagIdentity(attr.str("track").orEmpty()) != trackIdentity) continue
+            val wrongArtist = attr.str("artist")?.let { tagIdentity(it) != artistIdentity } == true
+            val wrongTrack = attr.str("track")?.let { tagIdentity(it) != trackIdentity } == true
+            if (artistIdentity.isBlank() || trackIdentity.isBlank() || wrongArtist || wrongTrack) {
+                hadError = true
+                continue
+            }
             val labels = MusicTags.supportedTags(tags.mapNotNull { tag ->
                 tag.str("name")?.let { it to (tag.str("count")?.toIntOrNull() ?: 0) }
             }.toMap())
             dao.putGenre(GenreEntity(songTagsKey(song), labels.joinToString("|"), System.currentTimeMillis()))
             onBatch(mapOf(song.id to (cached[song.id].orEmpty() + labels)))
         }
+        if (hadError) TagResult.ERROR else TagResult.READY
     }
 
 }
