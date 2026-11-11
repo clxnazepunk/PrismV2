@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">دانلود نسخه اصلی</string>
     <string name="artist_export_png">خروجی PNG با تنظیمات پس‌زمینه</string>
     <string name="artist_font_gradient">گرادیان</string>
+    <string name="show_moods">نمایش حال‌وهوا</string>
+    <string name="music_tag_key_format">کلید ۳۲ کاراکتری API سرویس Last.fm را وارد کنید.</string>
+    <string name="music_tag_saved">کلید در این دستگاه ذخیره شد.</string>
+    <string name="music_tag_check">بررسی اتصال</string>
+    <string name="music_tag_get_key">دریافت کلید API</string>
+    <string name="music_tag_connection_ok">اتصال به Last.fm تأیید شد.</string>
+    <string name="music_tag_key_rejected">Last.fm کلید را نپذیرفت.</string>
+    <string name="music_tag_connection_failed">اتصال به Last.fm ممکن نبود. دوباره تلاش کنید.</string>
+    <string name="music_tag_scrobbling_unavailable">همگام‌سازی سابقهٔ شنیدن در این نسخه در دسترس نیست.</string>
 </resources>

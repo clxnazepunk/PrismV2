@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">下載原圖</string>
     <string name="artist_export_png">匯出套用背景調整的PNG</string>
     <string name="artist_font_gradient">漸層</string>
+    <string name="show_moods">顯示心情</string>
+    <string name="music_tag_key_format">請輸入 32 個字元的 Last.fm API 金鑰。</string>
+    <string name="music_tag_saved">金鑰已儲存到此裝置。</string>
+    <string name="music_tag_check">檢查連線</string>
+    <string name="music_tag_get_key">取得 API 金鑰</string>
+    <string name="music_tag_connection_ok">已驗證 Last.fm 連線。</string>
+    <string name="music_tag_key_rejected">Last.fm 拒絕了此金鑰。</string>
+    <string name="music_tag_connection_failed">無法連線到 Last.fm。請再試一次。</string>
+    <string name="music_tag_scrobbling_unavailable">此版本無法同步聆聽記錄。</string>
 </resources>

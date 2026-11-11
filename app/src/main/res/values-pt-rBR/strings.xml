@@ -4991,4 +4991,13 @@
     <string name="artist_export_original">Baixar original</string>
     <string name="artist_export_png">Exportar PNG com ajustes de fundo</string>
     <string name="artist_font_gradient">Degradê</string>
+    <string name="show_moods">Mostrar estados de espírito</string>
+    <string name="music_tag_key_format">Digite a chave de API do Last.fm de 32 caracteres.</string>
+    <string name="music_tag_saved">Chave salva neste dispositivo.</string>
+    <string name="music_tag_check">Verificar conexão</string>
+    <string name="music_tag_get_key">Obter chave de API</string>
+    <string name="music_tag_connection_ok">Conexão com o Last.fm verificada.</string>
+    <string name="music_tag_key_rejected">O Last.fm rejeitou a chave.</string>
+    <string name="music_tag_connection_failed">Não foi possível conectar ao Last.fm. Tente novamente.</string>
+    <string name="music_tag_scrobbling_unavailable">A sincronização do histórico de reprodução está indisponível nesta versão.</string>
 </resources>

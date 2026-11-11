@@ -1,5 +1,8 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
+
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.prefs.PlayerPart
@@ -1195,7 +1198,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             if (inHeader(PlayerPart.TITLE)) PlayerMarquee(
                                 // The title leads, the artist under it a size smaller (#41). Spectrum: large and light
                                 // (a tenth under headlineMedium, so longer titles fit before they scroll).
-                                song.title, MaterialTheme.typography.headlineMedium.let { it.copy(fontSize = it.fontSize * 0.9f * titleScale, lineHeight = it.lineHeight * 0.9f * titleScale, fontWeight = settings.type.playerTitleWeight.title ?: it.fontWeight) }, Color.White, scrolls,
+                                song.displayTitle, MaterialTheme.typography.headlineMedium.let { it.copy(fontSize = it.fontSize * 0.9f * titleScale, lineHeight = it.lineHeight * 0.9f * titleScale, fontWeight = settings.type.playerTitleWeight.title ?: it.fontWeight) }, Color.White, scrolls,
                                 Modifier.testTag("playerTitle").combinedClickable(enabled = song.album?.id != null || menuHeld != null, onLongClick = menuHeld) {
                                     song.album?.id?.let { onCollapse(); nav.go(Routes.album(it)) }
                                 },
@@ -1206,7 +1209,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             var pickArtist by remember(song.id) { mutableStateOf(false) }
                             if (inHeader(PlayerPart.ARTIST)) Box {
                                 // #289 (1.8.1): each name its own link, if asked for; a tap between them still asks.
-                                val artistLine = artistLinkText(song.artistText, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) }
+                                val artistLine = artistLinkText(song.displayArtists, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) }
                                 PlayerMarquee(
                                     artistLine, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
                                     Modifier.testTag("playerArtist").combinedClickable(enabled = linked.isNotEmpty() || menuHeld != null, onLongClick = menuHeld) {
@@ -1523,8 +1526,8 @@ private fun FullscreenVideo(song: Song, forceLandscape: Boolean, pip: Boolean = 
         AnimatedVisibility(controls && !pip, enter = fadeIn(), exit = fadeOut()) {
             Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {
                 Column(Modifier.align(Alignment.TopStart).padding(24.dp)) {
-                    Text(song.title, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 1)
-                    Text(song.artistText, color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+                    Text(song.displayTitle, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 1)
+                    Text(song.displayArtists, color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium, maxLines = 1)
                 }
                 Box(
                     Modifier.align(Alignment.TopEnd).padding(16.dp).size(44.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f)).clickable(onClick = onExit),

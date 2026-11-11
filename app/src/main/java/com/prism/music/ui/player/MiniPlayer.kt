@@ -1,5 +1,8 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
+
 import com.prism.music.R
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
@@ -244,9 +247,9 @@ fun MiniPlayer(
                 // #328: as the version picked to play in its place, if any.
                 val song = com.prism.music.data.SongVersions.shownOf(playing)
                 Column {
-                    Text(song.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleSmall)
-                    if (style != MiniPlayerStyle.SLIM || song.artistText.isNotBlank()) Text(
-                        song.artistText, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    Text(song.displayTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleSmall)
+                    if (style != MiniPlayerStyle.SLIM || song.displayArtists.isNotBlank()) Text(
+                        song.displayArtists, maxLines = 1, overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                     )
                 }

@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">I-download ang orihinal</string>
     <string name="artist_export_png">I-export ang PNG na may inayos na background</string>
     <string name="artist_font_gradient">Gradient</string>
+    <string name="show_moods">Ipakita ang mga mood</string>
+    <string name="music_tag_key_format">Ilagay ang 32-character na API key ng Last.fm.</string>
+    <string name="music_tag_saved">Na-save ang key sa device na ito.</string>
+    <string name="music_tag_check">Suriin ang koneksyon</string>
+    <string name="music_tag_get_key">Kumuha ng API key</string>
+    <string name="music_tag_connection_ok">Naberipika ang koneksyon sa Last.fm.</string>
+    <string name="music_tag_key_rejected">Tinanggihan ng Last.fm ang key.</string>
+    <string name="music_tag_connection_failed">Hindi makakonekta sa Last.fm. Subukan muli.</string>
+    <string name="music_tag_scrobbling_unavailable">Hindi available ang pag-sync ng kasaysayan ng pakikinig sa build na ito.</string>
 </resources>

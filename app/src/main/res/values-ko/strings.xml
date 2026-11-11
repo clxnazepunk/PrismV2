@@ -4863,4 +4863,13 @@
     <string name="artist_export_original">원본 다운로드</string>
     <string name="artist_export_png">배경 조정이 적용된 PNG 내보내기</string>
     <string name="artist_font_gradient">그라데이션</string>
+    <string name="show_moods">분위기 표시</string>
+    <string name="music_tag_key_format">32자리 Last.fm API 키를 입력하세요.</string>
+    <string name="music_tag_saved">이 기기에 키를 저장했습니다.</string>
+    <string name="music_tag_check">연결 확인</string>
+    <string name="music_tag_get_key">API 키 받기</string>
+    <string name="music_tag_connection_ok">Last.fm 연결을 확인했습니다.</string>
+    <string name="music_tag_key_rejected">Last.fm에서 키를 거부했습니다.</string>
+    <string name="music_tag_connection_failed">Last.fm에 연결할 수 없습니다. 다시 시도하세요.</string>
+    <string name="music_tag_scrobbling_unavailable">이 빌드에서는 청취 기록 동기화를 사용할 수 없습니다.</string>
 </resources>

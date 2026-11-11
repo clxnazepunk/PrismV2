@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 
+internal const val LEGACY_TAG_KEY = "music_tag_api_key"
+internal fun isMusicTagKey(value: String): Boolean = value.matches(Regex("[a-fA-F0-9]{32}"))
+
 /** An artist the listener starred. */
 @Serializable
 data class FavoriteArtist(val id: String, val name: String, val thumbnail: String? = null, val at: Long = 0)
@@ -33,11 +36,27 @@ class ArtistPrefs(context: Context) {
     } ?: ArtistTypographyConfig()
 
     val typography = MutableStateFlow(readTypography())
-    val musicTagKey = MutableStateFlow(prefs.getString("music_tag_api_key", "").orEmpty())
-    fun setMusicTagKey(key: String) {
+    private val tagPrefs = context.getSharedPreferences("lastfm_tags", Context.MODE_PRIVATE)
+    private val tagKey = MutableStateFlow(readMusicTagKey())
+    val musicTagKey: kotlinx.coroutines.flow.StateFlow<String> = tagKey
+
+    private fun readMusicTagKey(): String {
+        val previous = prefs.getString(LEGACY_TAG_KEY, null)
+        val current = tagPrefs.getString(LEGACY_TAG_KEY, null)
+        if (previous != null && (current != null || tagPrefs.edit().putString(LEGACY_TAG_KEY, previous.trim()).commit())) {
+            prefs.edit().remove(LEGACY_TAG_KEY).apply()
+        }
+        return current ?: previous.orEmpty().trim()
+    }
+
+    /** Saving is local. A network failure must not invalidate a syntactically valid key. */
+    suspend fun setMusicTagKey(key: String): Boolean = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         val value = key.trim()
-        prefs.edit().putString("music_tag_api_key", value).apply()
-        musicTagKey.value = value
+        if (value.isNotEmpty() && !isMusicTagKey(value)) return@withContext false
+        if (!tagPrefs.edit().putString(LEGACY_TAG_KEY, value).commit()) return@withContext false
+        prefs.edit().remove(LEGACY_TAG_KEY).apply()
+        tagKey.value = value
+        true
     }
 
     fun setTypography(value: ArtistTypographyConfig) {
@@ -49,7 +68,7 @@ class ArtistPrefs(context: Context) {
     /** Reads the saved choices again (after "Bring your Prism" merged a phone's into them, 1.8.0). */
     fun reload() {
         typography.value = readTypography()
-        musicTagKey.value = prefs.getString("music_tag_api_key", "").orEmpty()
+        tagKey.value = readMusicTagKey()
         favorites.value = prefs.getString("favorites", null)?.let { runCatching { InnerTube.json.decodeFromString(listSerializer, it) }.getOrNull() } ?: emptyList()
         signatures.value = prefs.all.filterKeys { it.startsWith(SIG) }.mapNotNull { (k, v) -> (v as? String)?.let { k.removePrefix(SIG) to it } }.toMap()
         colors.value = prefs.all.filterKeys { it.startsWith(COL) }.mapNotNull { (k, v) -> (v as? Int)?.let { k.removePrefix(COL) to it } }.toMap()

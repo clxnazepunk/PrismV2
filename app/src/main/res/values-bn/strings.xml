@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">আসল ছবি ডাউনলোড</string>
     <string name="artist_export_png">পটভূমি সমন্বয়সহ PNG রপ্তানি</string>
     <string name="artist_font_gradient">গ্রেডিয়েন্ট</string>
+    <string name="show_moods">মুড দেখান</string>
+    <string name="music_tag_key_format">Last.fm-এর ৩২ অক্ষরের API কী লিখুন।</string>
+    <string name="music_tag_saved">এই ডিভাইসে কী সংরক্ষিত হয়েছে।</string>
+    <string name="music_tag_check">সংযোগ যাচাই করুন</string>
+    <string name="music_tag_get_key">API কী নিন</string>
+    <string name="music_tag_connection_ok">Last.fm সংযোগ যাচাই হয়েছে।</string>
+    <string name="music_tag_key_rejected">Last.fm কী প্রত্যাখ্যান করেছে।</string>
+    <string name="music_tag_connection_failed">Last.fm-এ সংযোগ করা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="music_tag_scrobbling_unavailable">এই বিল্ডে শোনার ইতিহাস সিঙ্ক করা যায় না।</string>
 </resources>

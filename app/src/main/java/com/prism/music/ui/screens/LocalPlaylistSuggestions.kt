@@ -51,6 +51,7 @@ internal fun LocalPlaylistSuggestions(
     existing: List<Song>,
     state: LocalPlaylistSuggestionsState,
     scope: CoroutineScope,
+    online: Boolean,
 ) {
     val c = LocalContainer.current
     val context = LocalContext.current
@@ -68,8 +69,12 @@ internal fun LocalPlaylistSuggestions(
         PlaylistSuggestions.select(existing, state.songs, allowed = ::allowed)
     }
 
+    val hasSeeds = remember(existing, disliked, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
+        PlaylistSuggestions.seeds(existing.filter(::allowed)).isNotEmpty()
+    }
+
     fun load() {
-        if (state.loading) return
+        if (state.loading || !online || !hasSeeds) return
         state.requested = true
         state.loading = true
         state.failed = false
@@ -110,24 +115,24 @@ internal fun LocalPlaylistSuggestions(
         }
     }
 
-    LaunchedEffect(playlistId) { if (!state.requested) load() }
+    LaunchedEffect(playlistId, online, hasSeeds) { if (!state.requested) load() }
     Column {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             SectionHeader(tr(R.string.playlist_recommended_songs), Modifier.weight(1f))
-            IconButton(onClick = { load() }, enabled = !state.loading, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
+            IconButton(onClick = { load() }, enabled = !state.loading && online && hasSeeds, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
                 Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
             }
         }
         when {
+            !hasSeeds -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
+            !online && visible.isEmpty() -> Text(tr(R.string.you_re_offline), Modifier.padding(horizontal = 20.dp))
             state.loading -> LoadingState()
             state.failed -> PrismTextButton(onClick = { load() }, modifier = Modifier.padding(horizontal = 16.dp)) {
                 Text(tr(R.string.try_again))
             }
-            visible.isEmpty() -> PrismTextButton(onClick = { load() }, modifier = Modifier.padding(horizontal = 16.dp)) {
-                Text(tr(R.string.refresh_the_list))
-            }
+            visible.isEmpty() -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
         }
-        for (song in visible) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        for (song in visible.takeIf { hasSeeds }.orEmpty()) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             SongRow(song, Modifier.weight(1f), playing = current?.id == song.id) { c.player.playSingle(song) }
             IconButton(
                 onClick = { add(song) }, enabled = song.id !in state.adding,

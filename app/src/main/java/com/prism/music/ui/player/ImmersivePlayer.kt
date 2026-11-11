@@ -1,5 +1,8 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
+
 import com.prism.music.R
 import com.prism.music.tr
 import androidx.compose.ui.draw.clip
@@ -209,7 +212,7 @@ fun ImmersivePlayer(
             // For TalkBack the gestures are actions: a double tap opens the settings (the button only shows for a few
             // seconds), and the swipes and the hold have their own entries in its actions menu.
             .semantics {
-                contentDescription = tr(R.string.immersive_player_by, song.title, song.artistText)
+                contentDescription = tr(R.string.immersive_player_by, song.displayTitle, song.displayArtists)
                 onClick(tr(R.string.open_immersive_mode_settings)) { menu = true; true }
                 customActions = listOf(
                     CustomAccessibilityAction(tr(R.string.next_song)) { c.player.next(); true },
@@ -388,7 +391,7 @@ fun ImmersivePlayer(
     }
 
     if (menu) ActionSheet(song.thumbnail, { menu = false; button = false }) { close ->
-        ActionHeader(song.thumbnail, song.title, song.artistText)
+        ActionHeader(song.thumbnail, song.displayTitle, song.displayArtists)
         ActionGroup(
             tr(R.string.immersive_mode),
             listOf(
@@ -508,13 +511,13 @@ private fun TitleCard(song: Song) {
     @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            song.title, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
+            song.displayTitle, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Normal, textAlign = TextAlign.Center, shadow = lineShadow),
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(6.dp))
         Text(
-            song.artistText, color = Color.White.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis,
+            song.displayArtists, color = Color.White.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal, textAlign = TextAlign.Center, shadow = lineShadow),
             modifier = Modifier.fillMaxWidth(),
         )

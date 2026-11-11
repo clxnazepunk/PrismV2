@@ -322,6 +322,7 @@ class Backup(private val c: AppContainer) {
             ).forEach { put(it, BackupPart.DOWNLOADS) }
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
             put("lastfm", BackupPart.ACCOUNTS)
+            put("lastfm_tags", null)
             // 1.8.1: the Spotify connection's Client ID and switches go with the accounts (a Client ID is public in
             // PKCE); its tokens never travel, as Discord's sign-in doesn't (sealed by a key only this phone has anyway).
             put(com.prism.music.data.spotify.SpotifyStore.PREFS, BackupPart.ACCOUNTS)

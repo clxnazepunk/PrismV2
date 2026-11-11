@@ -4927,4 +4927,13 @@
     <string name="artist_export_original">Orijinali indir</string>
     <string name="artist_export_png">Arka plan ayarlarıyla PNG dışa aktar</string>
     <string name="artist_font_gradient">Gradyan</string>
+    <string name="show_moods">Ruh hâllerini göster</string>
+    <string name="music_tag_key_format">32 karakterli Last.fm API anahtarını girin.</string>
+    <string name="music_tag_saved">Anahtar bu cihaza kaydedildi.</string>
+    <string name="music_tag_check">Bağlantıyı denetle</string>
+    <string name="music_tag_get_key">API anahtarı al</string>
+    <string name="music_tag_connection_ok">Last.fm bağlantısı doğrulandı.</string>
+    <string name="music_tag_key_rejected">Last.fm anahtarı reddetti.</string>
+    <string name="music_tag_connection_failed">Last.fm bağlantısı kurulamadı. Tekrar deneyin.</string>
+    <string name="music_tag_scrobbling_unavailable">Bu sürümde dinleme geçmişi eşitlenemiyor.</string>
 </resources>

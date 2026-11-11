@@ -5183,4 +5183,13 @@
     <string name="artist_export_original">تنزيل الأصل</string>
     <string name="artist_export_png">تصدير PNG مع تعديلات الخلفية</string>
     <string name="artist_font_gradient">تدرج</string>
+    <string name="show_moods">إظهار الحالات المزاجية</string>
+    <string name="music_tag_key_format">أدخل مفتاح Last.fm المكوّن من 32 حرفًا.</string>
+    <string name="music_tag_saved">تم حفظ المفتاح على هذا الجهاز.</string>
+    <string name="music_tag_check">التحقق من الاتصال</string>
+    <string name="music_tag_get_key">الحصول على مفتاح API</string>
+    <string name="music_tag_connection_ok">تم التحقق من اتصال Last.fm.</string>
+    <string name="music_tag_key_rejected">رفض Last.fm المفتاح.</string>
+    <string name="music_tag_connection_failed">تعذر الاتصال بـ Last.fm. حاول مجددًا.</string>
+    <string name="music_tag_scrobbling_unavailable">مزامنة سجل الاستماع غير متاحة في هذا الإصدار.</string>
 </resources>
