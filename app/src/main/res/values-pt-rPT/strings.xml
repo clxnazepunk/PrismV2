@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">O Last.fm rejeitou a chave.</string>
     <string name="music_tag_connection_failed">Não foi possível ligar ao Last.fm. Tente novamente.</string>
     <string name="music_tag_scrobbling_unavailable">A sincronização do histórico de audição não está disponível nesta versão.</string>
+    <string name="discovery_genre">Semelhança de géneros</string>
+    <string name="discovery_similar">Semelhantes</string>
+    <string name="discovery_exploratory">Exploratórios</string>
+    <string name="discovery_artist">Descoberta de artistas</string>
+    <string name="discovery_familiar">Familiares</string>
+    <string name="discovery_new">Descobrir</string>
+    <string name="discovery_width">Exploração musical</string>
+    <string name="discovery_repetition">Reduzir repetições</string>
+    <string name="lastfm_credentials_needed">Para ligar a conta, introduza a chave de API e o segredo partilhado da mesma aplicação Last.fm.</string>
+    <string name="lastfm_secret">Segredo partilhado</string>
+    <string name="moods_none">Não foram encontrados estados de espírito compatíveis para estas faixas.</string>
+    <string name="moods_refresh">Atualizar estados de espírito</string>
+    <string name="artist_next_image">Próxima imagem guardada</string>
+    <string name="artist_brightness">Brilho</string>
+    <string name="artist_grayscale">Escala de cinzentos</string>
+    <string name="artist_saved_image">Imagem guardada %1$d</string>
+    <string name="artist_make_first">Mover para o início</string>
+    <string name="artist_move_earlier">Mover para a frente</string>
+    <string name="artist_move_later">Mover para trás</string>
 </resources>

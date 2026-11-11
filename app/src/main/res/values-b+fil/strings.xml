@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Tinanggihan ng Last.fm ang key.</string>
     <string name="music_tag_connection_failed">Hindi makakonekta sa Last.fm. Subukan muli.</string>
     <string name="music_tag_scrobbling_unavailable">Hindi available ang pag-sync ng kasaysayan ng pakikinig sa build na ito.</string>
+    <string name="discovery_genre">Pagkakatulad ng genre</string>
+    <string name="discovery_similar">Magkatulad</string>
+    <string name="discovery_exploratory">Mapagtuklas</string>
+    <string name="discovery_artist">Pagtuklas ng artist</string>
+    <string name="discovery_familiar">Pamilyar</string>
+    <string name="discovery_new">Tumuklas</string>
+    <string name="discovery_width">Paggalugad ng musika</string>
+    <string name="discovery_repetition">Bawasan ang pag-uulit</string>
+    <string name="lastfm_credentials_needed">Para ikonekta ang account, ilagay ang API key at shared secret mula sa parehong Last.fm app.</string>
+    <string name="lastfm_secret">Shared secret</string>
+    <string name="moods_none">Walang suportadong mood para sa mga kantang ito.</string>
+    <string name="moods_refresh">I-refresh ang mga mood</string>
+    <string name="artist_next_image">Susunod na naka-save na larawan</string>
+    <string name="artist_brightness">Liwanag</string>
+    <string name="artist_grayscale">Grayscale</string>
+    <string name="artist_saved_image">Naka-save na larawan %1$d</string>
+    <string name="artist_make_first">Ilipat sa unahan</string>
+    <string name="artist_move_earlier">Ilipat nang mas maaga</string>
+    <string name="artist_move_later">Ilipat nang mas huli</string>
 </resources>

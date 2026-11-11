@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm কী প্রত্যাখ্যান করেছে।</string>
     <string name="music_tag_connection_failed">Last.fm-এ সংযোগ করা যায়নি। আবার চেষ্টা করুন।</string>
     <string name="music_tag_scrobbling_unavailable">এই বিল্ডে শোনার ইতিহাস সিঙ্ক করা যায় না।</string>
+    <string name="discovery_genre">ঘরানার মিল</string>
+    <string name="discovery_similar">অনুরূপ</string>
+    <string name="discovery_exploratory">অনুসন্ধানী</string>
+    <string name="discovery_artist">শিল্পী আবিষ্কার</string>
+    <string name="discovery_familiar">পরিচিত</string>
+    <string name="discovery_new">আবিষ্কার</string>
+    <string name="discovery_width">সঙ্গীত অন্বেষণ</string>
+    <string name="discovery_repetition">পুনরাবৃত্তি কমান</string>
+    <string name="lastfm_credentials_needed">অ্যাকাউন্ট সংযোগে একই Last.fm অ্যাপের API কী ও শেয়ার্ড সিক্রেট দিন।</string>
+    <string name="lastfm_secret">শেয়ার্ড সিক্রেট</string>
+    <string name="moods_none">এই গানগুলোর জন্য সমর্থিত মুড পাওয়া যায়নি।</string>
+    <string name="moods_refresh">মুড রিফ্রেশ করুন</string>
+    <string name="artist_next_image">পরের সংরক্ষিত ছবি</string>
+    <string name="artist_brightness">উজ্জ্বলতা</string>
+    <string name="artist_grayscale">ধূসর স্কেল</string>
+    <string name="artist_saved_image">সংরক্ষিত ছবি %1$d</string>
+    <string name="artist_make_first">প্রথমে সরান</string>
+    <string name="artist_move_earlier">আগে সরান</string>
+    <string name="artist_move_later">পরে সরান</string>
 </resources>

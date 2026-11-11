@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm menolak kunci.</string>
     <string name="music_tag_connection_failed">Tidak dapat menyambung ke Last.fm. Cuba lagi.</string>
     <string name="music_tag_scrobbling_unavailable">Penyegerakan sejarah pendengaran tidak tersedia dalam binaan ini.</string>
+    <string name="discovery_genre">Persamaan genre</string>
+    <string name="discovery_similar">Serupa</string>
+    <string name="discovery_exploratory">Penerokaan</string>
+    <string name="discovery_artist">Penemuan artis</string>
+    <string name="discovery_familiar">Biasa</string>
+    <string name="discovery_new">Temui</string>
+    <string name="discovery_width">Penerokaan muzik</string>
+    <string name="discovery_repetition">Kurangkan pengulangan</string>
+    <string name="lastfm_credentials_needed">Untuk menyambung akaun, masukkan kunci API dan rahsia kongsi daripada aplikasi Last.fm yang sama.</string>
+    <string name="lastfm_secret">Rahsia kongsi</string>
+    <string name="moods_none">Tiada suasana yang disokong untuk lagu ini.</string>
+    <string name="moods_refresh">Muat semula suasana</string>
+    <string name="artist_next_image">Imej tersimpan seterusnya</string>
+    <string name="artist_brightness">Kecerahan</string>
+    <string name="artist_grayscale">Skala kelabu</string>
+    <string name="artist_saved_image">Imej tersimpan %1$d</string>
+    <string name="artist_make_first">Alih ke pertama</string>
+    <string name="artist_move_earlier">Alih ke depan</string>
+    <string name="artist_move_later">Alih ke belakang</string>
 </resources>

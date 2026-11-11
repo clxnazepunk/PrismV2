@@ -389,8 +389,8 @@ private fun SettingsPage(
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item {
                 Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-                    MusicTagSettings()
                     LastFmGroup()
+                    MusicTagSettings()
                 }
             }
             SettingsSection.SPOTIFY -> item { SpotifyPage() }
@@ -2670,13 +2670,15 @@ private fun LastFmGroup() {
     val user by lastFm.user.collectAsState()
     val o by lastFm.options.collectAsState()
     val waiting by lastFm.waiting.collectAsState()
+    val ready by lastFm.ready.collectAsState()
     Group(
         "Last.fm",
         info = tr(R.string.sends_what_you_listen_to_scrobbles_all),
     ) {
-        if (!lastFm.available) {
-            Note(tr(R.string.music_tag_scrobbling_unavailable))
-            return@Group
+        if (lastFm.needsPersonalCredentials && (user == null || !ready)) LastFmCredentialsForm(lastFm)
+        if (!ready) {
+            Item(tr(R.string.connect_last_fm), tr(R.string.lastfm_credentials_needed))
+            if (user == null) return@Group
         }
         if (user == null) {
             Item(tr(R.string.connect_last_fm), tr(R.string.opens_last_fm_to_let_prism), onClick = {
@@ -2871,6 +2873,7 @@ private fun LibraryLookGroup() {
             Toggle(tr(R.string.full_width_playlist_pictures), tr(R.string.edge_to_edge_like_an_artist), s.playlistHeroCover) { prefs.setPlaylistHeroCover(it) }
             Toggle(tr(R.string.genres_on_playlists), tr(R.string.genres_on_playlists_detail), s.behavior.playlistGenres) { prefs.setPlaylistGenres(it) }
             Toggle(tr(R.string.playlist_recommended_songs), null, s.behavior.playlistRecommendations) { prefs.setPlaylistRecommendations(it) }
+            PlaylistDiscoverySettings(s.behavior.playlistDiscovery) { prefs.setPlaylistDiscovery(it) }
             // #310 (1.8.1): off, Downloads lists each song with just its artist under it.
             Toggle(
                 tr(R.string.album_names_in_downloads), tr(R.string.album_names_in_downloads_detail), s.view.downloadsAlbums,

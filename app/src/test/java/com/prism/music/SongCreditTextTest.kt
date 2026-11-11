@@ -20,6 +20,20 @@ class SongCreditTextTest {
         assertEquals("Lead, Guest", song.artistText)
     }
 
+    @Test fun structuredCreditsStayLiteralUnderEnglishAndSpanishLocales() {
+        val previous = java.util.Locale.getDefault()
+        try {
+            for (locale in listOf(java.util.Locale.ENGLISH, java.util.Locale.forLanguageTag("es-MX"))) {
+                java.util.Locale.setDefault(locale)
+                val song = Song("id", "Title con Guest", listOf(ArtistRef("Lead"), ArtistRef("Guest", featured = true)))
+                assertEquals("Title feat. Guest", song.displayTitle)
+                assertEquals("Lead feat. Guest", song.displayArtists)
+                assertEquals("Title con Guest", song.title)
+                assertEquals("Con Altura", song.copy(title = "Con Altura").displayTitle)
+            }
+        } finally { java.util.Locale.setDefault(previous) }
+    }
+
     @Test fun existingCreditsAndOrdinarySpanishTitlesArePreserved() {
         for (title in listOf("Track (feat. Guest)", "Con Altura", "Track (con calma)", "Track - con mi gente")) {
             assertEquals(title, Song("id", title, artists).displayTitle)

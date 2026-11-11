@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">Last.fm דחה את המפתח.</string>
     <string name="music_tag_connection_failed">לא ניתן להתחבר ל־Last.fm. יש לנסות שוב.</string>
     <string name="music_tag_scrobbling_unavailable">סנכרון היסטוריית ההאזנה אינו זמין בגרסה זו.</string>
+    <string name="discovery_genre">דמיון בין ז׳אנרים</string>
+    <string name="discovery_similar">דומים</string>
+    <string name="discovery_exploratory">חקרניים</string>
+    <string name="discovery_artist">גילוי אמנים</string>
+    <string name="discovery_familiar">מוכרים</string>
+    <string name="discovery_new">גילוי</string>
+    <string name="discovery_width">חקירה מוזיקלית</string>
+    <string name="discovery_repetition">הפחתת חזרות</string>
+    <string name="lastfm_credentials_needed">כדי לחבר את החשבון, יש להזין מפתח API וסוד משותף מאותה אפליקציית Last.fm.</string>
+    <string name="lastfm_secret">סוד משותף</string>
+    <string name="moods_none">לא נמצאו מצבי רוח נתמכים לשירים האלה.</string>
+    <string name="moods_refresh">רענון מצבי רוח</string>
+    <string name="artist_next_image">התמונה השמורה הבאה</string>
+    <string name="artist_brightness">בהירות</string>
+    <string name="artist_grayscale">גווני אפור</string>
+    <string name="artist_saved_image">תמונה שמורה %1$d</string>
+    <string name="artist_make_first">העברה להתחלה</string>
+    <string name="artist_move_earlier">העברה קדימה</string>
+    <string name="artist_move_later">העברה אחורה</string>
 </resources>

@@ -172,7 +172,6 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         }
         // Scrobbles made offline go to Last.fm once the phone is back online (#133).
         container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            if (!container.lastFm.available) return@launch
             container.network.online.collect { online -> if (online && container.lastFm.user.value != null) runCatching { container.lastFm.flush() } }
         }
         // A restored backup's settings (since 1.7.8 kept as values beside the store) go in at once, before Home shows.
@@ -332,7 +331,12 @@ class AppContainer(val app: Application) {
     /** Albums and playlists played lately (Home's Recently played, #196). */
     val recentCollections by lazy { com.prism.music.data.RecentCollections(app) }
     /** Last.fm scrobbling, when the listener connects their account (#133). */
-    val lastFm by lazy { com.prism.music.data.lastfm.LastFm(app, http, scope) }
+    private val lastFmHttp by lazy {
+        okhttp3.OkHttpClient.Builder().followRedirects(false)
+            .connectTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).build()
+    }
+    val lastFm by lazy { com.prism.music.data.lastfm.LastFm(app, lastFmHttp, scope) }
     val lyrics = LyricsRepository(http, db.lyrics(), ytm) { settings.current }.apply {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
@@ -345,7 +349,7 @@ class AppContainer(val app: Application) {
     }
     /** Search by a line of the lyrics, from the box itself (1.7.6). */
     val lyricSearch = com.prism.music.data.lyrics.LyricSearch(http, ytm, db.lyricsSearch(), db.songs(), lyrics::textLines)
-    val meta = MetaRepository(http, db.meta(), tagKey = { artistPrefs.musicTagKey.value.ifBlank { BuildConfig.LASTFM_API_KEY } })
+    val meta = MetaRepository(http, db.meta(), tagKey = { artistPrefs.musicTagKey.value.ifBlank { BuildConfig.LASTFM_API_KEY } }, tagsHttp = lastFmHttp)
     val canvas = com.prism.music.data.canvas.CanvasRepository(http).apply {
         hiddenPrefs = app.getSharedPreferences("canvas_hidden", android.content.Context.MODE_PRIVATE)
         savedPrefs = app.getSharedPreferences("canvas_saved", android.content.Context.MODE_PRIVATE)

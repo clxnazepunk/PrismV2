@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 const val UNKNOWN_ARTIST = "Unknown artist"
 
 @Serializable
-data class ArtistRef(val name: String, val id: String? = null)
+data class ArtistRef(val name: String, val id: String? = null, val featured: Boolean = false)
 
 @Serializable
 data class AlbumRef(val title: String, val id: String? = null)

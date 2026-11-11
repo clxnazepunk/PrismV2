@@ -6,6 +6,9 @@ import com.prism.music.data.model.SongItem
 
 private const val FEAT = "feat."
 
+private val confirmedSuffix = Regex("""(\s+)con\s+(.+)$""", RegexOption.IGNORE_CASE)
+private val explicitTitleGuest = Regex("""(?:[(\[]|\s[-–—]\s)feat\.\s+([^\]\)]+)""", RegexOption.IGNORE_CASE)
+
 private val bracketedGuest = Regex("""(\(|\[)con\s+([^\[\]()]+)(\)|\])""", RegexOption.IGNORE_CASE)
 private val suffixedGuest = Regex("""(\s+[–—-]\s+)con\s+(.+)$""", RegexOption.IGNORE_CASE)
 
@@ -25,19 +28,26 @@ internal val Song.displayTitle: String
                 "$open$FEAT $names$close"
             else credit.value
         }
-        return suffixedGuest.replace(bracketed) { credit ->
+        val suffixed = suffixedGuest.replace(bracketed) { credit ->
             val (separator, names) = credit.destructured
             if (isGuestCredit(names)) "$separator$FEAT $names" else credit.value
+        }
+        return confirmedSuffix.replace(suffixed) { credit ->
+            val (separator, names) = credit.destructured
+            if (artists.any { it.featured } && isGuestCredit(names)) "$separator$FEAT $names" else credit.value
         }
     }
 
 /** Keep an explicit credit on the guest line when the title supplies one. */
 internal val Song.displayArtists: String
     get() {
-        val guest = displayTitle.substringAfter("$FEAT ", "").trimEnd(')', ']')
-        if (guest.isEmpty() || !isGuestCredit(guest)) return artistText
         val otherArtists = artists.drop(1)
-        val credited = otherArtists.filter { it.name.trim().equals(guest, ignoreCase = true) }.ifEmpty { otherArtists }
+        val fromMetadata = otherArtists.filter { it.featured }
+        val guest = explicitTitleGuest.find(displayTitle)?.groupValues?.get(1).orEmpty()
+        val credited = fromMetadata.ifEmpty {
+            if (guest.isEmpty() || !isGuestCredit(guest)) return artistText
+            otherArtists.filter { it.name.trim().equals(guest.trim(), ignoreCase = true) }.ifEmpty { otherArtists }
+        }
         val lead = artists.filterNot { it in credited }.joinToString(", ") { it.name }
         return "$lead $FEAT " + credited.joinToString(", ") { it.name }
     }

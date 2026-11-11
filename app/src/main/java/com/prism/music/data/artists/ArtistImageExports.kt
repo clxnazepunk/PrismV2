@@ -50,7 +50,7 @@ object ArtistImageExports {
         } else {
             val fit = layout.bounded()
             val request = ImageRequest.Builder(context).data(source).size(ArtistRasterSize(source, 2048)).allowHardware(false)
-                .apply { if (fit.removeBackground) transformations(UniformArtistBackground(fit.backgroundTolerance)) }.build()
+                .apply { if (fit.hasEffects) transformations(ArtistVisualEffects(fit)) }.build()
             val bitmap = (SingletonImageLoader.get(context).execute(request) as? SuccessResult)?.image?.toBitmap()
                 ?: error("Cannot decode artist image")
             coroutineContext.ensureActive()

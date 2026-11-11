@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm menolak kunci.</string>
     <string name="music_tag_connection_failed">Tidak dapat terhubung ke Last.fm. Coba lagi.</string>
     <string name="music_tag_scrobbling_unavailable">Sinkronisasi riwayat dengar tidak tersedia di versi ini.</string>
+    <string name="discovery_genre">Kemiripan genre</string>
+    <string name="discovery_similar">Mirip</string>
+    <string name="discovery_exploratory">Eksploratif</string>
+    <string name="discovery_artist">Penemuan artis</string>
+    <string name="discovery_familiar">Familiar</string>
+    <string name="discovery_new">Temukan</string>
+    <string name="discovery_width">Eksplorasi musik</string>
+    <string name="discovery_repetition">Kurangi pengulangan</string>
+    <string name="lastfm_credentials_needed">Untuk menghubungkan akun, masukkan kunci API dan rahasia bersama dari aplikasi Last.fm yang sama.</string>
+    <string name="lastfm_secret">Rahasia bersama</string>
+    <string name="moods_none">Tidak ada suasana yang didukung untuk lagu-lagu ini.</string>
+    <string name="moods_refresh">Segarkan suasana</string>
+    <string name="artist_next_image">Gambar tersimpan berikutnya</string>
+    <string name="artist_brightness">Kecerahan</string>
+    <string name="artist_grayscale">Skala abu-abu</string>
+    <string name="artist_saved_image">Gambar tersimpan %1$d</string>
+    <string name="artist_make_first">Pindahkan ke awal</string>
+    <string name="artist_move_earlier">Pindahkan lebih awal</string>
+    <string name="artist_move_later">Pindahkan lebih akhir</string>
 </resources>

@@ -1,6 +1,10 @@
 package com.prism.music.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +42,21 @@ internal class LocalPlaylistSuggestionsState {
     var loading by mutableStateOf(false)
     var failed by mutableStateOf(false)
     var adding by mutableStateOf<Set<String>>(emptySet())
-    var recentIds: Set<String> = emptySet()
+    val history = LinkedHashMap<String, Long>()
+    var candidates: List<Song> = emptyList()
+    var slotIds by mutableStateOf<Map<String, Int>>(emptyMap())
+
+    fun recent(): Set<String> {
+        val cutoff = System.currentTimeMillis() - 30 * 60_000L
+        history.entries.removeAll { it.value < cutoff }
+        return history.keys.toSet()
+    }
+
+    fun rememberShown(songs: List<Song>) {
+        val now = System.currentTimeMillis()
+        songs.forEach { history.remove(it.id); history[it.id] = now }
+        while (history.size > 150) history.remove(history.keys.first())
+    }
     var round = 0
     val continuations = HashMap<String, String?>()
 }
@@ -52,6 +70,7 @@ internal fun LocalPlaylistSuggestions(
     state: LocalPlaylistSuggestionsState,
     scope: CoroutineScope,
     online: Boolean,
+    playlistGenres: Map<String, Set<String>> = emptyMap(),
 ) {
     val c = LocalContainer.current
     val context = LocalContext.current
@@ -73,8 +92,29 @@ internal fun LocalPlaylistSuggestions(
         PlaylistSuggestions.seeds(existing.filter(::allowed)).isNotEmpty()
     }
 
+    suspend fun fetch(snapshot: List<Song>, genres: Map<String, Set<String>>): List<Song> =
+        PlaylistSuggestions.load(snapshot, allowed = ::allowed, round = state.round++, seedGenres = genres, candidateLimit = 120) { seed ->
+            val page = c.radio(seed.id, "RDAMVM" + seed.id, continuation = state.continuations[seed.id])
+            state.continuations[seed.id] = page.continuation
+            page.songs
+        }
+
+    suspend fun ranked(snapshot: List<Song>, pool: List<Song>, recent: Set<String>, limit: Int): List<Song> {
+        val cached = c.meta.cachedSongTags(snapshot + pool)
+        val tracks = snapshot + pool
+        val genres = tracks.associate { song ->
+            song.id to (cached[song.id].orEmpty() + playlistGenres[song.id].orEmpty())
+                .filterNot { it in com.prism.music.data.meta.MusicTags.moods }.toSet()
+        }
+        val artistGenres = snapshot.filter { !it.primaryArtist.isBlank() }.groupBy { it.primaryArtist.lowercase() }
+            .mapValues { (_, songs) -> songs.flatMap { genres[it.id].orEmpty() }.toSet() }
+        val signals = genres.mapValues { it.value }.toMutableMap()
+        pool.forEach { song -> if (signals[song.id].isNullOrEmpty()) signals[song.id] = artistGenres[song.primaryArtist.lowercase()].orEmpty() }
+        return PlaylistSuggestions.rank(snapshot, pool.filter(::allowed), signals, settings.behavior.playlistDiscovery, recent, limit)
+    }
+
     fun load() {
-        if (state.loading || !online || !hasSeeds) return
+        if (state.loading || state.adding.isNotEmpty() || !online || !hasSeeds) return
         state.requested = true
         state.loading = true
         state.failed = false
@@ -82,15 +122,12 @@ internal fun LocalPlaylistSuggestions(
         scope.launch {
             try {
                 val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
-                state.songs = withContext(Dispatchers.IO) {
-                    PlaylistSuggestions.load(snapshot, allowed = ::allowed, excluded = state.recentIds, round = state.round) { seed ->
-                        val page = c.radio(seed.id, "RDAMVM" + seed.id, continuation = state.continuations[seed.id])
-                        state.continuations[seed.id] = page.continuation
-                        page.songs
-                    }
-                }
-                state.round++
-                state.recentIds = (state.recentIds + state.songs.map { it.id }).toList().takeLast(100).toSet()
+                val recent = state.recent() + state.songs.map { it.id }
+                val fresh = fetch(snapshot, playlistGenres)
+                state.candidates = (fresh + state.candidates).distinctBy { it.id }.take(160)
+                state.songs = ranked(snapshot, state.candidates, recent, PlaylistSuggestions.LIMIT)
+                state.slotIds = state.songs.mapIndexed { index, song -> song.id to index }.toMap()
+                state.rememberShown(state.songs)
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
@@ -102,13 +139,30 @@ internal fun LocalPlaylistSuggestions(
     }
 
     fun add(song: Song) {
-        if (song.id in state.adding) return
+        if (state.loading || state.adding.isNotEmpty()) return
         state.adding = state.adding + song.id
         scope.launch {
             try {
                 // PrismLibrary rechecks ids against the current list, then appends and persists.
                 val added = withContext(Dispatchers.IO) { c.prismLibrary.add(playlistId, listOf(song)) }
-                if (added > 0) Toast.makeText(context, tr(R.string.added_to, title), Toast.LENGTH_SHORT).show()
+                if (added > 0) {
+                    Toast.makeText(context, tr(R.string.added_to, title), Toast.LENGTH_SHORT).show()
+                    val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
+                    val existingIds = snapshot.mapTo(hashSetOf()) { it.id }
+                    val otherSuggestions = state.songs.filterNot { it.id == song.id }
+                    val blocked = existingIds + otherSuggestions.map { it.id } + state.recent()
+                    var fresh = state.candidates.filterNot { it.id in blocked }
+                    if (fresh.isEmpty() && online) {
+                        val fetched = fetch(snapshot, playlistGenres)
+                        state.candidates = (fetched + state.candidates).distinctBy { it.id }.take(160)
+                        fresh = fetched.filterNot { it.id in blocked }
+                    }
+                    val replacement = ranked(snapshot + otherSuggestions, fresh, emptySet(), 1).firstOrNull()
+                    val index = state.slotIds[song.id] ?: state.songs.indexOfFirst { it.id == song.id }
+                    state.songs = PlaylistSuggestions.replaceSlot(state.songs, song.id, replacement)
+                    state.slotIds = (state.slotIds - song.id) + listOfNotNull(replacement?.let { it.id to index }).toMap()
+                    replacement?.let { state.rememberShown(listOf(it)) }
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
@@ -122,14 +176,23 @@ internal fun LocalPlaylistSuggestions(
     LaunchedEffect(playlistId, online, hasSeeds) { if (!state.requested) load() }
     PlaylistRecommendationFooter(
         enabled = settings.behavior.playlistRecommendations, hasSeeds = hasSeeds, online = online, loading = state.loading,
-        failed = state.failed, hasResults = visible.isNotEmpty(), onRefresh = ::load,
+        failed = state.failed, hasResults = visible.isNotEmpty() || state.adding.isNotEmpty(), onRefresh = ::load,
     ) {
-        for (song in visible) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            SongRow(song, Modifier.weight(1f), playing = current?.id == song.id) { c.player.playSingle(song) }
-            IconButton(
-                onClick = { add(song) }, enabled = song.id !in state.adding,
-                modifier = Modifier.testTag("addSuggestion:" + song.id),
-            ) { Icon(PrismIcons.Add, tr(R.string.add) + " " + song.title) }
+        val reducedMotion = com.prism.music.ui.theme.LocalUi.current.reduceMotion
+        for ((index, slot) in state.songs.withIndex()) key(state.slotIds[slot.id] ?: index) {
+            val song = slot.takeIf { candidate -> candidate.id in state.adding || visible.any { it.id == candidate.id } }
+            AnimatedContent(song, contentKey = { it?.id }, transitionSpec = {
+                if (reducedMotion) androidx.compose.animation.EnterTransition.None togetherWith androidx.compose.animation.ExitTransition.None
+                else fadeIn() togetherWith fadeOut()
+            }, label = "suggestion") { item ->
+                if (item != null) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    SongRow(item, Modifier.weight(1f), playing = current?.id == item.id) { c.player.playSingle(item) }
+                    IconButton(
+                        onClick = { add(item) }, enabled = !state.loading && state.adding.isEmpty(),
+                        modifier = Modifier.testTag("addSuggestion:" + item.id),
+                    ) { Icon(PrismIcons.Add, tr(R.string.add) + " " + item.title) }
+                }
+            }
         }
     }
 }
@@ -150,7 +213,7 @@ internal fun PlaylistRecommendationFooter(
         when {
             !hasSeeds -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
             !online && !hasResults -> Text(tr(R.string.you_re_offline), Modifier.padding(horizontal = 20.dp))
-            loading -> LoadingState(Modifier.testTag("loadingPlaylistSuggestions"))
+            loading && !hasResults -> LoadingState(Modifier.testTag("loadingPlaylistSuggestions"))
             failed && online -> PrismTextButton(onClick = onRefresh, modifier = Modifier.padding(horizontal = 16.dp).testTag("retryPlaylistSuggestions")) {
                 Text(tr(R.string.try_again))
             }

@@ -22,6 +22,18 @@ class MusicTagsTest {
         override suspend fun putMotion(e: MotionArtEntity) {}
     }
 
+    @Test fun moodRefreshReportsMissingKeyAndServiceRejection(): Unit = runBlocking {
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(403).message("Forbidden")
+                .body("""{"error":10,"message":"Invalid API key"}""".toResponseBody()).build()
+        }.build()
+        val songs = listOf(Song("id", "Song", listOf(ArtistRef("Artist"))))
+        val missing = MetaRepository(client, Dao(), tagKey = { "" }, tagsHttp = client)
+        val invalid = MetaRepository(client, Dao(), tagKey = { "test" }, tagsHttp = client)
+        assertEquals(MetaRepository.TagResult.NO_KEY, missing.resolveSongTags(songs) {})
+        assertEquals(MetaRepository.TagResult.ERROR, invalid.resolveSongTags(songs) {})
+    }
+
     @Test fun explicitConnectionCheckDistinguishesRejectionAndNetworkFailure(): Unit = runBlocking {
         var reply: Pair<Int, String>? = 200 to """{"toptags":{"tag":[]}}"""
         val client = OkHttpClient.Builder().addInterceptor { chain ->

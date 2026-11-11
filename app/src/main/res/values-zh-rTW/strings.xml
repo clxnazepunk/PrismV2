@@ -4872,4 +4872,23 @@
     <string name="music_tag_key_rejected">Last.fm 拒絕了此金鑰。</string>
     <string name="music_tag_connection_failed">無法連線到 Last.fm。請再試一次。</string>
     <string name="music_tag_scrobbling_unavailable">此版本無法同步聆聽記錄。</string>
+    <string name="discovery_genre">曲風相似度</string>
+    <string name="discovery_similar">相似</string>
+    <string name="discovery_exploratory">探索</string>
+    <string name="discovery_artist">探索藝人</string>
+    <string name="discovery_familiar">熟悉</string>
+    <string name="discovery_new">探索</string>
+    <string name="discovery_width">音樂探索</string>
+    <string name="discovery_repetition">減少重複</string>
+    <string name="lastfm_credentials_needed">若要連結帳號，請輸入同一個 Last.fm 應用程式的 API 金鑰與共用密鑰。</string>
+    <string name="lastfm_secret">共用密鑰</string>
+    <string name="moods_none">找不到這些歌曲支援的心情。</string>
+    <string name="moods_refresh">重新整理心情</string>
+    <string name="artist_next_image">下一張已儲存的圖片</string>
+    <string name="artist_brightness">亮度</string>
+    <string name="artist_grayscale">灰階</string>
+    <string name="artist_saved_image">已儲存的圖片 %1$d</string>
+    <string name="artist_make_first">移至首位</string>
+    <string name="artist_move_earlier">向前移</string>
+    <string name="artist_move_later">向後移</string>
 </resources>

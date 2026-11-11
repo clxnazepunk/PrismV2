@@ -4966,4 +4966,23 @@
     <string name="music_tag_key_rejected">Last.fm rejected the key.</string>
     <string name="music_tag_connection_failed">Could not reach Last.fm. Try again.</string>
     <string name="music_tag_scrobbling_unavailable">Listening history sync is unavailable in this build.</string>
+    <string name="discovery_genre">Genre similarity</string>
+    <string name="discovery_similar">Similar</string>
+    <string name="discovery_exploratory">Exploratory</string>
+    <string name="discovery_artist">Artist discovery</string>
+    <string name="discovery_familiar">Familiar</string>
+    <string name="discovery_new">Discover</string>
+    <string name="discovery_width">Musical exploration</string>
+    <string name="discovery_repetition">Reduce repetition</string>
+    <string name="lastfm_credentials_needed">To connect your account, enter the API key and shared secret from the same Last.fm app.</string>
+    <string name="lastfm_secret">Shared secret</string>
+    <string name="moods_none">No supported moods were found for these songs.</string>
+    <string name="moods_refresh">Refresh moods</string>
+    <string name="artist_next_image">Next saved image</string>
+    <string name="artist_brightness">Brightness</string>
+    <string name="artist_grayscale">Grayscale</string>
+    <string name="artist_saved_image">Saved image %1$d</string>
+    <string name="artist_make_first">Move to first</string>
+    <string name="artist_move_earlier">Move earlier</string>
+    <string name="artist_move_later">Move later</string>
 </resources>

@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">A Last.fm elutasította a kulcsot.</string>
     <string name="music_tag_connection_failed">A Last.fm nem érhető el. Próbáld újra.</string>
     <string name="music_tag_scrobbling_unavailable">A hallgatási előzmények szinkronizálása ebben a verzióban nem érhető el.</string>
+    <string name="discovery_genre">Műfaji hasonlóság</string>
+    <string name="discovery_similar">Hasonló</string>
+    <string name="discovery_exploratory">Felfedező</string>
+    <string name="discovery_artist">Előadók felfedezése</string>
+    <string name="discovery_familiar">Ismerős</string>
+    <string name="discovery_new">Felfedezés</string>
+    <string name="discovery_width">Zenei felfedezés</string>
+    <string name="discovery_repetition">Ismétlődés csökkentése</string>
+    <string name="lastfm_credentials_needed">A fiók csatlakoztatásához add meg ugyanannak a Last.fm-alkalmazásnak az API-kulcsát és közös titkát.</string>
+    <string name="lastfm_secret">Közös titok</string>
+    <string name="moods_none">Ezekhez a számokhoz nem található támogatott hangulat.</string>
+    <string name="moods_refresh">Hangulatok frissítése</string>
+    <string name="artist_next_image">Következő mentett kép</string>
+    <string name="artist_brightness">Fényerő</string>
+    <string name="artist_grayscale">Szürkeárnyalatos</string>
+    <string name="artist_saved_image">Mentett kép %1$d</string>
+    <string name="artist_make_first">Mozgatás az elejére</string>
+    <string name="artist_move_earlier">Mozgatás előrébb</string>
+    <string name="artist_move_later">Mozgatás hátrébb</string>
 </resources>

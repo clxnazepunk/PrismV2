@@ -5064,4 +5064,23 @@
     <string name="music_tag_key_rejected">Last.fm klíč odmítl.</string>
     <string name="music_tag_connection_failed">Připojení k Last.fm selhalo. Zkuste to znovu.</string>
     <string name="music_tag_scrobbling_unavailable">Synchronizace historie poslechu není v této verzi dostupná.</string>
+    <string name="discovery_genre">Podobnost žánrů</string>
+    <string name="discovery_similar">Podobné</string>
+    <string name="discovery_exploratory">Objevné</string>
+    <string name="discovery_artist">Objevování interpretů</string>
+    <string name="discovery_familiar">Známí</string>
+    <string name="discovery_new">Objevovat</string>
+    <string name="discovery_width">Objevování hudby</string>
+    <string name="discovery_repetition">Omezit opakování</string>
+    <string name="lastfm_credentials_needed">Pro připojení účtu zadejte klíč API a sdílené tajemství ze stejné aplikace Last.fm.</string>
+    <string name="lastfm_secret">Sdílené tajemství</string>
+    <string name="moods_none">Pro tyto skladby nebyly nalezeny podporované nálady.</string>
+    <string name="moods_refresh">Obnovit nálady</string>
+    <string name="artist_next_image">Další uložený obrázek</string>
+    <string name="artist_brightness">Jas</string>
+    <string name="artist_grayscale">Odstíny šedi</string>
+    <string name="artist_saved_image">Uložený obrázek %1$d</string>
+    <string name="artist_make_first">Přesunout na začátek</string>
+    <string name="artist_move_earlier">Přesunout výše</string>
+    <string name="artist_move_later">Přesunout níže</string>
 </resources>

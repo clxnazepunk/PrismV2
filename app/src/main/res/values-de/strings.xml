@@ -4936,4 +4936,23 @@
     <string name="music_tag_key_rejected">Last.fm hat den Schlüssel abgelehnt.</string>
     <string name="music_tag_connection_failed">Last.fm ist nicht erreichbar. Versuche es erneut.</string>
     <string name="music_tag_scrobbling_unavailable">Der Hörverlauf kann in dieser Version nicht synchronisiert werden.</string>
+    <string name="discovery_genre">Genreähnlichkeit</string>
+    <string name="discovery_similar">Ähnlich</string>
+    <string name="discovery_exploratory">Entdeckend</string>
+    <string name="discovery_artist">Künstler entdecken</string>
+    <string name="discovery_familiar">Vertraut</string>
+    <string name="discovery_new">Entdecken</string>
+    <string name="discovery_width">Musikalische Entdeckung</string>
+    <string name="discovery_repetition">Wiederholungen reduzieren</string>
+    <string name="lastfm_credentials_needed">Gib zum Verbinden deines Kontos den API-Schlüssel und das gemeinsame Geheimnis derselben Last.fm-App ein.</string>
+    <string name="lastfm_secret">Gemeinsames Geheimnis</string>
+    <string name="moods_none">Keine unterstützten Stimmungen für diese Titel gefunden.</string>
+    <string name="moods_refresh">Stimmungen aktualisieren</string>
+    <string name="artist_next_image">Nächstes gespeichertes Bild</string>
+    <string name="artist_brightness">Helligkeit</string>
+    <string name="artist_grayscale">Graustufen</string>
+    <string name="artist_saved_image">Gespeichertes Bild %1$d</string>
+    <string name="artist_make_first">An den Anfang verschieben</string>
+    <string name="artist_move_earlier">Nach vorne verschieben</string>
+    <string name="artist_move_later">Nach hinten verschieben</string>
 </resources>

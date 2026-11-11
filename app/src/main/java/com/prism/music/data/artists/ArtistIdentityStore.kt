@@ -36,7 +36,52 @@ data class ArtistIdentity(
     val logoLayout: ArtistImageLayout = ArtistImageLayout(),
     val signatureLayout: ArtistImageLayout = ArtistImageLayout(),
     val signatureCaption: Boolean = true,
+    val logos: List<ArtistImageAsset> = emptyList(),
+    val signatures: List<ArtistImageAsset> = emptyList(),
+    val assetLayouts: Map<String, ArtistImageLayout> = emptyMap(),
 ) {
+    fun local(role: ArtistImageRole) = if (role == ArtistImageRole.LOGO) localLogo else localSignature
+
+    fun assets(role: ArtistImageRole): List<ArtistImageAsset> =
+        ((if (role == ArtistImageRole.LOGO) logos else signatures) + listOfNotNull(local(role))).distinctBy { it.file }
+
+    fun layout(role: ArtistImageRole, asset: ArtistImageAsset? = chosen(role)): ArtistImageLayout {
+        val legacy = if (role == ArtistImageRole.LOGO) logoLayout else signatureLayout
+        return assetLayouts[asset?.file] ?: if (assets(role).size <= 1) legacy else ArtistImageLayout()
+    }
+
+    fun withLayout(role: ArtistImageRole, asset: ArtistImageAsset, layout: ArtistImageLayout): ArtistIdentity =
+        if (assets(role).size <= 1 && chosen(role)?.file == asset.file) {
+            val next = if (role == ArtistImageRole.LOGO) copy(logoLayout = layout) else copy(signatureLayout = layout)
+            next.copy(assetLayouts = next.assetLayouts + (asset.file to layout))
+        } else copy(assetLayouts = assetLayouts + (asset.file to layout))
+
+    fun withAssets(role: ArtistImageRole, ordered: List<ArtistImageAsset>, selected: ArtistImageAsset?): ArtistIdentity =
+        if (role == ArtistImageRole.LOGO) copy(logos = ordered, localLogo = selected)
+        else copy(signatures = ordered, localSignature = selected)
+
+    fun select(role: ArtistImageRole, file: String): ArtistIdentity {
+        val ordered = assets(role)
+        val selected = ordered.firstOrNull { it.file == file } ?: return this
+        return withAssets(role, ordered, selected)
+    }
+
+    fun cycle(role: ArtistImageRole): ArtistIdentity {
+        val ordered = assets(role)
+        if (ordered.size < 2) return this
+        val at = ordered.indexOfFirst { it.file == local(role)?.file }
+        return withAssets(role, ordered, ordered[(at + 1) % ordered.size])
+    }
+
+    fun reorder(role: ArtistImageRole, file: String, newIndex: Int): ArtistIdentity {
+        val ordered = assets(role).toMutableList()
+        val at = ordered.indexOfFirst { it.file == file }
+        if (at < 0 || newIndex !in ordered.indices) return this
+        val asset = ordered.removeAt(at)
+        ordered.add(newIndex, asset)
+        return withAssets(role, ordered, local(role))
+    }
+
     fun chosen(role: ArtistImageRole, automatic: Boolean = true): ArtistImageAsset? = when (role) {
         ArtistImageRole.LOGO -> localLogo ?: logo.takeIf { automatic }
         ArtistImageRole.SIGNATURE -> localSignature ?: signature.takeIf { automatic }
@@ -84,17 +129,17 @@ class ArtistIdentityStore(val dir: File) {
             val asset = ArtistImageAsset(target.name, info.second, source, license)
             var previous: ArtistImageAsset? = null
             update(id) { old ->
-                previous = when {
-                    local && role == ArtistImageRole.LOGO -> old.localLogo
-                    local -> old.localSignature
-                    role == ArtistImageRole.LOGO -> old.logo
-                    else -> old.signature
-                }
-                when {
-                    local && role == ArtistImageRole.LOGO -> old.copy(localLogo = asset)
-                    local -> old.copy(localSignature = asset)
-                    role == ArtistImageRole.LOGO -> old.copy(logo = asset)
-                    else -> old.copy(signature = asset)
+                if (local) {
+                    val ordered = old.assets(role)
+                    require(ordered.size < MAX_ASSETS_PER_ROLE)
+                    // Migrate the original single image and its layout on the first append.
+                    val layouts = ordered.associate { it.file to old.layout(role, it) }
+                    val next = old.withAssets(role, ordered + asset, asset)
+                    next.copy(assetLayouts = next.assetLayouts + layouts + (asset.file to ArtistImageLayout()))
+                } else {
+                    previous = if (role == ArtistImageRole.LOGO) old.logo else old.signature
+                    val next = if (role == ArtistImageRole.LOGO) old.copy(logo = asset) else old.copy(signature = asset)
+                    next.copy(assetLayouts = next.assetLayouts - previous?.file.orEmpty())
                 }
             }
             committed = true
@@ -103,19 +148,22 @@ class ArtistIdentityStore(val dir: File) {
         } finally { if (!committed) target.delete() }
     }
 
-    suspend fun clearLocal(id: String, role: ArtistImageRole) {
-        var previous: ArtistImageAsset? = null
+    suspend fun clearLocal(id: String, role: ArtistImageRole) = removeLocal(id, role, null)
+
+    suspend fun removeLocal(id: String, role: ArtistImageRole, filename: String?) {
+        var removed: List<ArtistImageAsset> = emptyList()
         update(id) { old ->
-            if (role == ArtistImageRole.LOGO) {
-                previous = old.localLogo; old.copy(localLogo = null)
-            } else {
-                previous = old.localSignature; old.copy(localSignature = null)
-            }
+            val ordered = old.assets(role)
+            removed = ordered.filter { filename == null || it.file == filename }
+            val remaining = ordered - removed.toSet()
+            val selected = old.local(role)?.takeIf { it in remaining } ?: remaining.firstOrNull()
+            old.withAssets(role, remaining, selected).copy(assetLayouts = old.assetLayouts - removed.map { it.file }.toSet())
         }
-        withContext(Dispatchers.IO) { file(previous)?.delete() }
+        withContext(Dispatchers.IO) { removed.forEach { file(it)?.delete() } }
     }
 
     companion object {
+        const val MAX_ASSETS_PER_ROLE = 12
         const val MAX_IMAGE_BYTES = 4 * 1024 * 1024
         private val ASSET_NAME = Regex("(?:local|remote)-[a-f0-9-]{36}\\.(?:png|jpg|webp|svg)")
 

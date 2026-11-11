@@ -5000,4 +5000,23 @@
     <string name="music_tag_key_rejected">Last.fm a respins cheia.</string>
     <string name="music_tag_connection_failed">Conexiunea la Last.fm nu a reușit. Încearcă din nou.</string>
     <string name="music_tag_scrobbling_unavailable">Sincronizarea istoricului de ascultare nu este disponibilă în această versiune.</string>
+    <string name="discovery_genre">Asemănarea genurilor</string>
+    <string name="discovery_similar">Similare</string>
+    <string name="discovery_exploratory">Exploratorii</string>
+    <string name="discovery_artist">Descoperirea artiștilor</string>
+    <string name="discovery_familiar">Cunoscuți</string>
+    <string name="discovery_new">Descoperă</string>
+    <string name="discovery_width">Explorare muzicală</string>
+    <string name="discovery_repetition">Redu repetările</string>
+    <string name="lastfm_credentials_needed">Pentru conectarea contului, introdu cheia API și secretul partajat din aceeași aplicație Last.fm.</string>
+    <string name="lastfm_secret">Secret partajat</string>
+    <string name="moods_none">Nu s-au găsit stări de spirit acceptate pentru aceste melodii.</string>
+    <string name="moods_refresh">Actualizează stările de spirit</string>
+    <string name="artist_next_image">Următoarea imagine salvată</string>
+    <string name="artist_brightness">Luminozitate</string>
+    <string name="artist_grayscale">Tonuri de gri</string>
+    <string name="artist_saved_image">Imagine salvată %1$d</string>
+    <string name="artist_make_first">Mută la început</string>
+    <string name="artist_move_earlier">Mută mai sus</string>
+    <string name="artist_move_later">Mută mai jos</string>
 </resources>
