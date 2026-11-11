@@ -174,7 +174,7 @@ object Genres {
 class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     private val tagKey: () -> String = { com.prism.music.BuildConfig.LASTFM_API_KEY },
     private val tagsHttp: OkHttpClient = OkHttpClient.Builder().connectTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
-        .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).build(),
+        .readTimeout(8, java.util.concurrent.TimeUnit.SECONDS).followRedirects(false).build(),
 ) {
     /** Diagnostics hook (tests print it). */
     var trace: ((String) -> Unit)? = null
@@ -690,7 +690,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
 
     private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
-    private fun songTagsKey(song: Song) = "songtags1:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
+    private fun songTagsKey(song: Song) = "songtags2:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
 
     enum class TagConnection { VALID, INVALID, UNAVAILABLE }
@@ -698,7 +698,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
     suspend fun checkTagConnection(key: String): TagConnection = withContext(Dispatchers.IO) {
         val response = trackTags(key, "Radiohead", "Paranoid Android")
         when {
-            response.field("toptags") != null -> TagConnection.VALID
+            response.field("toptags").field("tag") is JsonArray -> TagConnection.VALID
             response.field("error")?.toString() in setOf("10", "26") -> TagConnection.INVALID
             else -> TagConnection.UNAVAILABLE
         }
@@ -741,7 +741,15 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             }
             if (response == null) { if (++failures >= 3) break; continue }
             failures = 0
-            if (response.field("error") != null) break
+            when (response.field("error")?.toString()) {
+                null -> Unit
+                "6", "7" -> {
+                    // No match for this track. It says nothing about the remaining playlist.
+                    dao.putGenre(GenreEntity(songTagsKey(song), "", System.currentTimeMillis()))
+                    continue
+                }
+                else -> break
+            }
             val data = response.field("toptags")
             val tags = data.field("tag") as? JsonArray ?: continue
             val attr = data.field("@attr")

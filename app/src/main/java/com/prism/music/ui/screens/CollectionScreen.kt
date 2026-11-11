@@ -304,8 +304,13 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var tagRefresh by remember(page.id) { mutableStateOf(0) }
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
     val tagBudget = remember(page.id, tagApiKey, tagRefresh) { com.prism.music.data.meta.TagLookupBudget() }
-    fun genresOf(id: String): List<String> = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty() +
-        detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }).distinct()
+    fun genresOf(id: String): List<String> {
+        val details = detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }
+        val hasSpecificGenre = details.any { it in com.prism.music.data.meta.MusicTags.detailedGenres }
+        val legacy = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty())
+            .filterNot { it == "Pop" && hasSpecificGenre }
+        return (legacy + details).distinct()
+    }
     fun displayGenre(id: String): String? = com.prism.music.data.meta.MusicTags.displayGenre(detailTags[id].orEmpty(), genres[id])
     var genreFilter by rememberSaveable(page.id) { mutableStateOf(initialGenre) }
     // Liked songs', Downloads' and each playlist's sort is kept, so leaving the page doesn't undo it.

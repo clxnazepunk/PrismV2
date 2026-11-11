@@ -109,6 +109,10 @@ internal fun LocalPlaylistSuggestions(
                 // PrismLibrary rechecks ids against the current list, then appends and persists.
                 val added = withContext(Dispatchers.IO) { c.prismLibrary.add(playlistId, listOf(song)) }
                 if (added > 0) Toast.makeText(context, tr(R.string.added_to, title), Toast.LENGTH_SHORT).show()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                Toast.makeText(context, tr(R.string.try_again), Toast.LENGTH_SHORT).show()
             } finally {
                 state.adding = state.adding - song.id
             }
@@ -116,28 +120,42 @@ internal fun LocalPlaylistSuggestions(
     }
 
     LaunchedEffect(playlistId, online, hasSeeds) { if (!state.requested) load() }
-    Column {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            SectionHeader(tr(R.string.playlist_recommended_songs), Modifier.weight(1f))
-            IconButton(onClick = { load() }, enabled = !state.loading && online && hasSeeds, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
-                Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
-            }
-        }
-        when {
-            !hasSeeds -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
-            !online && visible.isEmpty() -> Text(tr(R.string.you_re_offline), Modifier.padding(horizontal = 20.dp))
-            state.loading -> LoadingState()
-            state.failed -> PrismTextButton(onClick = { load() }, modifier = Modifier.padding(horizontal = 16.dp)) {
-                Text(tr(R.string.try_again))
-            }
-            visible.isEmpty() -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
-        }
-        for (song in visible.takeIf { hasSeeds }.orEmpty()) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    PlaylistRecommendationFooter(
+        enabled = settings.behavior.playlistRecommendations, hasSeeds = hasSeeds, online = online, loading = state.loading,
+        failed = state.failed, hasResults = visible.isNotEmpty(), onRefresh = ::load,
+    ) {
+        for (song in visible) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             SongRow(song, Modifier.weight(1f), playing = current?.id == song.id) { c.player.playSingle(song) }
             IconButton(
                 onClick = { add(song) }, enabled = song.id !in state.adding,
                 modifier = Modifier.testTag("addSuggestion:" + song.id),
             ) { Icon(PrismIcons.Add, tr(R.string.add) + " " + song.title) }
         }
+    }
+}
+
+@Composable
+internal fun PlaylistRecommendationFooter(
+    enabled: Boolean, hasSeeds: Boolean, online: Boolean, loading: Boolean, failed: Boolean, hasResults: Boolean,
+    onRefresh: () -> Unit, results: @Composable () -> Unit,
+) {
+    if (!enabled) return
+    Column(Modifier.testTag("playlistRecommendations")) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            SectionHeader(tr(R.string.playlist_recommended_songs), Modifier.weight(1f))
+            IconButton(onClick = onRefresh, enabled = !loading && online && hasSeeds, modifier = Modifier.testTag("refreshPlaylistSuggestions")) {
+                Icon(PrismIcons.Refresh, tr(R.string.refresh_the_list))
+            }
+        }
+        when {
+            !hasSeeds -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
+            !online && !hasResults -> Text(tr(R.string.you_re_offline), Modifier.padding(horizontal = 20.dp))
+            loading -> LoadingState(Modifier.testTag("loadingPlaylistSuggestions"))
+            failed && online -> PrismTextButton(onClick = onRefresh, modifier = Modifier.padding(horizontal = 16.dp).testTag("retryPlaylistSuggestions")) {
+                Text(tr(R.string.try_again))
+            }
+            !hasResults -> Text(tr(R.string.no_results), Modifier.padding(horizontal = 20.dp))
+        }
+        if (hasSeeds && hasResults) results()
     }
 }
