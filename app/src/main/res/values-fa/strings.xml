@@ -4959,4 +4959,6 @@
     <string name="discovery_language">حساسیت به زبان</string>
     <string name="artist_themes">پوسته‌های هنرمند</string>
     <string name="moods_unavailable">منابع حال‌وهوا موقتاً در دسترس نیستند.</string>
+    <string name="artist_adjust_image">تنظیم تصویر</string>
+    <string name="artist_photo_fit">جا دادن</string>
 </resources>

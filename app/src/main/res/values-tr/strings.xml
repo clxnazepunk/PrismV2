@@ -4959,4 +4959,6 @@
     <string name="discovery_language">Dil duyarlılığı</string>
     <string name="artist_themes">Sanatçı temaları</string>
     <string name="moods_unavailable">Ruh hâli kaynakları geçici olarak kullanılamıyor.</string>
+    <string name="artist_adjust_image">Görseli ayarla</string>
+    <string name="artist_photo_fit">Sığdır</string>
 </resources>

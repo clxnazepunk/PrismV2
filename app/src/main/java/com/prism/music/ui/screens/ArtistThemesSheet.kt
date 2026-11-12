@@ -32,9 +32,11 @@ private const val THEME_PHOTO_MIME = "image/*"
 
 @Composable
 internal fun ArtistThemesSheet(
-    artistId: String, currentColor: Int?, currentPhoto: String?, onColor: () -> Unit, onDismiss: () -> Unit,
+    artistId: String, currentColor: Int?, currentPhoto: String?, onColor: () -> Unit,
+    onPhotoPicked: (String, Uri) -> Unit, onDismiss: () -> Unit,
 ) {
-    val identities = LocalContainer.current.artistIdentities
+    val container = LocalContainer.current
+    val identities = container.artistIdentities
     val entries by identities.entries.collectAsState()
     val identity = entries[artistId] ?: ArtistIdentity()
     val active = identity.activeTheme
@@ -57,11 +59,7 @@ internal fun ArtistThemesSheet(
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         val target = photoFor
         photoFor = null
-        if (uri != null && target != null) scope.launch {
-            busy = true
-            try { if (!identities.importThemePhoto(artistId, target, uri)) reportFailure() }
-            finally { busy = false }
-        }
+        if (uri != null && target != null) onPhotoPicked(target, uri)
     }
     PrismSheet(onDismiss = onDismiss) {
         Text(tr(R.string.artist_themes), Modifier.padding(horizontal = 22.dp, vertical = 8.dp), style = MaterialTheme.typography.titleLarge)
@@ -133,8 +131,16 @@ internal fun ArtistThemesSheet(
                         busy = true
                         scope.launch {
                             try {
-                                identities.store.update(artistId) { it.copy(themes = it.themes + theme) }
-                                if (currentPhoto != null && !identities.importThemePhoto(artistId, theme.id, Uri.parse(currentPhoto))) reportFailure()
+                                identities.store.update(artistId) { entry ->
+                                    val source = entry.activeTheme
+                                    entry.copy(themes = entry.themes + theme.copy(
+                                        photograph = source?.photograph,
+                                        photoFrame = source?.photoFrame,
+                                    ))
+                                }
+                                if (active == null && currentPhoto != null && !identities.importThemePhoto(
+                                        artistId, theme.id, Uri.parse(currentPhoto), container.covers.artistFrame(artistId),
+                                    )) reportFailure()
                                 identities.store.update(artistId) { it.copy(activeThemeId = theme.id) }
                                 newName = ""
                             } catch (e: CancellationException) { throw e }

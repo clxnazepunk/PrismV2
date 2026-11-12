@@ -4989,4 +4989,6 @@
     <string name="discovery_language">Language sensitivity</string>
     <string name="artist_themes">Artist themes</string>
     <string name="moods_unavailable">Mood sources are temporarily unavailable.</string>
+    <string name="artist_adjust_image">Adjust image</string>
+    <string name="artist_photo_fit">Fit</string>
 </resources>

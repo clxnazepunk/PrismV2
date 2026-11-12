@@ -4895,4 +4895,6 @@
     <string name="discovery_language">ความไวต่อภาษา</string>
     <string name="artist_themes">ธีมศิลปิน</string>
     <string name="moods_unavailable">แหล่งข้อมูลอารมณ์ไม่พร้อมใช้งานชั่วคราว</string>
+    <string name="artist_adjust_image">ปรับรูปภาพ</string>
+    <string name="artist_photo_fit">พอดี</string>
 </resources>

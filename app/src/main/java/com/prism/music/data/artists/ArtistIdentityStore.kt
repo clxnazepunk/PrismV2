@@ -31,6 +31,7 @@ data class ArtistTheme(
     val logo: ArtistImageAsset? = null,
     val signature: ArtistImageAsset? = null,
     val photograph: ArtistImageAsset? = null,
+    val photoFrame: ArtistPhotoFrame? = null,
 ) {
     fun asset(role: ArtistImageRole) = if (role == ArtistImageRole.LOGO) logo else signature
     fun withAsset(role: ArtistImageRole, asset: ArtistImageAsset?) =
@@ -208,7 +209,9 @@ class ArtistIdentityStore(val dir: File) {
         withContext(Dispatchers.IO) { removed.forEach { file(it)?.delete() } }
     }
 
-    suspend fun setThemePhoto(id: String, themeId: String, bytes: ByteArray?) = withContext(Dispatchers.IO) {
+    suspend fun setThemePhoto(
+        id: String, themeId: String, bytes: ByteArray?, frame: ArtistPhotoFrame? = null,
+    ): Boolean = withContext(Dispatchers.IO) {
         val photo = bytes?.let {
             val (extension, aspect) = imageInfo(it)
             require(extension != "svg")
@@ -225,11 +228,12 @@ class ArtistIdentityStore(val dir: File) {
                 val theme = identity.themes.firstOrNull { it.id == themeId } ?: return@update identity
                 previous = theme.photograph
                 applied = true
-                identity.editTheme(themeId) { it.copy(photograph = photo) }
+                identity.editTheme(themeId) { it.copy(photograph = photo, photoFrame = frame?.normalized()) }
             }
             committed = applied
         } finally { if (!committed) file(photo)?.delete() }
-        if (committed) file(previous)?.delete()
+        if (committed) deleteUnusedThemePhoto(previous)
+        committed
     }
 
     suspend fun deleteTheme(id: String, themeId: String) = withContext(Dispatchers.IO) {
@@ -239,7 +243,29 @@ class ArtistIdentityStore(val dir: File) {
             val remaining = identity.themes.filterNot { it.id == themeId }
             identity.copy(themes = remaining, activeThemeId = identity.activeThemeId?.takeUnless { it == themeId })
         }
-        file(deleted?.photograph)?.delete()
+        deleteUnusedThemePhoto(deleted?.photograph)
+    }
+
+    suspend fun adjustThemePhoto(id: String, themeId: String, expected: ArtistImageAsset, frame: ArtistPhotoFrame): Boolean {
+        var applied = false
+        update(id) { identity ->
+            identity.editTheme(themeId) { theme ->
+                if (theme.photograph != expected) theme else {
+                    applied = true
+                    theme.copy(photoFrame = frame.normalized())
+                }
+            }
+        }
+        return applied
+    }
+
+    private suspend fun deleteUnusedThemePhoto(asset: ArtistImageAsset?) {
+        if (asset == null) return
+        lock.withLock {
+            if (state.value.values.none { entry -> entry.themes.any { it.photograph?.file == asset.file } }) {
+                file(asset)?.delete()
+            }
+        }
     }
 
     companion object {

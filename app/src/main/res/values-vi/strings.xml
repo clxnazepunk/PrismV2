@@ -4895,4 +4895,6 @@
     <string name="discovery_language">Độ nhạy ngôn ngữ</string>
     <string name="artist_themes">Chủ đề nghệ sĩ</string>
     <string name="moods_unavailable">Các nguồn tâm trạng tạm thời không khả dụng.</string>
+    <string name="artist_adjust_image">Điều chỉnh ảnh</string>
+    <string name="artist_photo_fit">Vừa khung</string>
 </resources>

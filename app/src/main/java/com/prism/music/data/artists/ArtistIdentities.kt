@@ -59,11 +59,10 @@ class ArtistIdentities(private val context: Context) {
         } catch (e: CancellationException) { throw e } catch (_: Exception) { false }
     }
 
-    suspend fun importThemePhoto(id: String, themeId: String, uri: Uri): Boolean = withContext(Dispatchers.IO) {
+    suspend fun importThemePhoto(id: String, themeId: String, uri: Uri, frame: ArtistPhotoFrame? = null): Boolean = withContext(Dispatchers.IO) {
         try {
-            val bytes = context.contentResolver.openInputStream(uri)?.use { bounded(it, ArtistIdentityStore.MAX_IMAGE_BYTES) } ?: return@withContext false
-            store.setThemePhoto(id, themeId, bytes)
-            true
+            val bytes = com.prism.music.data.artistPhotoBytes(context, uri) ?: return@withContext false
+            store.setThemePhoto(id, themeId, bytes, frame)
         } catch (e: CancellationException) { throw e } catch (_: Exception) { false }
     }
 

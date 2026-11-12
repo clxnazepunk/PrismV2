@@ -5087,4 +5087,6 @@
     <string name="discovery_language">Wrażliwość na język</string>
     <string name="artist_themes">Motywy wykonawcy</string>
     <string name="moods_unavailable">Źródła nastrojów są tymczasowo niedostępne.</string>
+    <string name="artist_adjust_image">Dostosuj obraz</string>
+    <string name="artist_photo_fit">Dopasuj</string>
 </resources>

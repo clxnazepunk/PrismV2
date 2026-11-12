@@ -5023,4 +5023,6 @@
     <string name="discovery_language">Sensibilità alla lingua</string>
     <string name="artist_themes">Temi dell’artista</string>
     <string name="moods_unavailable">Le fonti degli stati d’animo sono temporaneamente indisponibili.</string>
+    <string name="artist_adjust_image">Regola immagine</string>
+    <string name="artist_photo_fit">Adatta</string>
 </resources>
