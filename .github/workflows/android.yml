@@ -73,6 +73,25 @@ jobs:
           fi
           "$adb" shell input keyevent 82
           "$adb" install -g app/build/outputs/apk/debug/app-debug.apk
+          # The first-run welcome screen can open before any song row loads its credit formatter.
+          probe="$RUNNER_TEMP/prism-regex-probe"
+          mkdir -p "$probe"
+          cat > "$probe/PrismRegexProbe.java" <<'JAVA'
+          public final class PrismRegexProbe {
+              public static void main(String[] args) throws Exception {
+                  ClassLoader app = new dalvik.system.PathClassLoader(args[0], ClassLoader.getSystemClassLoader());
+                  Class.forName("com.prism.music.ui.components.SongCreditTextKt", true, app);
+                  System.out.println("Song credit formatter initialized on Android");
+              }
+          }
+          JAVA
+          android_jar="$ANDROID_HOME/platforms/android-37.0/android.jar"
+          javac --release 8 -classpath "$android_jar" -d "$probe" "$probe/PrismRegexProbe.java"
+          "$ANDROID_HOME/build-tools/36.0.0/d8" --lib "$android_jar" --output "$probe/probe.jar" "$probe/PrismRegexProbe.class"
+          "$adb" push "$probe/probe.jar" /data/local/tmp/prism-regex-probe.jar
+          "$adb" shell chmod 444 /data/local/tmp/prism-regex-probe.jar
+          installed=$("$adb" shell pm path com.prism.music.dev | tr -d '\r')
+          "$adb" shell 'CLASSPATH=/data/local/tmp/prism-regex-probe.jar' app_process /system/bin PrismRegexProbe "${installed#package:}"
           "$adb" logcat -b crash -c
           component="com.prism.music.dev/com.prism.music.MainActivity"
           "$adb" shell am start -W -n "$component" | tee "$RUNNER_TEMP/prism-launch.log"
@@ -81,7 +100,7 @@ jobs:
           "$adb" logcat -b crash -d | tee "$RUNNER_TEMP/prism-crash.log"
           ! grep -Fq 'Process: com.prism.music.dev,' "$RUNNER_TEMP/prism-crash.log"
           "$adb" shell pidof com.prism.music.dev
-          "$adb" shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' | grep -F "$component"
+          "$adb" shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity).*com\.prism\.music\.dev/com\.prism\.music\.(MainActivity|PrismActivity)'
 
   tests:
     name: Android unit tests
