@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import com.prism.music.data.artists.ArtistImageLayout
 import com.prism.music.data.artists.ArtistPhotoFrame
-import com.prism.music.ui.screens.ArtistHeaderPhotograph
+import com.prism.music.ui.screens.ArtistFramedPhoto
 import com.prism.music.ui.theme.LocalUi
 import com.prism.music.ui.theme.PrismUi
 import com.prism.music.ui.screens.ArtistProfileMark
@@ -56,10 +56,10 @@ class ArtistHeaderCanvasTest {
         compose.setContent {
             CompositionLocalProvider(LocalDensity provides Density(1f), LocalUi provides PrismUi(reduceMotion = true)) {
                 Column {
-                    ArtistHeaderPhotograph(source, frame, Modifier.size(64.dp).background(Color.Blue).testTag("photo-preview"),
-                        gradientFraction = 0f, onImageSize = { previewLoaded = true })
-                    ArtistHeaderPhotograph(source, frame, Modifier.size(128.dp).background(Color.Blue).testTag("photo-header"),
-                        gradientFraction = 0f, onImageSize = { headerLoaded = true })
+                    ArtistFramedPhoto(source, frame, Modifier.size(64.dp).background(Color.Blue).testTag("photo-preview"),
+                        onImageSize = { previewLoaded = true })
+                    ArtistFramedPhoto(source, frame, Modifier.size(128.dp).background(Color.Blue).testTag("photo-header"),
+                        onImageSize = { headerLoaded = true })
                 }
             }
         }

@@ -43,7 +43,6 @@ import com.prism.music.ui.theme.LocalUi
 import kotlin.math.roundToInt
 
 /** Both the editor and artist header draw the same framed photograph and fade. */
-@OptIn(coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 internal fun ArtistHeaderPhotograph(
     source: String?,
@@ -53,6 +52,24 @@ internal fun ArtistHeaderPhotograph(
     gradientFraction: Float,
     onImageSize: (Size) -> Unit = {},
     onLoadError: () -> Unit = {},
+) {
+    Box(modifier.clipToBounds()) {
+        Box(Modifier.matchParentSize().dissolveBottom(0.5f)) {
+            ArtistFramedPhoto(source, frame, Modifier.fillMaxSize().graphicsLayer { translationY = scroll() * 0.5f },
+                onImageSize, onLoadError)
+        }
+        BoxWithConstraints(Modifier.matchParentSize()) {
+            Box(Modifier.fillMaxWidth().height(maxHeight * gradientFraction)
+                .background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.34f), Color.Transparent))))
+        }
+    }
+}
+
+@OptIn(coil3.annotation.ExperimentalCoilApi::class)
+@Composable
+internal fun ArtistFramedPhoto(
+    source: String?, frame: ArtistPhotoFrame?, modifier: Modifier = Modifier,
+    onImageSize: (Size) -> Unit = {}, onLoadError: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val reduceMotion = LocalUi.current.reduceMotion
@@ -76,20 +93,11 @@ internal fun ArtistHeaderPhotograph(
             )
         }
     }
-    Box(modifier.clipToBounds()) {
-        Box(Modifier.matchParentSize().dissolveBottom(0.5f)) {
-            AsyncImage(
-                request, null, contentScale = scale, alignment = alignment,
-                modifier = Modifier.fillMaxSize().graphicsLayer { translationY = scroll() * 0.5f },
-                onSuccess = { onImageSize(it.painter.intrinsicSize) },
-                onError = { onLoadError() },
-            )
-        }
-        BoxWithConstraints(Modifier.matchParentSize()) {
-            Box(Modifier.fillMaxWidth().height(maxHeight * gradientFraction)
-                .background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.34f), Color.Transparent))))
-        }
-    }
+    AsyncImage(
+        request, null, modifier, contentScale = scale, alignment = alignment,
+        onSuccess = { onImageSize(it.painter.intrinsicSize) },
+        onError = { onLoadError() },
+    )
 }
 
 private val frameSaver = listSaver<ArtistPhotoFrame, Any>(
