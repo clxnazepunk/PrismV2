@@ -5087,4 +5087,6 @@
     <string name="discovery_language">Чувствительность к языку</string>
     <string name="artist_themes">Темы исполнителя</string>
     <string name="moods_unavailable">Источники настроений временно недоступны.</string>
+    <string name="artist_adjust_image">Настроить изображение</string>
+    <string name="artist_photo_fit">Вписать</string>
 </resources>

@@ -54,7 +54,8 @@ class ArtistIdentityStoreTest {
             val output = java.io.ByteArrayOutputStream()
             image.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output)
             image.recycle()
-            store.setThemePhoto("id", "one", output.toByteArray())
+            val frame = ArtistPhotoFrame(false, 2f, 0.4f, -0.6f)
+            store.setThemePhoto("id", "one", output.toByteArray(), frame)
             store.update("id") { it.cycleTheme() }
             var entry = ArtistIdentityStore(dir).entries.value.getValue("id")
             assertEquals(8, entry.activeTheme?.color)
@@ -67,8 +68,19 @@ class ArtistIdentityStoreTest {
             assertEquals(5, entry.activeTheme?.color)
             assertEquals(b, entry.chosen(ArtistImageRole.LOGO))
             assertEquals(s, entry.chosen(ArtistImageRole.SIGNATURE))
-            assertNotNull(store.file(entry.activeTheme?.photograph))
+            assertEquals(frame, entry.activeTheme?.photoFrame)
+            val photo = entry.activeTheme?.photograph!!
+            assertNotNull(store.file(photo))
+            store.update("id") { current ->
+                current.editTheme("two") { it.copy(photograph = photo, photoFrame = frame) }
+            }
+            assertTrue(store.adjustThemePhoto("id", "two", photo, frame.copy(zoom = 3f)))
+            assertEquals(3f, ArtistIdentityStore(dir).entries.value.getValue("id").themes
+                .first { it.id == "two" }.photoFrame!!.zoom, 0f)
+            assertEquals(frame, store.entries.value.getValue("id").activeTheme?.photoFrame)
             store.deleteTheme("id", "one")
+            assertNotNull(store.file(photo))
+            store.setThemePhoto("id", "two", null)
             assertNull(store.entries.value.getValue("id").activeTheme)
             assertNotNull(store.file(b))
             assertNull(store.file(entry.activeTheme?.photograph))

@@ -4895,4 +4895,6 @@
     <string name="discovery_language">언어 민감도</string>
     <string name="artist_themes">아티스트 테마</string>
     <string name="moods_unavailable">분위기 출처를 일시적으로 사용할 수 없습니다.</string>
+    <string name="artist_adjust_image">이미지 조정</string>
+    <string name="artist_photo_fit">맞춤</string>
 </resources>

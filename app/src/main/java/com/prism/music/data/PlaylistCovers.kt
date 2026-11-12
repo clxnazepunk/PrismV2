@@ -4,15 +4,21 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import androidx.compose.runtime.mutableStateMapOf
+import com.prism.music.data.artists.ArtistPhotoFrame
 import com.prism.music.data.model.BrowseItem
 import com.prism.music.data.model.PlaylistItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.UUID
 
 /** #305 (1.8.1): the song's picture as Prism shows it: the cover picked for it or its album, else its own. */
 val com.prism.music.data.model.Song.art: String? get() = PlaylistCovers.artOf(this)
@@ -25,7 +31,18 @@ class PlaylistCovers(private val context: Context) {
     private val prefs = context.getSharedPreferences("playlist_covers", Context.MODE_PRIVATE)
     /** Compose state, so every cover on screen updates the moment one is changed. */
     private val covers = mutableStateMapOf<String, String>().apply {
-        prefs.all.forEach { (k, v) -> (v as? String)?.let { put(k, restoredCover(it)) } }
+        prefs.all.forEach { (k, v) ->
+            if (!k.startsWith(ARTIST_FRAME_PREFIX) && v is String) put(k, restoredCover(v))
+        }
+    }
+    private val artistFrames = mutableStateMapOf<String, ArtistPhotoFrame>().apply {
+        prefs.all.forEach { (key, value) ->
+            if (key.startsWith(ARTIST_FRAME_PREFIX) && value is String) {
+                runCatching { Json.decodeFromString<ArtistPhotoFrame>(value).normalized() }.getOrNull()?.let {
+                    put(key.removePrefix(ARTIST_FRAME_PREFIX), it)
+                }
+            }
+        }
     }
     val dir: File get() = File(context.filesDir, "covers")
 
@@ -82,6 +99,7 @@ class PlaylistCovers(private val context: Context) {
     init { shared = this }
 
     companion object {
+        private const val ARTIST_FRAME_PREFIX = "artist_frame:"
         /** The phone's covers, for what draws a song without the app's container at hand (the media session, a row). */
         @Volatile var shared: PlaylistCovers? = null
             internal set
@@ -90,10 +108,12 @@ class PlaylistCovers(private val context: Context) {
         fun artOf(song: com.prism.music.data.model.Song): String? = shared?.art(song) ?: song.thumbnail
     }
 
-    private fun put(id: String, value: String) {
+    private fun put(id: String, value: String, frame: ArtistPhotoFrame? = null) {
         val old = covers[id]
         covers[id] = value
-        prefs.edit().putString(id, value).apply()
+        val edit = prefs.edit().putString(id, value)
+        if (id.startsWith("artist:")) writeArtistFrame(id, frame, edit)
+        edit.apply()
         old?.let(::deleteIfOurs)
     }
 
@@ -102,7 +122,7 @@ class PlaylistCovers(private val context: Context) {
 
     /** Copies a picked photo into the app as a square, so it survives the original being moved or deleted. */
     suspend fun usePhoto(id: String, uri: Uri): Boolean = withContext(Dispatchers.IO) {
-        val bmp = runCatching { decode(uri) }.getOrNull() ?: return@withContext false
+        val bmp = runCatching { decodeCover(context, uri) }.getOrNull() ?: return@withContext false
         var square: Bitmap? = null
         var out: Bitmap? = null
         var file: File? = null
@@ -147,9 +167,54 @@ class PlaylistCovers(private val context: Context) {
     /** An artist's own photo (1.7.6), kept under the artist's id. */
     fun artistKey(id: String) = "artist:$id"
 
+    fun artistFrame(id: String): ArtistPhotoFrame? = artistFrames[artistKey(id)]
+
+    fun adjustArtistPhoto(id: String, expectedPhoto: String, frame: ArtistPhotoFrame): Boolean {
+        val key = artistKey(id)
+        if (covers[key] != expectedPhoto) return false
+        val edit = prefs.edit()
+        writeArtistFrame(key, frame, edit)
+        edit.apply()
+        return true
+    }
+
+    private fun writeArtistFrame(key: String, frame: ArtistPhotoFrame?, edit: android.content.SharedPreferences.Editor) {
+        val preference = ARTIST_FRAME_PREFIX + key
+        if (frame == null) {
+            artistFrames.remove(key)
+            edit.remove(preference)
+        } else {
+            val safe = frame.normalized()
+            artistFrames[key] = safe
+            edit.putString(preference, Json.encodeToString(ArtistPhotoFrame.serializer(), safe))
+        }
+    }
+
+    /** Keep the full aspect ratio. The profile frame is saved alongside the existing library cover. */
+    suspend fun useArtistPhoto(id: String, uri: Uri, frame: ArtistPhotoFrame): Boolean = withContext(Dispatchers.IO) {
+        var target: File? = null
+        var committed = false
+        try {
+            val bytes = artistPhotoBytes(context, uri) ?: return@withContext false
+            dir.mkdirs()
+            val file = File(dir, "artist-${UUID.randomUUID()}.jpg")
+            target = file
+            file.writeBytes(bytes)
+            withContext(Dispatchers.Main) {
+                put(artistKey(id), Uri.fromFile(file).toString(), frame)
+                committed = true
+            }
+            true
+        } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+        catch (_: Exception) { false }
+        finally { if (!committed) target?.delete() }
+    }
+
     fun reset(id: String) {
         val old = covers.remove(id) ?: return
-        prefs.edit().remove(id).apply()
+        val edit = prefs.edit().remove(id)
+        if (id.startsWith("artist:")) writeArtistFrame(id, null, edit)
+        edit.apply()
         deleteIfOurs(old)
     }
 
@@ -159,22 +224,52 @@ class PlaylistCovers(private val context: Context) {
         if (f.canonicalFile.parentFile == dir.canonicalFile) f.delete()
     }
 
-    /** Decoded at a sensible size, the right way up (phone photos often carry a rotation). */
-    private fun decode(uri: Uri): Bitmap? {
-        if (Build.VERSION.SDK_INT >= 28) {
-            val decoded = runCatching { ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { d, info, _ ->
-                val longest = maxOf(info.size.width, info.size.height)
-                if (longest > 2400) d.setTargetSampleSize(longest / 2400 + 1)
-                d.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-            } }.getOrNull()
-            if (decoded != null) return decoded
+}
+
+internal fun artistPhotoBytes(context: Context, uri: Uri): ByteArray? {
+    val bitmap = decodeCover(context, uri, honorExif = true) ?: return null
+    return try {
+        ByteArrayOutputStream().use { output ->
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 88, output)) output.toByteArray() else null
         }
-        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-        var sample = 1
-        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 1200) sample *= 2
-        return context.contentResolver.openInputStream(uri)?.use {
-            BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+    } finally { bitmap.recycle() }
+}
+
+/** Decoded at a sensible size, the right way up (phone photos often carry a rotation). */
+private fun decodeCover(context: Context, uri: Uri, honorExif: Boolean = false): Bitmap? {
+    if (Build.VERSION.SDK_INT >= 28) {
+        val decoded = runCatching { ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { d, info, _ ->
+            val longest = maxOf(info.size.width, info.size.height)
+            if (longest > 2400) d.setTargetSampleSize(longest / 2400 + 1)
+            d.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+        } }.getOrNull()
+        if (decoded != null) return decoded
+    }
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+    var sample = 1
+    while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 1200) sample *= 2
+    val bitmap = context.contentResolver.openInputStream(uri)?.use {
+        BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+    } ?: return null
+    if (!honorExif) return bitmap
+    val orientation = runCatching {
+        context.contentResolver.openInputStream(uri)?.use {
+            ExifInterface(it).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
         }
+    }.getOrNull()
+    val matrix = Matrix()
+    when (orientation) {
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
+        ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
+        ExifInterface.ORIENTATION_TRANSPOSE -> { matrix.setRotate(90f); matrix.postScale(-1f, 1f) }
+        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
+        ExifInterface.ORIENTATION_TRANSVERSE -> { matrix.setRotate(-90f); matrix.postScale(-1f, 1f) }
+        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
+        else -> return bitmap
+    }
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true).also {
+        if (it !== bitmap) bitmap.recycle()
     }
 }

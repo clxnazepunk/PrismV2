@@ -2,6 +2,9 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import android.net.Uri
+import androidx.compose.runtime.saveable.rememberSaveable
+import com.prism.music.data.artists.ArtistPhotoFrame
 import com.prism.music.trp
 import com.prism.music.ui.theme.PrismIcons
 import android.app.Activity
@@ -57,13 +60,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
@@ -73,9 +74,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import coil3.compose.AsyncImage
-import coil3.compose.useExistingImageAsPlaceholder
-import coil3.request.crossfade
 import com.prism.music.data.ArtistOpened
 import com.prism.music.data.FavoriteArtist
 import com.prism.music.data.ShareLinks
@@ -118,7 +116,6 @@ import com.prism.music.ui.components.ShareTarget
 import com.prism.music.ui.components.SignatureSample
 import com.prism.music.ui.components.SongActionsSheet
 import com.prism.music.ui.components.SongRow
-import com.prism.music.ui.components.dissolveBottom
 import com.prism.music.ui.components.frostFill
 import com.prism.music.ui.components.playable
 import com.prism.music.ui.components.rememberArtPalette
@@ -249,7 +246,19 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
 
     var showInfo by remember { mutableStateOf(false) }
     var showSignature by remember { mutableStateOf(false) }
-    var showThemes by remember { mutableStateOf(false) }
+    var showThemes by rememberSaveable(page.id) { mutableStateOf(false) }
+    var photoSource by rememberSaveable(page.id) { mutableStateOf<String?>(null) }
+    var photoThemeId by rememberSaveable(page.id) { mutableStateOf<String?>(null) }
+    var importingPhoto by rememberSaveable(page.id) { mutableStateOf(false) }
+    var savingPhoto by remember(page.id) { mutableStateOf(false) }
+    fun openPhoto(source: String, themeId: String?, importing: Boolean) {
+        photoThemeId = themeId
+        importingPhoto = importing
+        photoSource = source
+    }
+    val pickArtistPhoto = rememberArtistPhotoPicker(page.id) { target, uri ->
+        if (target == page.id) openPhoto(uri.toString(), null, true)
+    }
     var sharing by remember { mutableStateOf(false) }
 
     fun playList(playlistId: String?, title: String, videoId: String? = null, params: String? = null) {
@@ -339,6 +348,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
     var pageWidth by remember { mutableStateOf(config.screenWidthDp.dp) }
     val heroHeight = minOf(pageWidth * 1.1f, config.screenHeightDp.dp * 0.6f)
     val heroPx = with(density) { heroHeight.toPx() }
+    val photoFrame = if (customPhoto == null) null else if (theme == null) c.covers.artistFrame(page.id) else theme.photoFrame
     val heroScroll = { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset.toFloat() else heroPx }
     // How far the bar has taken over from the hero (0 at the top of the page, 1 once the photo has gone).
     val solid by remember {
@@ -373,7 +383,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
             LazyColumn(state = list, contentPadding = PaddingValues(bottom = bottomPadding + 32.dp)) {
                 item("hero") {
                     Hero(
-                        page, type, true, heroHeight, { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset else 0 },
+                        page, type, true, heroHeight, { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset else 0 }, photoFrame,
                         favorite = favorite,
                         onInfo = { showInfo = true },
                         onPlay = playTop,
@@ -443,12 +453,54 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
                 onThemeCycle = if (identity?.themes.isNullOrEmpty()) null else ({
                     scope.launch { c.artistIdentities.store.update(page.id) { it.cycleTheme() } }
                     Unit
-                }), activeThemeId = theme?.id)
+                }), activeThemeId = theme?.id, onPickPhoto = pickArtistPhoto,
+                onAdjustPhoto = customPhoto?.let { source -> { openPhoto(source, theme?.id, false) } })
         }
 
         if (showInfo) InfoSheet(page, genre, favorite, onFavorite = toggleFavorite, onShare = { showInfo = false; sharing = true }) { showInfo = false }
-        if (showSignature) SignatureSheet(page, genre, randomFont, pageWidth, heroHeight) { showSignature = false }
-        if (showThemes) ArtistThemesSheet(page.id, ownColor?.toArgb(), customPhoto, onColor = { showThemes = false; pageColor = true }) { showThemes = false }
+        if (showSignature) SignatureSheet(page, genre, randomFont, pageWidth, heroHeight, photoFrame) { showSignature = false }
+        if (showThemes && photoSource == null) ArtistThemesSheet(
+            page.id, ownColor?.toArgb(), customPhoto,
+            onColor = { showThemes = false; pageColor = true },
+            onPhotoPicked = { target, uri -> openPhoto(uri.toString(), target, true) },
+        ) { showThemes = false }
+        photoSource?.let { source ->
+            val targetThemeId = photoThemeId
+            val targetTheme = identity?.themes?.firstOrNull { it.id == targetThemeId }
+            val isImport = importingPhoto
+            val initial = if (isImport) ArtistPhotoFrame() else {
+                (if (targetThemeId == null) c.covers.artistFrame(page.id) else targetTheme?.photoFrame) ?: ArtistPhotoFrame()
+            }
+            ArtistPhotoAdjustment(
+                source, initial, pageWidth.value / heroHeight.value.coerceAtLeast(1f),
+                130f / heroHeight.value.coerceAtLeast(1f), savingPhoto,
+                onConfirm = { frame ->
+                    if (!savingPhoto) {
+                        savingPhoto = true
+                        scope.launch {
+                            val saved = try {
+                                when {
+                                    targetThemeId == null && isImport -> c.covers.useArtistPhoto(page.id, Uri.parse(source), frame)
+                                    targetThemeId == null -> c.covers.adjustArtistPhoto(page.id, source, frame)
+                                    isImport -> c.artistIdentities.importThemePhoto(page.id, targetThemeId, Uri.parse(source), frame)
+                                    else -> targetTheme?.photograph?.let { asset ->
+                                        val stored = c.artistIdentities.store.file(asset)
+                                        stored != null && Uri.fromFile(stored).toString() == source &&
+                                            c.artistIdentities.store.adjustThemePhoto(page.id, targetThemeId, asset, frame)
+                                    } ?: false
+                                }
+                            } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+                            catch (_: Exception) { false }
+                            finally { savingPhoto = false }
+                            if (saved) photoSource = null else android.widget.Toast.makeText(
+                                context, tr(R.string.couldn_t_use_that_picture), android.widget.Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+                },
+                onDismiss = { photoSource = null },
+            )
+        }
     }
     // The page's own color (1.7.2): any color, or back to the photo's.
     if (pageColor) {
@@ -485,27 +537,18 @@ private fun latestRelease(s: ArtistSections): AlbumItem? {
     }
 }
 
-@OptIn(coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 internal fun ArtistHeader(
     page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean,
     height: Dp, scroll: () -> Int = { 0 }, onSignature: () -> Unit = {},
     preview: Pair<com.prism.music.data.artists.ArtistImageRole, com.prism.music.data.artists.ArtistImageLayout>? = null,
+    photoFrame: ArtistPhotoFrame? = null,
 ) {
         Box(Modifier.fillMaxWidth().height(height)) {
-            // The photo frosts over into the backdrop below (a blurred copy of it, lined up exactly).
-            Box(Modifier.matchParentSize().clipToBounds().dissolveBottom(0.5f)) {
-                AsyncImage(
-                    coil3.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
-                        .data(hiRes(page.thumbnail, 2880))
-                        .useExistingImageAsPlaceholder(true)
-                        .crossfade(if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 220)
-                        .build(), null, contentScale = ContentScale.Crop,
-                    // Gentle parallax: the photo drifts at half the scroll speed.
-                    modifier = Modifier.fillMaxSize().graphicsLayer { translationY = scroll() * 0.5f },
-                )
-            }
-            Box(Modifier.fillMaxWidth().height(130.dp).background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.34f), Color.Transparent))))
+            ArtistHeaderPhotograph(
+                hiRes(page.thumbnail, 2880), photoFrame, Modifier.matchParentSize(),
+                scroll = scroll, gradientFraction = 130f / height.value.coerceAtLeast(1f),
+            )
             // The name (and audience) sit on the photo and move with it (#37): they drift at the photo's pace as the page
             // scrolls, fading and sinking into its foot, rather than sliding off over it at the page's.
             Box(Modifier.matchParentSize().clipToBounds()) {
@@ -533,10 +576,11 @@ internal fun ArtistHeader(
 @Composable
 private fun Hero(
     page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean, height: Dp, scroll: () -> Int,
+    photoFrame: ArtistPhotoFrame?,
     favorite: Boolean, onInfo: () -> Unit, onPlay: () -> Unit, onShuffle: () -> Unit, onFavorite: () -> Unit, onSignature: () -> Unit,
 ) {
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        ArtistHeader(page, type, typeReady, height, scroll, onSignature)
+        ArtistHeader(page, type, typeReady, height, scroll, onSignature, photoFrame = photoFrame)
         Spacer(Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
             HeroButton(PrismIcons.Info, tr(R.string.about, page.name), onClick = onInfo)
@@ -586,6 +630,7 @@ private fun TopBar(
     onColor: () -> Unit,
     /** An uploaded artist has no page anyone else could open. */
     shareable: Boolean = true, onThemes: () -> Unit, onThemeCycle: (() -> Unit)?, activeThemeId: String?,
+    onPickPhoto: () -> Unit, onAdjustPhoto: (() -> Unit)?,
 ) {
     val nav = LocalNavigator.current
     val view = LocalView.current
@@ -604,9 +649,6 @@ private fun TopBar(
     val profileContext = androidx.compose.ui.platform.LocalContext.current
     val savedRevision by profileContainer.offline.savedArtistChanges.collectAsState()
     val profileSaved = remember(page.id, savedRevision) { profileContainer.offline.isArtistSaved(page.id) }
-    val pickArtistPhoto = rememberArtistPhotoPicker(page.id, profileContainer.covers) {
-        android.widget.Toast.makeText(profileContext, tr(R.string.couldn_t_use_that_picture), android.widget.Toast.LENGTH_SHORT).show()
-    }
     var menu by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().statusBarsPadding().height(60.dp)) {
@@ -664,7 +706,11 @@ private fun TopBar(
                         val ownPhoto = c.covers.custom(photoKey) != null
                         DropdownMenuItem(
                             { Text(tr(R.string.use_your_own_photo)) },
-                            { menu = false; if (activeThemeId != null) onThemes() else pickArtistPhoto() },
+                            { menu = false; if (activeThemeId != null) onThemes() else onPickPhoto() },
+                            leadingIcon = { Icon(PrismIcons.Photo, null) },
+                        )
+                        if (onAdjustPhoto != null) DropdownMenuItem(
+                            { Text(tr(R.string.artist_adjust_image)) }, { menu = false; onAdjustPhoto() },
                             leadingIcon = { Icon(PrismIcons.Photo, null) },
                         )
                         if (ownPhoto && activeThemeId == null) DropdownMenuItem(
@@ -976,7 +1022,7 @@ private fun InfoSheet(page: ArtistPage, genre: String?, favorite: Boolean, onFav
 
 /** Pick how this artist's name is set on their page (or leave it to Prism). Kept on this phone. */
 @Composable
-private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, headerWidth: Dp, headerHeight: Dp, onDismiss: () -> Unit) {
+private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, headerWidth: Dp, headerHeight: Dp, photoFrame: ArtistPhotoFrame?, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val signatures by c.artistPrefs.signatures.collectAsState()
     val chosen = signatures[page.id]
@@ -995,7 +1041,7 @@ private fun SignatureSheet(page: ArtistPage, genre: String?, randomFont: Int, he
         }
         Spacer(Modifier.height(10.dp))
         LazyColumn(Modifier.heightIn(max = 560.dp), contentPadding = PaddingValues(bottom = 28.dp)) {
-            item("artist-images") { ArtistIdentityControls(page, auto, headerWidth, headerHeight) }
+            item("artist-images") { ArtistIdentityControls(page, auto, headerWidth, headerHeight, photoFrame) }
             item("auto") { SignatureOption(page.name, tr(R.string.automatic, auto.label), auto, chosen == null) { c.artistPrefs.setSignature(page.id, null) } }
             items(ArtistTypography.all, key = { it.key }) { t ->
                 SignatureOption(page.name, t.label, t, chosen == t.key) { c.artistPrefs.setSignature(page.id, t.key) }

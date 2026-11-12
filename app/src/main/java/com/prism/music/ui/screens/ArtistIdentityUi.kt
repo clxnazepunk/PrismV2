@@ -143,6 +143,7 @@ internal fun ArtistMark(
 
 @Composable
 private fun ArtistLayoutEditor(
+    photoFrame: com.prism.music.data.artists.ArtistPhotoFrame?,
     page: ArtistPage, role: ArtistImageRole, type: ArtistType, headerWidth: Dp, headerHeight: Dp,
     current: ArtistImageLayout, onSave: (ArtistImageLayout) -> Unit, onDismiss: () -> Unit,
 ) {
@@ -164,7 +165,7 @@ private fun ArtistLayoutEditor(
                             .requiredSize(headerWidth, headerHeight).graphicsLayer {
                                 transformOrigin = TransformOrigin(0f, 0f); scaleX = ratio; scaleY = ratio
                             }) {
-                            ArtistHeader(page, type, true, headerHeight, preview = role to draft)
+                            ArtistHeader(page, type, true, headerHeight, preview = role to draft, photoFrame = photoFrame)
                         }
                     }
                 }
@@ -224,7 +225,9 @@ private fun ArtistIconAction(
 
 /** Inside the existing signature sheet: keep its native typography picker as the fallback. */
 @Composable
-internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWidth: Dp, headerHeight: Dp) {
+internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWidth: Dp, headerHeight: Dp,
+    photoFrame: com.prism.music.data.artists.ArtistPhotoFrame?,
+) {
     val c = LocalContainer.current
     val identities = c.artistIdentities
     val entries by identities.entries.collectAsState()
@@ -271,7 +274,7 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
     }
     adjusting?.let { kind ->
         identities.asset(page.id, kind)?.let { asset ->
-            ArtistLayoutEditor(page, kind, type, headerWidth, headerHeight,
+            ArtistLayoutEditor(photoFrame, page, kind, type, headerWidth, headerHeight,
                 current.layout(kind, asset),
                 onSave = { layout ->
                     change { it.withLayout(kind, asset, layout) }

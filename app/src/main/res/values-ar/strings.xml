@@ -5215,4 +5215,6 @@
     <string name="discovery_language">حساسية اللغة</string>
     <string name="artist_themes">سمات الفنان</string>
     <string name="moods_unavailable">مصادر الحالات المزاجية غير متاحة مؤقتًا.</string>
+    <string name="artist_adjust_image">ضبط الصورة</string>
+    <string name="artist_photo_fit">احتواء</string>
 </resources>

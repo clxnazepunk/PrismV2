@@ -4959,4 +4959,6 @@
     <string name="discovery_language">Nyelvi érzékenység</string>
     <string name="artist_themes">Előadói témák</string>
     <string name="moods_unavailable">A hangulatforrások átmenetileg nem elérhetők.</string>
+    <string name="artist_adjust_image">Kép igazítása</string>
+    <string name="artist_photo_fit">Illesztés</string>
 </resources>

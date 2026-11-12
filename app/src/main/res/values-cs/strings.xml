@@ -5087,4 +5087,6 @@
     <string name="discovery_language">Citlivost na jazyk</string>
     <string name="artist_themes">Motivy interpreta</string>
     <string name="moods_unavailable">Zdroje nálad jsou dočasně nedostupné.</string>
+    <string name="artist_adjust_image">Upravit obrázek</string>
+    <string name="artist_photo_fit">Přizpůsobit</string>
 </resources>

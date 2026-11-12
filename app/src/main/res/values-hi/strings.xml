@@ -4959,4 +4959,6 @@
     <string name="discovery_language">भाषा संवेदनशीलता</string>
     <string name="artist_themes">कलाकार की थीम</string>
     <string name="moods_unavailable">मूड के स्रोत अस्थायी रूप से उपलब्ध नहीं हैं।</string>
+    <string name="artist_adjust_image">छवि समायोजित करें</string>
+    <string name="artist_photo_fit">फ़िट करें</string>
 </resources>

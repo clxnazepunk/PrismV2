@@ -4895,4 +4895,6 @@
     <string name="discovery_language">語言敏感度</string>
     <string name="artist_themes">藝人主題</string>
     <string name="moods_unavailable">心情資料來源暫時無法使用。</string>
+    <string name="artist_adjust_image">調整圖片</string>
+    <string name="artist_photo_fit">符合框架</string>
 </resources>

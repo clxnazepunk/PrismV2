@@ -4959,4 +4959,6 @@
     <string name="discovery_language">Pagiging sensitibo sa wika</string>
     <string name="artist_themes">Mga tema ng artist</string>
     <string name="moods_unavailable">Pansamantalang hindi available ang mga pinagmumulan ng mood.</string>
+    <string name="artist_adjust_image">Ayusin ang larawan</string>
+    <string name="artist_photo_fit">Iakma</string>
 </resources>

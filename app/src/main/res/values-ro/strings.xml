@@ -5023,4 +5023,6 @@
     <string name="discovery_language">Sensibilitate la limbă</string>
     <string name="artist_themes">Temele artistului</string>
     <string name="moods_unavailable">Sursele pentru stări de spirit sunt temporar indisponibile.</string>
+    <string name="artist_adjust_image">Ajustează imaginea</string>
+    <string name="artist_photo_fit">Încadrează</string>
 </resources>
