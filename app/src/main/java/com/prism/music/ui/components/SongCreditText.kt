@@ -6,10 +6,11 @@ import com.prism.music.data.model.Song
 import com.prism.music.data.model.SongItem
 
 private const val FEAT = "feat."
-private val bracketCredit = Regex("""(?U)(\(|\[)(feat\.?|ft\.?|featuring|con)\s+([^\[\]()]+)(\)|\])""", RegexOption.IGNORE_CASE)
-private val dashCredit = Regex("""(?U)(\s+[–—-]\s+)(feat\.?|ft\.?|featuring|con)\s+(.+?)(?=\s+[–—-]\s+|$)""", RegexOption.IGNORE_CASE)
-private val plainCredit = Regex("""(?U)\s+(feat\.|ft\.|featuring|con)\s+(?=(.+)$)""", RegexOption.IGNORE_CASE)
-private val separator = Regex("""(?U)^\s*(?:[,/&+·;]\s*|(?:y|and|e|x)\s+)+""", RegexOption.IGNORE_CASE)
+// Explicit spacing classes work with both Android ICU and the JVM, including non-breaking spaces.
+private val bracketCredit = Regex("""(\(|\[)(feat\.?|ft\.?|featuring|con)[\s\p{Zs}]+([^\[\]()]+)(\)|\])""", RegexOption.IGNORE_CASE)
+private val dashCredit = Regex("""([\s\p{Zs}]+[–—-][\s\p{Zs}]+)(feat\.?|ft\.?|featuring|con)[\s\p{Zs}]+(.+?)(?=[\s\p{Zs}]+[–—-][\s\p{Zs}]+|$)""", RegexOption.IGNORE_CASE)
+private val plainCredit = Regex("""[\s\p{Zs}]+(feat\.|ft\.|featuring|con)[\s\p{Zs}]+(?=(.+)$)""", RegexOption.IGNORE_CASE)
+private val separator = Regex("""^[\s\p{Zs}]*(?:[,/&+·;][\s\p{Zs}]*|(?:y|and|e|x)[\s\p{Zs}]+)+""", RegexOption.IGNORE_CASE)
 
 private data class DisplayCredit(val start: Int, val end: Int, val guests: List<ArtistRef>)
 

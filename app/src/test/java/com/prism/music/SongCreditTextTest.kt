@@ -46,6 +46,14 @@ class SongCreditTextTest {
         } finally { java.util.Locale.setDefault(previous) }
     }
 
+    @Test fun localizedCreditAcceptsNonBreakingAndNarrowSpaces() {
+        val original = "Canción (con\u00a0Ana\u202fy\u202fLuis)"
+        val song = Song("id", original, listOf(ArtistRef("Lead"), ArtistRef("Ana"), ArtistRef("Luis")))
+        assertEquals("Canción (feat.\u00a0Ana\u202fy\u202fLuis)", song.displayTitle)
+        assertEquals("Lead feat. Ana, Luis", song.displayArtists)
+        assertEquals(original, song.title)
+    }
+
     @Test fun multipleFeaturedArtistsAndGenuineConAreDistinguishedInBothLocales() {
         val original = java.util.Locale.getDefault()
         try {
