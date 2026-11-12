@@ -59,7 +59,7 @@ object PlaylistSuggestions {
     fun playlistArtistKeys(playlist: List<Song>): Set<String> = playlist.flatMap(::artistKeys).toSet()
     fun hasPlaylistArtist(song: Song, artists: Set<String>) = artistKeys(song).any { it in artists }
 
-    private val spanishWords = setOf("que", "del", "una", "para", "eres", "nunca", "quiero", "las", "los", "vida", "amor", "corazón", "mi", "sin", "por")
+    private val spanishWords = setOf("que", "del", "una", "para", "eres", "nunca", "quiero", "las", "los", "vida", "amor", "mi", "sin", "por")
     private val englishWords = setOf("the", "you", "your", "my", "with", "from", "never", "love", "heart", "this", "and", "for", "where", "when")
     private val titleWord = Regex("[\\p{L}]+")
 

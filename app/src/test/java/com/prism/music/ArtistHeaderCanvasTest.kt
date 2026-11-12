@@ -105,7 +105,8 @@ class ArtistHeaderCanvasTest {
         compose.runOnIdle { mark = green }
         await(green)
         assertTrue(render().toPixelMap()[20, 50].blue > 0.9f)
-        android.os.SystemClock.sleep(300)
+        // Coil's painter measures elapsed time with the monotonic system clock.
+        Thread.sleep(300)
         compose.mainClock.advanceTimeBy(300)
         val image = render()
         assertTrue(image.toPixelMap()[150, 50].green > 0.8f)

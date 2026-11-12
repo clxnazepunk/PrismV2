@@ -28,6 +28,8 @@ import com.prism.music.ui.theme.PrismIcons
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
+private const val THEME_PHOTO_MIME = "image/*"
+
 @Composable
 internal fun ArtistThemesSheet(
     artistId: String, currentColor: Int?, currentPhoto: String?, onColor: () -> Unit, onDismiss: () -> Unit,
@@ -109,7 +111,7 @@ internal fun ArtistThemesSheet(
                         }
                     }
                     PrismTextButton(onClick = onColor, enabled = !busy) { Text(tr(R.string.page_color)) }
-                    PrismTextButton(onClick = { photoFor = active.id; picker.launch("image/*") }, enabled = !busy) {
+                    PrismTextButton(onClick = { photoFor = active.id; picker.launch(THEME_PHOTO_MIME) }, enabled = !busy) {
                         Text(tr(R.string.use_your_own_photo))
                     }
                     if (active.photograph != null) PrismTextButton(onClick = {
