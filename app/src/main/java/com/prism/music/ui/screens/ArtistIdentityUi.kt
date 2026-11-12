@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import coil3.request.transformations
 import com.prism.music.R
 import com.prism.music.data.artists.*
@@ -61,13 +62,13 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val scope = rememberCoroutineScope()
     fun cycle(role: ArtistImageRole): (() -> Unit)? =
         if (preview == null && entry.assets(role).size > 1) ({ scope.launch { identities.store.update(page.id) { it.cycle(role) } }; Unit }) else null
-    fun layout(role: ArtistImageRole) = preview?.takeIf { it.first == role }?.second ?: entry.layout(role)
+    fun layout(role: ArtistImageRole) = preview?.takeIf { it.first == role }?.second ?: entry.layout(role, identities.asset(page.id, role))
     val logo = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.LOGO)) }
     val signature = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.SIGNATURE)) }
     var logoFailed by remember(logo) { mutableStateOf(false) }
     var signatureFailed by remember(signature) { mutableStateOf(false) }
-    var logoLoaded by remember(logo) { mutableStateOf(false) }
-    var signatureLoaded by remember(signature) { mutableStateOf(false) }
+    var logoLoaded by remember(page.id) { mutableStateOf(false) }
+    var signatureLoaded by remember(page.id) { mutableStateOf(false) }
     val selected = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
         ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
     val shown = preview?.first?.let { selected.preview(it) } ?: selected
@@ -76,7 +77,7 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
             onCycle = cycle(ArtistImageRole.LOGO), onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
         if (shown.signature && signature != null) {
             ArtistProfileMark(ArtistImageRole.SIGNATURE, signature, tr(R.string.signature), layout(ArtistImageRole.SIGNATURE), canvasHeight,
-                onCycle = cycle(ArtistImageRole.SIGNATURE), tint = entry.localSignature == null && signature.extension == "svg",
+                onCycle = cycle(ArtistImageRole.SIGNATURE), tint = entry.activeTheme == null && entry.localSignature == null && signature.extension == "svg",
                 onEdit = onEdit, onSuccess = { signatureLoaded = true }, onError = { signatureFailed = true })
             if (entry.signatureCaption && signatureLoaded && !shown.text) Text(page.name,
                 style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
@@ -109,12 +110,13 @@ internal fun ArtistMark(
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
+    val transition = if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 180
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
     Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).combinedClickable(onClick = onCycle ?: onEdit,
         onClickLabel = tr(if (onCycle == null) R.string.artist_adjust else R.string.artist_next_image),
         onLongClick = onCycle?.let { onEdit }, onLongClickLabel = if (onCycle != null) tr(R.string.artist_adjust) else null)) {
         AsyncImage(
-            ImageRequest.Builder(context).data(file).apply {
+            ImageRequest.Builder(context).data(file).crossfade(transition).apply {
                 if (fit.hasEffects) {
                     size(ArtistRasterSize(file, 1024))
                     transformations(ArtistVisualEffects(fit))
@@ -290,9 +292,9 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         }
         for (kind in ArtistImageRole.entries) {
             val label = tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature)
-            val local = current.local(kind)
             val savedAssets = current.assets(kind)
             val shown = identities.asset(page.id, kind)
+            val local = savedAssets.firstOrNull { it.file == shown?.file }
             Text(label, style = MaterialTheme.typography.titleMedium)
             shown?.let { asset ->
                 identities.store.file(asset)?.let { file ->
@@ -325,7 +327,7 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
             }
             if (savedAssets.isNotEmpty()) LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 itemsIndexed(savedAssets, key = { _, asset -> asset.file }) { index, asset ->
-                    val selected = asset.file == local?.file
+                    val selected = asset.file == shown?.file
                     val description = tr(R.string.artist_saved_image, index + 1)
                     Surface(
                         modifier = Modifier.size(68.dp).semantics { this.selected = selected },

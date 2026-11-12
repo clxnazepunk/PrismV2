@@ -5019,4 +5019,8 @@
     <string name="artist_make_first">העברה להתחלה</string>
     <string name="artist_move_earlier">העברה קדימה</string>
     <string name="artist_move_later">העברה אחורה</string>
+    <string name="discovery_no_repeat_artists">ללא אמנים חוזרים</string>
+    <string name="discovery_language">רגישות לשפה</string>
+    <string name="artist_themes">ערכות נושא לאמן</string>
+    <string name="moods_unavailable">מקורות מצבי הרוח אינם זמינים כרגע.</string>
 </resources>

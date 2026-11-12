@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">Naar het begin verplaatsen</string>
     <string name="artist_move_earlier">Naar voren verplaatsen</string>
     <string name="artist_move_later">Naar achteren verplaatsen</string>
+    <string name="discovery_no_repeat_artists">Geen herhaalde artiesten</string>
+    <string name="discovery_language">Taalgevoeligheid</string>
+    <string name="artist_themes">Artiestthema’s</string>
+    <string name="moods_unavailable">De bronnen voor stemmingen zijn tijdelijk niet beschikbaar.</string>
 </resources>

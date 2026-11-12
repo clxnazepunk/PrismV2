@@ -741,7 +741,7 @@ fun SheetAction(icon: ImageVector, label: String, onClick: () -> Unit) {
  * account's YouTube Music ones. A new one is a YouTube Music playlist when signed in, else a Prism one.
  */
 @Composable
-fun PlaylistPicker(song: Song, onDismiss: () -> Unit) = PlaylistPicker(listOf(song), song.title, onDismiss)
+fun PlaylistPicker(song: Song, onDismiss: () -> Unit) = PlaylistPicker(listOf(song), song.displayTitle, onDismiss)
 
 /**
  * Adds [songs] (a song, or a whole album or playlist: Reddit R8) to one of the listener's playlists, or to a new one.

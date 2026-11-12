@@ -5019,4 +5019,8 @@
     <string name="artist_make_first">Sposta all’inizio</string>
     <string name="artist_move_earlier">Sposta prima</string>
     <string name="artist_move_later">Sposta dopo</string>
+    <string name="discovery_no_repeat_artists">Non ripetere gli artisti</string>
+    <string name="discovery_language">Sensibilità alla lingua</string>
+    <string name="artist_themes">Temi dell’artista</string>
+    <string name="moods_unavailable">Le fonti degli stati d’animo sono temporaneamente indisponibili.</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import com.prism.music.R
+import com.prism.music.ui.components.displayTitle
 import com.prism.music.tr
 import com.prism.music.trp
 import androidx.compose.foundation.border
@@ -925,7 +926,7 @@ private fun DownloadsSummary() {
         active.forEach { d ->
             d.song?.let { s ->
                 Row(Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(s.title, Modifier.weight(1f), maxLines = 1, style = MaterialTheme.typography.bodyMedium)
+                    Text(s.displayTitle, Modifier.weight(1f), maxLines = 1, style = MaterialTheme.typography.bodyMedium)
                     Text(com.prism.music.ui.screens.downloadStateText(d, waiting), style = MaterialTheme.typography.labelMedium, color = Color.Gray)
                 }
             }

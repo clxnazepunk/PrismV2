@@ -680,18 +680,75 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             .associate { it.key to decodeSongs(it.genre) }
         val stored = songs.map { songTagsKey(it) }.chunked(500).flatMap { dao.genres(it) }
             .filter { System.currentTimeMillis() - it.fetchedAt < 7 * 24 * 60 * 60 * 1000L }
-            .associate { it.key to it.genre.orEmpty().split("|").filter { it in MusicTags.genresAll || it in MusicTags.moods }.toSet() }
+            .associate { it.key to it.genre.orEmpty().split("|").filter { it in MusicTags.genresAll || it in MusicTags.moods || it.startsWith("lang:") }.toSet() }
+        val fallback = songs.map(::fallbackMoodKey).chunked(500).flatMap { dao.genres(it) }
+            .filter { System.currentTimeMillis() - it.fetchedAt < MOOD_TTL }
+            .associate { it.key to it.genre.orEmpty().split('|').filter(MusicTags.moods::contains).toSet() }
         songs.associate { song ->
             val raw = if (key(song.primaryArtist).isBlank() || key(cleanTitle(song.title)).isBlank()) null
                 else byArtist[itunesSongsKey(song.primaryArtist)]?.get(key(cleanTitle(song.title)))
-            song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + stored[songTagsKey(song)].orEmpty())
+            song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + stored[songTagsKey(song)].orEmpty() + fallback[fallbackMoodKey(song)].orEmpty())
         }
     }
 
     private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
-    private fun songTagsKey(song: Song) = "songtags2:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
+    private fun songTagsKey(song: Song) = "songtags3:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
+    private val fallbackMoodLock = Mutex()
+    private val MOOD_TTL = 7 * 24 * 60 * 60 * 1000L
+    private fun fallbackMoodKey(song: Song) = "songmood-mb1:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
+
+    private fun publicTagTrack(song: Song) = !song.isLocal && !song.isUpload && !song.isRss &&
+        !song.isEpisode && !song.isLive && song.primaryArtist.isNotBlank() && song.title.isNotBlank()
+
+    /** MusicBrainz indexed recording tags, queried only for public tracks lacking a Last.fm mood. */
+    suspend fun resolveFallbackMoods(
+        songs: List<Song>, budget: TagLookupBudget, refreshEmpty: Boolean,
+        onBatch: suspend (Map<String, Set<String>>) -> Unit,
+    ): TagResult = withContext(Dispatchers.IO) {
+        val cached = cachedSongTags(songs)
+        var failed = false
+        for (song in songs.distinctBy { it.id }.filter(::publicTagTrack)) {
+            if (cached[song.id].orEmpty().any(MusicTags.moods::contains)) continue
+            val cacheKey = fallbackMoodKey(song)
+            val prior = dao.genre(cacheKey)
+            val ttl = if (refreshEmpty) 120_000L else MOOD_TTL
+            if (prior != null && System.currentTimeMillis() - prior.fetchedAt < ttl) continue
+            if (!budget.tryTake()) break
+            val result = fallbackMoodLock.withLock {
+                delay(1100)
+                val url = "https://musicbrainz.org/ws/2/recording/".toHttpUrl().newBuilder()
+                    .addQueryParameter("query", "recording:\"${lucene(song.title)}\" AND artist:\"${lucene(song.primaryArtist)}\"")
+                    .addQueryParameter("fmt", "json").addQueryParameter("limit", "8").build()
+                try {
+                    val request = Request.Builder().url(url).header("User-Agent", "PrismV2/1.8 (https://github.com/clxnazepunk/PrismV2)").build()
+                    tagsHttp.newCall(request).execute().use { response ->
+                        if (response.isSuccessful) InnerTube.json.parseToJsonElement(response.body.string()).field("recordings") as? JsonArray else null
+                    }
+                } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+                catch (_: Exception) { null }
+            }
+            if (result == null) { failed = true; break }
+            val title = tagIdentity(song.title)
+            val artist = tagIdentity(song.primaryArtist)
+            val matches = result.filter { recording ->
+                tagIdentity(recording.str("title").orEmpty()) == title &&
+                    (recording.field("artist-credit") as? JsonArray).orEmpty().any { credit ->
+                        listOf(credit.str("name"), credit.field("artist").str("name")).filterNotNull().any { tagIdentity(it) == artist }
+                    }
+            }
+            val tags = matches.flatMap { (it.field("tags") as? JsonArray).orEmpty() }.mapNotNull { tag ->
+                tag.str("name")?.let { name -> name to (tag.str("count")?.toIntOrNull() ?: 0) }
+            }.groupingBy { it.first }.fold(0) { best, tag -> maxOf(best, tag.second) }
+            val moods = MusicTags.communityMoods(tags)
+            dao.putGenre(GenreEntity(cacheKey, moods.joinToString("|"), System.currentTimeMillis()))
+            if (moods.isNotEmpty()) onBatch(mapOf(song.id to (cached[song.id].orEmpty() + moods)))
+        }
+        if (failed) TagResult.ERROR else TagResult.READY
+    }
+
+    private fun lucene(text: String): String = text.take(180).replace("\\", "\\\\").replace("\"", "\\\"")
 
     enum class TagConnection { VALID, INVALID, UNAVAILABLE }
     enum class TagResult { READY, NO_KEY, ERROR }
@@ -731,8 +788,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         var failures = 0
         var hadError = false
         for (song in songs.distinctBy { it.id }) {
-            if (song.isLocal || song.isUpload || song.isRss || song.isEpisode || song.isLive ||
-                song.primaryArtist.isBlank() || song.title.isBlank()) continue
+            if (!publicTagTrack(song)) continue
             val cachedEntry = dao.genre(songTagsKey(song))
             if (cachedEntry != null) {
                 val age = System.currentTimeMillis() - cachedEntry.fetchedAt
@@ -761,7 +817,11 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
                 else -> return@withContext TagResult.ERROR
             }
             val data = response.field("toptags")
-            val tags = data.field("tag") as? JsonArray
+            val tags = when (val tag = data.field("tag")) {
+                is JsonArray -> tag
+                is JsonObject -> JsonArray(listOf(tag))
+                else -> null
+            }
             if (tags == null) { hadError = true; continue }
             val attr = data.field("@attr")
             val artistIdentity = tagIdentity(song.primaryArtist)

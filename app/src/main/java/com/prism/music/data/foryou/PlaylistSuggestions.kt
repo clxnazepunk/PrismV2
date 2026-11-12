@@ -12,11 +12,13 @@ data class PlaylistDiscovery(
     val artist: Int = 1,
     val width: Int = 50,
     val limitRepetition: Boolean = true,
+    val noRepeatArtists: Boolean = false,
+    val languageSensitivity: Int = 1,
 ) {
-    fun encode() = listOf(genre, artist, width, if (limitRepetition) 1 else 0).joinToString(",")
+    fun encode() = listOf(genre, artist, width, if (limitRepetition) 1 else 0, if (noRepeatArtists) 1 else 0, languageSensitivity).joinToString(",")
     companion object {
-        fun decode(value: String?) = value?.split(",")?.mapNotNull(String::toIntOrNull)?.takeIf { it.size == 4 }
-            ?.let { PlaylistDiscovery(it[0].coerceIn(0, 2), it[1].coerceIn(0, 2), it[2].coerceIn(0, 100), it[3] != 0) }
+        fun decode(value: String?) = value?.split(",")?.mapNotNull(String::toIntOrNull)?.takeIf { it.size == 4 || it.size == 6 }
+            ?.let { PlaylistDiscovery(it[0].coerceIn(0, 2), it[1].coerceIn(0, 2), it[2].coerceIn(0, 100), it[3] != 0, it.getOrNull(4) == 1, it.getOrNull(5)?.coerceIn(0, 2) ?: 1) }
             ?: PlaylistDiscovery()
     }
 }
@@ -50,21 +52,54 @@ object PlaylistSuggestions {
         }
     }
 
+    private fun artistKeys(song: Song): Set<String> = song.artists.flatMap { artist ->
+        listOfNotNull(artist.id?.takeIf(String::isNotBlank), artist.name.trim().lowercase().takeIf(String::isNotBlank))
+    }.toSet()
+
+    fun playlistArtistKeys(playlist: List<Song>): Set<String> = playlist.flatMap(::artistKeys).toSet()
+    fun hasPlaylistArtist(song: Song, artists: Set<String>) = artistKeys(song).any { it in artists }
+
+    private val spanishWords = setOf("que", "del", "una", "para", "eres", "nunca", "quiero", "las", "los", "vida", "amor", "corazón", "mi", "sin", "por")
+    private val englishWords = setOf("the", "you", "your", "my", "with", "from", "never", "love", "heart", "this", "and", "for", "where", "when")
+    private val titleWord = Regex("[\\p{L}]+")
+
+    internal fun titleLanguage(title: String): String? {
+        val scripts = title.map { Character.UnicodeScript.of(it.code) }.toSet()
+        if (Character.UnicodeScript.HIRAGANA in scripts || Character.UnicodeScript.KATAKANA in scripts) return "ja"
+        if (Character.UnicodeScript.HANGUL in scripts) return "ko"
+        val words = titleWord.findAll(title.substringBefore('(').lowercase()).map { it.value }.toSet()
+        val es = words.count { it in spanishWords }
+        val en = words.count { it in englishWords }
+        return when {
+            es >= 2 && es >= en + 2 -> "es"
+            en >= 2 && en >= es + 2 -> "en"
+            else -> null
+        }
+    }
+
     fun rank(
         existing: List<Song>, candidates: List<Song>, genres: Map<String, Set<String>>,
         tuning: PlaylistDiscovery, recent: Set<String>, limit: Int = LIMIT,
+        languages: Map<String, String> = emptyMap(), occupied: List<Song> = emptyList(),
     ): List<Song> {
-        fun names(song: Song) = song.artists.map { it.id ?: it.name.trim().lowercase() }.filter(String::isNotBlank)
+        fun names(song: Song) = artistKeys(song)
         fun recording(song: Song) = song.title.lowercase().substringBefore(" (").substringBefore(" [").trim() to names(song).firstOrNull()
         val distribution = existing.flatMap { genres[it.id].orEmpty() }.groupingBy { it }.eachCount()
         val peakGenre = distribution.values.maxOrNull() ?: 1
-        val artists = existing.flatMap(::names).toSet()
+        val artists = playlistArtistKeys(existing)
         val existingRecordings = existing.mapTo(hashSetOf(), ::recording)
-        val remaining = select(existing, candidates, limit = 160).toMutableList()
+        val remaining = select(existing + occupied, candidates, limit = 160) {
+            !tuning.noRepeatArtists || !hasPlaylistArtist(it, artists)
+        }.toMutableList()
         val playedArtists = hashMapOf<String, Int>()
         val playedGenres = hashMapOf<String, Int>()
         val recordings = hashSetOf<Pair<String, String?>>()
         val chosen = mutableListOf<Song>()
+        fun language(song: Song) = languages[song.id] ?: titleLanguage(song.title)
+        val languageCounts = existing.mapNotNull(::language).groupingBy { it }.eachCount()
+        val languagePeak = languageCounts.values.maxOrNull() ?: 0
+        val playedLanguages = occupied.mapNotNull(::language).groupingBy { it }.eachCount().toMutableMap()
+        val candidateLanguages = remaining.associate { it.id to language(it) }
         val breadth = tuning.width / 100.0
         repeat(minOf(limit.coerceAtLeast(0), remaining.size)) {
             val best = remaining.indices.maxByOrNull { i ->
@@ -85,13 +120,23 @@ object PlaylistSuggestions {
                 val duplicate = recording(song) in existingRecordings || recording(song) in recordings
                 val variety = tags.maxOfOrNull { playedGenres[it] ?: 0 } ?: 0
                 val artistRepeats = names(song).maxOfOrNull { playedArtists[it] ?: 0 } ?: 0
-                genreScore + artistScore + (overlap ?: 0.0) * (1 - breadth) * 2 -
+                val lang = candidateLanguages[song.id]
+                val languageScore = if (lang == null || languagePeak == 0) 0.0 else {
+                    val weight = (languageCounts[lang] ?: 0).toDouble() / languagePeak
+                    when (tuning.languageSensitivity) {
+                        0 -> weight * 1.6
+                        2 -> weight * 0.7 + (if (weight == 0.0) 1.0 else 0.0) - (playedLanguages[lang] ?: 0) * 0.35
+                        else -> weight * 1.1 + (if (weight == 0.0 && (playedLanguages[lang] ?: 0) == 0) 0.4 else 0.0)
+                    }
+                }
+                genreScore + artistScore + languageScore + (overlap ?: 0.0) * (1 - breadth) * 2 -
                     variety * (0.7 + breadth * 1.7) - artistRepeats * (if (tuning.limitRepetition) 2.0 else 0.35) -
                     (if (tuning.limitRepetition && duplicate) 8 else 0) -
                     (if (song.id in recent) if (tuning.limitRepetition) 12 else 5 else 0) - i * 0.008
             } ?: return@repeat
             val song = remaining.removeAt(best)
             chosen += song
+            candidateLanguages[song.id]?.let { playedLanguages[it] = (playedLanguages[it] ?: 0) + 1 }
             recordings += recording(song)
             names(song).forEach { playedArtists[it] = (playedArtists[it] ?: 0) + 1 }
             genres[song.id].orEmpty().forEach { playedGenres[it] = (playedGenres[it] ?: 0) + 1 }
@@ -102,7 +147,7 @@ object PlaylistSuggestions {
     fun replaceSlot(songs: List<Song>, id: String, replacement: Song?): List<Song> {
         val index = songs.indexOfFirst { it.id == id }
         if (index < 0 || replacement?.id?.let { next -> songs.any { it.id == next } } == true) return songs
-        return songs.toMutableList().apply { if (replacement == null) removeAt(index) else set(index, replacement) }
+        return songs.filterIndexed { i, _ -> i != index } + listOfNotNull(replacement)
     }
 
     /** Keep radio order, never alter the playlist, and omit songs already in it. */

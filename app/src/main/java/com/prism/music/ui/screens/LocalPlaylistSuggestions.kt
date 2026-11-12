@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -79,6 +80,8 @@ internal fun LocalPlaylistSuggestions(
     val c = LocalContainer.current
     val context = LocalContext.current
     val current by c.player.currentSong.collectAsState()
+    var tuningOpen by remember(playlistId) { mutableStateOf(false) }
+    val playlistArtists = remember(existing) { PlaylistSuggestions.playlistArtistKeys(existing) }
     val settings = com.prism.music.ui.theme.LocalAppSettings.current
     val disliked by c.library.dislikedIds.collectAsState()
     val excludedSongs by c.exclusions.songs.collectAsState()
@@ -88,8 +91,10 @@ internal fun LocalPlaylistSuggestions(
     fun allowed(song: Song) = song.id !in disliked &&
         !c.exclusions.outOfTaste(song, playlistId) &&
         (!song.explicit || settings.behavior.explicitContent == com.prism.music.data.prefs.ExplicitContent.SHOW)
-    val visible = remember(existing, state.songs, disliked, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
-        PlaylistSuggestions.select(existing, state.songs, allowed = ::allowed)
+    val visible = remember(existing, state.songs, disliked, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent, settings.behavior.playlistDiscovery.noRepeatArtists) {
+        PlaylistSuggestions.select(existing, state.songs) {
+            allowed(it) && (!settings.behavior.playlistDiscovery.noRepeatArtists || !PlaylistSuggestions.hasPlaylistArtist(it, playlistArtists))
+        }
     }
 
     val hasSeeds = remember(existing, disliked, excludedSongs, excludedArtists, excludedPlaylists, settings.behavior.explicitContent) {
@@ -103,7 +108,7 @@ internal fun LocalPlaylistSuggestions(
             page.songs
         }
 
-    suspend fun ranked(snapshot: List<Song>, pool: List<Song>, recent: Set<String>, limit: Int): List<Song> = withContext(Dispatchers.Default) {
+    suspend fun ranked(snapshot: List<Song>, pool: List<Song>, recent: Set<String>, limit: Int, occupied: List<Song> = emptyList()): List<Song> = withContext(Dispatchers.Default) {
         val cached = c.meta.cachedSongTags(snapshot + pool)
         val tracks = snapshot + pool
         val genres = tracks.associate { song ->
@@ -114,7 +119,9 @@ internal fun LocalPlaylistSuggestions(
             .mapValues { (_, songs) -> songs.flatMap { genres[it.id].orEmpty() }.toSet() }
         val signals = genres.mapValues { it.value }.toMutableMap()
         pool.forEach { song -> if (signals[song.id].isNullOrEmpty()) signals[song.id] = artistGenres[song.primaryArtist.lowercase()].orEmpty() }
-        PlaylistSuggestions.rank(snapshot, pool.filter(::allowed), signals, settings.behavior.playlistDiscovery, recent, limit)
+        PlaylistSuggestions.rank(snapshot, pool.filter(::allowed), signals, settings.behavior.playlistDiscovery, recent, limit,
+            languages = cached.mapNotNull { (id, tags) -> tags.firstOrNull { it.startsWith("lang:") }?.removePrefix("lang:")?.let { id to it } }.toMap(),
+            occupied = occupied)
     }
 
     fun load() {
@@ -164,7 +171,7 @@ internal fun LocalPlaylistSuggestions(
                         state.candidates = (fetched + state.candidates).distinctBy { it.id }.take(160)
                         fresh = fetched.filterNot { it.id in blocked }
                     }
-                    val replacement = ranked(snapshot + otherSuggestions, fresh, emptySet(), 1).firstOrNull()
+                    val replacement = ranked(snapshot, fresh, emptySet(), 1, occupied = otherSuggestions).firstOrNull()
                     val index = state.slotIds[song.id] ?: state.songs.indexOfFirst { it.id == song.id }
                     state.songs = PlaylistSuggestions.replaceSlot(state.songs, song.id, replacement)
                     state.slotIds = (state.slotIds - song.id) + listOfNotNull(replacement?.let { it.id to index }).toMap()
@@ -201,6 +208,12 @@ internal fun LocalPlaylistSuggestions(
                 }
             }
         }
+    }
+    PrismTextButton(onClick = { tuningOpen = !tuningOpen }, modifier = Modifier.padding(horizontal = 16.dp)) {
+        Text(tr(R.string.settings))
+    }
+    AnimatedVisibility(tuningOpen) {
+        PlaylistDiscoverySettings(settings.behavior.playlistDiscovery, compact = true) { c.settings.setPlaylistDiscovery(it) }
     }
 }
 

@@ -53,7 +53,7 @@ internal fun PlaylistFilterPanel(
                         PrismTextButton(onClick = { onRefresh?.invoke() }, enabled = onRefresh != null) { Text(tr(R.string.moods_refresh)) }
                     }
                     if (moods.isNotEmpty()) TagChips(moods, mood, onMood, idle)
-                    if (moods.isEmpty() || moodMessage == R.string.loading || moodMessage == R.string.music_tag_connection_failed) Text(tr(moodMessage), Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    if (moods.isEmpty() || moodMessage == R.string.loading || moodMessage == R.string.moods_unavailable) Text(tr(moodMessage), Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         style = MaterialTheme.typography.bodySmall)
                 }
             }

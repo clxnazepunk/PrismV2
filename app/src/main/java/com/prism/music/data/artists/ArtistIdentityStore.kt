@@ -24,6 +24,20 @@ enum class ArtistImageRole { LOGO, SIGNATURE }
 data class ArtistImageAsset(val file: String, val aspect: Float, val source: String? = null, val license: String? = null)
 
 @Serializable
+data class ArtistTheme(
+    val id: String,
+    val name: String,
+    val color: Int? = null,
+    val logo: ArtistImageAsset? = null,
+    val signature: ArtistImageAsset? = null,
+    val photograph: ArtistImageAsset? = null,
+) {
+    fun asset(role: ArtistImageRole) = if (role == ArtistImageRole.LOGO) logo else signature
+    fun withAsset(role: ArtistImageRole, asset: ArtistImageAsset?) =
+        if (role == ArtistImageRole.LOGO) copy(logo = asset) else copy(signature = asset)
+}
+
+@Serializable
 data class ArtistIdentity(
     val logo: ArtistImageAsset? = null,
     val signature: ArtistImageAsset? = null,
@@ -39,7 +53,31 @@ data class ArtistIdentity(
     val logos: List<ArtistImageAsset> = emptyList(),
     val signatures: List<ArtistImageAsset> = emptyList(),
     val assetLayouts: Map<String, ArtistImageLayout> = emptyMap(),
+    val themes: List<ArtistTheme> = emptyList(),
+    val activeThemeId: String? = null,
 ) {
+    val activeTheme: ArtistTheme? get() = themes.firstOrNull { it.id == activeThemeId }
+
+    fun editTheme(id: String, change: (ArtistTheme) -> ArtistTheme) =
+        copy(themes = themes.map { if (it.id == id) change(it) else it })
+
+    fun cycleTheme(): ArtistIdentity {
+        if (themes.isEmpty()) return this
+        val at = themes.indexOfFirst { it.id == activeThemeId }
+        return copy(activeThemeId = themes[(at + 1) % themes.size].id)
+    }
+
+    fun reorderTheme(id: String, target: Int): ArtistIdentity {
+        val at = themes.indexOfFirst { it.id == id }
+        if (at < 0 || target !in themes.indices) return this
+        val sorted = themes.toMutableList()
+        sorted.add(target, sorted.removeAt(at))
+        return copy(themes = sorted)
+    }
+
+    fun themeAsset(role: ArtistImageRole, asset: ArtistImageAsset?): ArtistIdentity =
+        activeTheme?.let { theme -> editTheme(theme.id) { it.withAsset(role, asset) } } ?: this
+
     fun local(role: ArtistImageRole) = if (role == ArtistImageRole.LOGO) localLogo else localSignature
 
     fun assets(role: ArtistImageRole): List<ArtistImageAsset> =
@@ -63,14 +101,14 @@ data class ArtistIdentity(
     fun select(role: ArtistImageRole, file: String): ArtistIdentity {
         val ordered = assets(role)
         val selected = ordered.firstOrNull { it.file == file } ?: return this
-        return withAssets(role, ordered, selected)
+        return if (activeTheme != null) themeAsset(role, selected) else withAssets(role, ordered, selected)
     }
 
     fun cycle(role: ArtistImageRole): ArtistIdentity {
         val ordered = assets(role)
         if (ordered.size < 2) return this
-        val at = ordered.indexOfFirst { it.file == local(role)?.file }
-        return withAssets(role, ordered, ordered[(at + 1) % ordered.size])
+        val at = ordered.indexOfFirst { it.file == chosen(role)?.file }
+        return select(role, ordered[(at + 1) % ordered.size].file)
     }
 
     fun reorder(role: ArtistImageRole, file: String, newIndex: Int): ArtistIdentity {
@@ -82,9 +120,12 @@ data class ArtistIdentity(
         return withAssets(role, ordered, local(role))
     }
 
-    fun chosen(role: ArtistImageRole, automatic: Boolean = true): ArtistImageAsset? = when (role) {
+    fun chosen(role: ArtistImageRole, automatic: Boolean = true): ArtistImageAsset? {
+        activeTheme?.let { return it.asset(role) }
+        return when (role) {
         ArtistImageRole.LOGO -> localLogo ?: logo.takeIf { automatic }
         ArtistImageRole.SIGNATURE -> localSignature ?: signature.takeIf { automatic }
+        }
     }
 }
 
@@ -134,7 +175,8 @@ class ArtistIdentityStore(val dir: File) {
                     require(ordered.size < MAX_ASSETS_PER_ROLE)
                     // Migrate the original single image and its layout on the first append.
                     val layouts = ordered.associate { it.file to old.layout(role, it) }
-                    val next = old.withAssets(role, ordered + asset, asset)
+                    val next = old.withAssets(role, ordered + asset, if (old.activeTheme == null) asset else old.local(role) ?: asset)
+                        .themeAsset(role, asset)
                     next.copy(assetLayouts = next.assetLayouts + layouts + (asset.file to ArtistImageLayout()))
                 } else {
                     previous = if (role == ArtistImageRole.LOGO) old.logo else old.signature
@@ -143,7 +185,7 @@ class ArtistIdentityStore(val dir: File) {
                 }
             }
             committed = true
-            file(previous)?.delete()
+            if (state.value.values.none { identity -> identity.themes.any { it.asset(role)?.file == previous?.file } }) file(previous)?.delete()
             asset
         } finally { if (!committed) target.delete() }
     }
@@ -157,9 +199,47 @@ class ArtistIdentityStore(val dir: File) {
             removed = ordered.filter { filename == null || it.file == filename }
             val remaining = ordered - removed.toSet()
             val selected = old.local(role)?.takeIf { it in remaining } ?: remaining.firstOrNull()
-            old.withAssets(role, remaining, selected).copy(assetLayouts = old.assetLayouts - removed.map { it.file }.toSet())
+            val removedFiles = removed.map { it.file }.toSet()
+            old.withAssets(role, remaining, selected).copy(
+                assetLayouts = old.assetLayouts - removedFiles,
+                themes = old.themes.map { theme -> if (theme.asset(role)?.file in removedFiles) theme.withAsset(role, null) else theme },
+            )
         }
         withContext(Dispatchers.IO) { removed.forEach { file(it)?.delete() } }
+    }
+
+    suspend fun setThemePhoto(id: String, themeId: String, bytes: ByteArray?) = withContext(Dispatchers.IO) {
+        val photo = bytes?.let {
+            val (extension, aspect) = imageInfo(it)
+            require(extension != "svg")
+            dir.mkdirs()
+            val target = File(dir, "local-${UUID.randomUUID()}.$extension")
+            target.writeBytes(it)
+            ArtistImageAsset(target.name, aspect)
+        }
+        var previous: ArtistImageAsset? = null
+        var applied = false
+        var committed = false
+        try {
+            update(id) { identity ->
+                val theme = identity.themes.firstOrNull { it.id == themeId } ?: return@update identity
+                previous = theme.photograph
+                applied = true
+                identity.editTheme(themeId) { it.copy(photograph = photo) }
+            }
+            committed = applied
+        } finally { if (!committed) file(photo)?.delete() }
+        if (committed) file(previous)?.delete()
+    }
+
+    suspend fun deleteTheme(id: String, themeId: String) = withContext(Dispatchers.IO) {
+        var deleted: ArtistTheme? = null
+        update(id) { identity ->
+            deleted = identity.themes.firstOrNull { it.id == themeId }
+            val remaining = identity.themes.filterNot { it.id == themeId }
+            identity.copy(themes = remaining, activeThemeId = identity.activeThemeId?.takeUnless { it == themeId })
+        }
+        file(deleted?.photograph)?.delete()
     }
 
     companion object {

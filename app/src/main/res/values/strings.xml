@@ -4985,4 +4985,8 @@
     <string name="artist_make_first">Move to first</string>
     <string name="artist_move_earlier">Move earlier</string>
     <string name="artist_move_later">Move later</string>
+    <string name="discovery_no_repeat_artists">No repeat artists</string>
+    <string name="discovery_language">Language sensitivity</string>
+    <string name="artist_themes">Artist themes</string>
+    <string name="moods_unavailable">Mood sources are temporarily unavailable.</string>
 </resources>

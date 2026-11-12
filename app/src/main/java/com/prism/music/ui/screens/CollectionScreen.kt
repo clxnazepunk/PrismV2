@@ -1,6 +1,8 @@
 package com.prism.music.ui.screens
 
 import com.prism.music.R
+import com.prism.music.ui.components.displayTitle
+import com.prism.music.ui.components.displayArtists
 import com.prism.music.tr
 import com.prism.music.trp
 import com.prism.music.ui.theme.lit
@@ -304,8 +306,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var tagRefresh by remember(page.id) { mutableStateOf(0) }
     val tagApiKey by c.artistPrefs.musicTagKey.collectAsState()
     val tagBudget = remember(page.id, tagApiKey, tagRefresh) { com.prism.music.data.meta.TagLookupBudget() }
+    val fallbackMoodBudget = remember(page.id, tagRefresh) { com.prism.music.data.meta.TagLookupBudget(6) }
     fun genresOf(id: String): List<String> {
-        val details = detailTags[id].orEmpty().filter { it !in com.prism.music.data.meta.MusicTags.moods }
+        val details = detailTags[id].orEmpty().filter { it in com.prism.music.data.meta.MusicTags.genresAll }
         val hasSpecificGenre = details.any { it in com.prism.music.data.meta.MusicTags.detailedGenres }
         val legacy = (listOfNotNull(genres[id]) + extraGenres[id].orEmpty())
             .filterNot { it == "Pop" && hasSpecificGenre }
@@ -340,7 +343,6 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val showGenres = type != CollectionType.ALBUM && songs.isNotEmpty() && settings.behavior.playlistGenres
     val showMoods = (type == CollectionType.PRISM || type == CollectionType.PLAYLIST) &&
         songs.isNotEmpty() && settings.behavior.playlistMoods
-    val moodKeyConfigured = tagApiKey.isNotBlank() || com.prism.music.BuildConfig.LASTFM_API_KEY.isNotBlank()
     var loadingMoods by remember(page.id) { mutableStateOf(false) }
     var moodLookupFailed by remember(page.id) { mutableStateOf(false) }
     // #310 (1.8.1): Downloads can leave the album's name out from under each song.
@@ -384,18 +386,22 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         live.songs.collect { snapshot ->
             detailTags.putAll(c.meta.cachedSongTags(snapshot))
             genreVersion++
-            if (online && moodKeyConfigured) {
+            if (online) {
                 loadingMoods = true
                 moodLookupFailed = false
                 try {
-                    moodLookupFailed = c.meta.resolveSongTags(snapshot, budget = tagBudget, refreshEmpty = tagRefresh > 0) { batch ->
+                    val onBatch: suspend (Map<String, Set<String>>) -> Unit = { batch ->
                         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                             if (batch.any { (id, tags) -> detailTags[id] != tags }) {
                                 detailTags.putAll(batch)
                                 genreVersion++
                             }
                         }
-                    } == com.prism.music.data.meta.MetaRepository.TagResult.ERROR
+                    }
+                    val primary = c.meta.resolveSongTags(snapshot, budget = tagBudget, refreshEmpty = tagRefresh > 0, onBatch = onBatch)
+                    val fallback = c.meta.resolveFallbackMoods(snapshot, fallbackMoodBudget, tagRefresh > 0, onBatch)
+                    moodLookupFailed = primary == com.prism.music.data.meta.MetaRepository.TagResult.ERROR ||
+                        fallback == com.prism.music.data.meta.MetaRepository.TagResult.ERROR
                 } finally {
                     loadingMoods = false
                 }
@@ -823,12 +829,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         genres = if (showGenres) genreCounts else emptyList(), moods = if (showMoods) moodCounts else emptyList(),
                         showMoods = showMoods, genre = genreFilter, mood = moodFilter,
                         onGenre = { genreFilter = it }, onMood = { moodFilter = it },
-                        onRefresh = if (moodKeyConfigured && online && !loadingMoods) ({ tagRefresh++ }) else null,
+                        onRefresh = if (online && !loadingMoods) ({ tagRefresh++ }) else null,
                         moodMessage = when {
                             loadingMoods -> R.string.loading
-                            !moodKeyConfigured -> R.string.music_tag_hint
                             !online -> R.string.you_re_offline
-                            moodLookupFailed -> R.string.music_tag_connection_failed
+                            moodLookupFailed -> R.string.moods_unavailable
                             else -> R.string.moods_none
                         },
                         idle = frosted,
@@ -1604,10 +1609,10 @@ private fun androidx.compose.foundation.lazy.LazyListScope.rearrangeSongs(r: Laz
                 color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1,
             )
             Column(Modifier.weight(1f)) {
-                Text(s.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(s.artistText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(s.displayTitle, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(s.displayArtists, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            com.prism.music.ui.components.DragGrip(Modifier.dragging(afterHold = false).padding(start = 8.dp), tr(R.string.drag, s.title))
+            com.prism.music.ui.components.DragGrip(Modifier.dragging(afterHold = false).padding(start = 8.dp), tr(R.string.drag, s.displayTitle))
         }
     }
 }

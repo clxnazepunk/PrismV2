@@ -5083,4 +5083,8 @@
     <string name="artist_make_first">Переместить в начало</string>
     <string name="artist_move_earlier">Переместить выше</string>
     <string name="artist_move_later">Переместить ниже</string>
+    <string name="discovery_no_repeat_artists">Не повторять исполнителей</string>
+    <string name="discovery_language">Чувствительность к языку</string>
+    <string name="artist_themes">Темы исполнителя</string>
+    <string name="moods_unavailable">Источники настроений временно недоступны.</string>
 </resources>

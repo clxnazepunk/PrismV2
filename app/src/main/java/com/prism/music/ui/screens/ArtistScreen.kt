@@ -57,7 +57,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -75,6 +74,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import coil3.compose.AsyncImage
+import coil3.request.crossfade
 import com.prism.music.data.ArtistOpened
 import com.prism.music.data.FavoriteArtist
 import com.prism.music.data.ShareLinks
@@ -181,8 +181,13 @@ private fun Shelf.newestFirst() = copy(items = Releases.newestFirst(items))
 private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
     val c = LocalContainer.current
     val fromYouTube = opened.page
+    val identities by c.artistIdentities.entries.collectAsState()
+    val identity = identities[fromYouTube.id]
+    val theme = identity?.activeTheme
     // The listener's own photo of the artist (1.7.6), everywhere on the page, when they've picked one.
-    val page = c.covers.custom(c.covers.artistKey(fromYouTube.id))?.let { fromYouTube.copy(thumbnail = it) } ?: fromYouTube
+    val themePhoto = c.artistIdentities.store.file(theme?.photograph)?.let { android.net.Uri.fromFile(it).toString() }
+    val customPhoto = if (theme == null) c.covers.custom(c.covers.artistKey(fromYouTube.id)) else themePhoto
+    val page = customPhoto?.let { fromYouTube.copy(thumbnail = it) } ?: fromYouTube
     val nav = LocalNavigator.current
     val scope = rememberCoroutineScope()
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -243,6 +248,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
 
     var showInfo by remember { mutableStateOf(false) }
     var showSignature by remember { mutableStateOf(false) }
+    var showThemes by remember { mutableStateOf(false) }
     var sharing by remember { mutableStateOf(false) }
 
     fun playList(playlistId: String?, title: String, videoId: String? = null, params: String? = null) {
@@ -345,9 +351,22 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
 
     var pageColor by remember { mutableStateOf(false) }
     val ownColors by c.artistPrefs.colors.collectAsState()
-    val ownColor = ownColors[page.id]?.let { Color(it) }
+    val ownColor = (if (theme == null) ownColors[page.id] else theme.color)?.let { Color(it) }
+    val pageColors = com.prism.music.ui.theme.LocalAppSettings.current.pageColors
+    val neutral = com.prism.music.ui.theme.PrismTokens.white &&
+        com.prism.music.ui.theme.isNeutralSeed(MaterialTheme.colorScheme.primary.toArgb())
+    val accentTarget = ownColor ?: palette?.accent(dark)?.takeIf { pageColors && !neutral }
+    val themeAccent = accentTarget?.let {
+        androidx.compose.animation.animateColorAsState(it,
+            animationSpec = androidx.compose.animation.core.tween(if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 220),
+            label = "artistAccent").value
+    }
+    fun setArtistColor(value: Int?) {
+        if (theme == null) c.artistPrefs.setColor(page.id, value)
+        else scope.launch { c.artistIdentities.store.update(page.id) { it.editTheme(theme.id) { item -> item.copy(color = value) } } }
+    }
 
-    ArtworkAccent(palette, override = ownColor) {
+    ArtworkAccent(palette, override = themeAccent) {
         Box(Modifier.fillMaxSize().onSizeChanged { with(density) { pageHeight = it.height.toDp(); pageWidth = it.width.toDp() } }) {
             FrostedBackdrop(frost, palette, heroHeight, heroScroll, bleed = true)
             LazyColumn(state = list, contentPadding = PaddingValues(bottom = bottomPadding + 32.dp)) {
@@ -419,11 +438,16 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
             ScrollEdge({ solid }, statusTop + 60.dp + 34.dp, pageHeight) { m -> FrostedBackdrop(frost, palette, heroHeight, heroScroll, m, bleed = true) }
             TopBar(page, { solid }, hasMix = page.radioPlaylistId != null && !offline, favorite = favorite,
                 onMix = mix, onShare = { sharing = true }, onSignature = { showSignature = true }, onFavorite = toggleFavorite,
-                onColor = { pageColor = true }, shareable = !uploads)
+                onColor = { pageColor = true }, shareable = !uploads, onThemes = { showThemes = true },
+                onThemeCycle = if (identity?.themes.isNullOrEmpty()) null else ({
+                    scope.launch { c.artistIdentities.store.update(page.id) { it.cycleTheme() } }
+                    Unit
+                }), activeThemeId = theme?.id)
         }
 
         if (showInfo) InfoSheet(page, genre, favorite, onFavorite = toggleFavorite, onShare = { showInfo = false; sharing = true }) { showInfo = false }
         if (showSignature) SignatureSheet(page, genre, randomFont, pageWidth, heroHeight) { showSignature = false }
+        if (showThemes) ArtistThemesSheet(page.id, ownColor?.toArgb(), customPhoto, onColor = { showThemes = false; pageColor = true }) { showThemes = false }
     }
     // The page's own color (1.7.2): any color, or back to the photo's.
     if (pageColor) {
@@ -431,7 +455,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
         com.prism.music.ui.components.ColorPickerSheet(
             tr(R.string.s_color, page.name), (ownColor ?: fromPhoto ?: MaterialTheme.colorScheme.primary).toArgb(),
             onDismiss = { pageColor = false },
-            reset = if (ownColor != null) tr(R.string.use_the_photo_s_color) to { c.artistPrefs.setColor(page.id, null) } else null,
+            reset = if (ownColor != null) tr(R.string.use_the_photo_s_color) to { setArtistColor(null) } else null,
             preview = { col ->
                 val settings = com.prism.music.ui.theme.LocalAppSettings.current
                 androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -441,7 +465,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
                     }
                 }
             },
-        ) { c.artistPrefs.setColor(page.id, it) }
+        ) { setArtistColor(it) }
     }
     if (sharing) ShareSheet(
         ShareTarget(page.name, page.subscribers.orEmpty(), tr(R.string.artist), page.thumbnail, ShareLinks.artist(page.id), round = true),
@@ -470,7 +494,10 @@ internal fun ArtistHeader(
             // The photo frosts over into the backdrop below (a blurred copy of it, lined up exactly).
             Box(Modifier.matchParentSize().clipToBounds().dissolveBottom(0.5f)) {
                 AsyncImage(
-                    hiRes(page.thumbnail, 2880), null, contentScale = ContentScale.Crop,
+                    coil3.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
+                        .data(hiRes(page.thumbnail, 2880))
+                        .crossfade(if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 220)
+                        .build(), null, contentScale = ContentScale.Crop,
                     // Gentle parallax: the photo drifts at half the scroll speed.
                     modifier = Modifier.fillMaxSize().graphicsLayer { translationY = scroll() * 0.5f },
                 )
@@ -478,15 +505,7 @@ internal fun ArtistHeader(
             Box(Modifier.fillMaxWidth().height(130.dp).background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.34f), Color.Transparent))))
             // The name (and audience) sit on the photo and move with it (#37): they drift at the photo's pace as the page
             // scrolls, fading and sinking into its foot, rather than sliding off over it at the page's.
-            val sink = with(androidx.compose.ui.platform.LocalDensity.current) { 14.dp.toPx() }
-            Box(
-                Modifier.matchParentSize().clipToBounds()
-                    .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(Brush.verticalGradient(0f to Color.Black, (1f - sink / size.height) to Color.Black, 1f to Color.Transparent), blendMode = androidx.compose.ui.graphics.BlendMode.DstIn)
-                    },
-            ) {
+            Box(Modifier.matchParentSize().clipToBounds()) {
                 Column(
                     Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(bottom = 2.dp).graphicsLayer {
                         compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.ModulateAlpha
@@ -563,7 +582,7 @@ private fun TopBar(
     hasMix: Boolean, favorite: Boolean, onMix: () -> Unit, onShare: () -> Unit, onSignature: () -> Unit, onFavorite: () -> Unit,
     onColor: () -> Unit,
     /** An uploaded artist has no page anyone else could open. */
-    shareable: Boolean = true,
+    shareable: Boolean = true, onThemes: () -> Unit, onThemeCycle: (() -> Unit)?, activeThemeId: String?,
 ) {
     val nav = LocalNavigator.current
     val view = LocalView.current
@@ -589,11 +608,12 @@ private fun TopBar(
     Box(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().statusBarsPadding().height(60.dp)) {
             Text(
-                page.name, Modifier.align(Alignment.Center).padding(horizontal = 112.dp).graphicsLayer { alpha = solid() },
+                page.name, Modifier.align(Alignment.Center).padding(start = 60.dp, end = if (hasMix) 168.dp else 116.dp).graphicsLayer { alpha = solid() },
                 style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             com.prism.music.ui.components.RoundAction(PrismIcons.ArrowBack, tr(R.string.back), Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) { nav.back() }
             Row(Modifier.align(Alignment.CenterEnd).padding(end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                com.prism.music.ui.components.RoundAction(PrismIcons.Palette, tr(R.string.artist_themes), glass = true, onClick = onThemeCycle ?: onThemes)
                 if (hasMix) com.prism.music.ui.components.RoundAction(PrismIcons.Radio, tr(R.string.start_mix, page.name), glass = true, onClick = onMix)
                 Box {
                     com.prism.music.ui.components.RoundAction(PrismIcons.More, tr(R.string.more), glass = true) { menu = true }
@@ -604,6 +624,7 @@ private fun TopBar(
                             leadingIcon = { Icon(if (favorite) PrismIcons.StarFilled else PrismIcons.Star, null) },
                         )
                         DropdownMenuItem({ Text(tr(R.string.artist_identity)) }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
+                        DropdownMenuItem({ Text(tr(R.string.artist_themes)) }, { menu = false; onThemes() }, leadingIcon = { Icon(PrismIcons.Palette, null) })
                         DropdownMenuItem(
                             { Text(tr(if (profileSaved) R.string.artist_profile_remove else R.string.artist_profile_save)) },
                             {
@@ -640,10 +661,10 @@ private fun TopBar(
                         val ownPhoto = c.covers.custom(photoKey) != null
                         DropdownMenuItem(
                             { Text(tr(R.string.use_your_own_photo)) },
-                            { menu = false; pickArtistPhoto() },
+                            { menu = false; if (activeThemeId != null) onThemes() else pickArtistPhoto() },
                             leadingIcon = { Icon(PrismIcons.Photo, null) },
                         )
-                        if (ownPhoto) DropdownMenuItem(
+                        if (ownPhoto && activeThemeId == null) DropdownMenuItem(
                             { Text(tr(R.string.use_youtube_s_photo)) }, { menu = false; c.covers.reset(photoKey) },
                             leadingIcon = { Icon(PrismIcons.History, null) },
                         )

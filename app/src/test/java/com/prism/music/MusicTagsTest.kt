@@ -22,6 +22,27 @@ class MusicTagsTest {
         override suspend fun putMotion(e: MotionArtEntity) {}
     }
 
+    @Test fun musicBrainzFallbackUsesOnlyMatchedTrackMoodTagsAndCachesThem(): Unit = runBlocking {
+        var calls = 0
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            calls++
+            assertEquals("musicbrainz.org", chain.request().url.host)
+            assertNull(chain.request().url.queryParameter("api_key"))
+            assertNull(chain.request().header("Cookie"))
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(200).message("OK")
+                .body("""{"recordings":[{"title":"Careless Whisper","artist-credit":[{"name":"George Michael"}],"tags":[{"name":"romantic","count":1},{"name":"pop","count":4}]},{"title":"Careless Whisper","artist-credit":[{"name":"Other"}],"tags":[{"name":"sad","count":1}]}]}""".toResponseBody()).build()
+        }.build()
+        val meta = MetaRepository(client, Dao(), tagKey = { "" }, tagsHttp = client)
+        val song = Song("public", "Careless Whisper", listOf(ArtistRef("George Michael")))
+        val privateSong = song.copy(id = "private", isUpload = true)
+        val batches = mutableMapOf<String, Set<String>>()
+        assertEquals(MetaRepository.TagResult.READY, meta.resolveFallbackMoods(listOf(privateSong, song), TagLookupBudget(6), false) { batches.putAll(it) })
+        assertEquals(mapOf(song.id to setOf("mood:romantic")), batches)
+        assertEquals(setOf("mood:romantic"), meta.cachedSongTags(listOf(song)).getValue(song.id))
+        meta.resolveFallbackMoods(listOf(song), TagLookupBudget(6), true) {}
+        assertEquals(1, calls)
+    }
+
     @Test fun moodRefreshReportsMissingKeyAndServiceRejection(): Unit = runBlocking {
         val client = OkHttpClient.Builder().addInterceptor { chain ->
             Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(403).message("Forbidden")

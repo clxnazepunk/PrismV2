@@ -4891,4 +4891,8 @@
     <string name="artist_make_first">Chuyển lên đầu</string>
     <string name="artist_move_earlier">Chuyển lên trước</string>
     <string name="artist_move_later">Chuyển ra sau</string>
+    <string name="discovery_no_repeat_artists">Không lặp lại nghệ sĩ</string>
+    <string name="discovery_language">Độ nhạy ngôn ngữ</string>
+    <string name="artist_themes">Chủ đề nghệ sĩ</string>
+    <string name="moods_unavailable">Các nguồn tâm trạng tạm thời không khả dụng.</string>
 </resources>

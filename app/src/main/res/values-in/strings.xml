@@ -4891,4 +4891,8 @@
     <string name="artist_make_first">Pindahkan ke awal</string>
     <string name="artist_move_earlier">Pindahkan lebih awal</string>
     <string name="artist_move_later">Pindahkan lebih akhir</string>
+    <string name="discovery_no_repeat_artists">Jangan ulangi artis</string>
+    <string name="discovery_language">Sensitivitas bahasa</string>
+    <string name="artist_themes">Tema artis</string>
+    <string name="moods_unavailable">Sumber suasana tidak tersedia untuk sementara.</string>
 </resources>
