@@ -37,6 +37,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 /** Owned by the collection screen: scrolling past the footer does not repeat its requests. */
@@ -49,6 +50,7 @@ internal class LocalPlaylistSuggestionsState {
     var adding by mutableStateOf<Set<String>>(emptySet())
     val history = LinkedHashMap<String, Long>()
     var candidates: List<Song> = emptyList()
+    var appliedTuning: com.prism.music.data.foryou.PlaylistDiscovery? = null
     var slotIds by mutableStateOf<Map<String, Int>>(emptyMap())
 
     fun recent(): Set<String> {
@@ -141,6 +143,7 @@ internal fun LocalPlaylistSuggestions(
                 val pool = if (different.size >= PlaylistSuggestions.LIMIT) different else state.candidates
                 state.songs = ranked(snapshot, pool, recent, PlaylistSuggestions.LIMIT)
                 state.slotIds = state.songs.mapIndexed { index, song -> song.id to index }.toMap()
+                state.appliedTuning = settings.behavior.playlistDiscovery
                 state.rememberShown(state.songs)
             } catch (e: CancellationException) {
                 throw e
@@ -188,6 +191,27 @@ internal fun LocalPlaylistSuggestions(
     }
 
     LaunchedEffect(playlistId, online, hasSeeds) { if (!state.requested) load() }
+    LaunchedEffect(playlistId, settings.behavior.playlistDiscovery) {
+        snapshotFlow { !state.loading && state.adding.isEmpty() }.first { it }
+        val tuning = settings.behavior.playlistDiscovery
+        if (state.candidates.isNotEmpty() && state.appliedTuning != tuning) {
+            try {
+                val snapshot = c.prismLibrary.list(playlistId)?.songs.orEmpty()
+                val next = ranked(snapshot, state.candidates, emptySet(), PlaylistSuggestions.LIMIT)
+                if (!state.loading && state.adding.isEmpty()) {
+                    val previousSlots = state.slotIds
+                    var slot = (previousSlots.values.maxOrNull() ?: -1) + 1
+                    state.songs = next
+                    state.slotIds = next.associate { it.id to (previousSlots[it.id] ?: slot++) }
+                    state.appliedTuning = tuning
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                state.failed = true
+            }
+        }
+    }
     PlaylistRecommendationFooter(
         enabled = settings.behavior.playlistRecommendations, hasSeeds = hasSeeds, online = online, loading = state.loading || state.adding.isNotEmpty(),
         failed = state.failed, hasResults = visible.isNotEmpty() || state.adding.isNotEmpty(), onRefresh = ::load,

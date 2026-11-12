@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import coil3.compose.AsyncImage
+import coil3.compose.useExistingImageAsPlaceholder
 import coil3.request.crossfade
 import com.prism.music.data.ArtistOpened
 import com.prism.music.data.FavoriteArtist
@@ -484,6 +485,7 @@ private fun latestRelease(s: ArtistSections): AlbumItem? {
     }
 }
 
+@OptIn(coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 internal fun ArtistHeader(
     page: ArtistPage, type: com.prism.music.ui.theme.ArtistType, typeReady: Boolean,
@@ -496,6 +498,7 @@ internal fun ArtistHeader(
                 AsyncImage(
                     coil3.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
                         .data(hiRes(page.thumbnail, 2880))
+                        .useExistingImageAsPlaceholder(true)
                         .crossfade(if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 220)
                         .build(), null, contentScale = ContentScale.Crop,
                     // Gentle parallax: the photo drifts at half the scroll speed.

@@ -400,8 +400,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     }
                     val primary = c.meta.resolveSongTags(snapshot, budget = tagBudget, refreshEmpty = tagRefresh > 0, onBatch = onBatch)
                     val fallback = c.meta.resolveFallbackMoods(snapshot, fallbackMoodBudget, tagRefresh > 0, onBatch)
-                    moodLookupFailed = primary == com.prism.music.data.meta.MetaRepository.TagResult.ERROR ||
-                        fallback == com.prism.music.data.meta.MetaRepository.TagResult.ERROR
+                    val hasMoods = snapshot.any { song -> detailTags[song.id].orEmpty().any(com.prism.music.data.meta.MusicTags.moods::contains) }
+                    moodLookupFailed = fallback == com.prism.music.data.meta.MetaRepository.TagResult.ERROR ||
+                        (!hasMoods && primary == com.prism.music.data.meta.MetaRepository.TagResult.ERROR)
                 } finally {
                     loadingMoods = false
                 }

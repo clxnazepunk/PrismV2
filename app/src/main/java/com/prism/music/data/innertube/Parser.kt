@@ -117,9 +117,22 @@ object Parser {
                 guests = true
             } else if (text.trim() in setOf("•", ")", "]")) {
                 guests = false
+            } else if (guests && nav == null && !isSeparator(text) && !durationRegex.matches(text.trim())) {
+                linked += ArtistRef(text.trim().trimEnd(')', ']'), featured = true)
             }
         }
         if (linked.isNotEmpty()) return linked
+        val unlinkedCredit = runs.map { it.str("text").orEmpty() }
+            .dropWhile { isSeparator(it) || canonical(it.trim()) in typeLabels }
+            .takeWhile { it.trim() != "•" }
+        val marker = unlinkedCredit.indexOfFirst(::isFeaturedSeparator)
+        if (marker > 0) {
+            val lead = unlinkedCredit.take(marker).joinToString("").trim()
+            val invited = unlinkedCredit.drop(marker + 1).joinToString("").trim().trimEnd(')', ']')
+            if (lead.isNotEmpty() && invited.isNotEmpty()) {
+                return listOf(ArtistRef(lead), ArtistRef(invited, featured = true))
+            }
+        }
         // Unlinked: "Artist • Album • 3:10" or "Song • Artist • 3:10"
         val segments = canonical(runs.joinToString("") { it.str("text") ?: "" }).split(" • ").map { it.trim() }
         val name = segments.firstOrNull { it.isNotBlank() && it !in typeLabels && !durationRegex.matches(it) && !it.contains(" views") && !playsRegex.matches(it) }

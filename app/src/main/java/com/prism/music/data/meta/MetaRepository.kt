@@ -678,7 +678,7 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         val artists = songs.map { it.primaryArtist }.filter { it.isNotBlank() }.distinct()
         val byArtist = artists.map { itunesSongsKey(it) }.chunked(500).flatMap { dao.genres(it) }
             .associate { it.key to decodeSongs(it.genre) }
-        val stored = songs.map { songTagsKey(it) }.chunked(500).flatMap { dao.genres(it) }
+        val stored = songs.flatMap { listOf(songTagsKey(it), songTagsKey(it, legacy = true)) }.chunked(500).flatMap { dao.genres(it) }
             .filter { System.currentTimeMillis() - it.fetchedAt < 7 * 24 * 60 * 60 * 1000L }
             .associate { it.key to it.genre.orEmpty().split("|").filter { it in MusicTags.genresAll || it in MusicTags.moods || it.startsWith("lang:") }.toSet() }
         val fallback = songs.map(::fallbackMoodKey).chunked(500).flatMap { dao.genres(it) }
@@ -687,13 +687,13 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
         songs.associate { song ->
             val raw = if (key(song.primaryArtist).isBlank() || key(cleanTitle(song.title)).isBlank()) null
                 else byArtist[itunesSongsKey(song.primaryArtist)]?.get(key(cleanTitle(song.title)))
-            song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + stored[songTagsKey(song)].orEmpty() + fallback[fallbackMoodKey(song)].orEmpty())
+            song.id to (raw?.let { MusicTags.genres(it) }.orEmpty() + (stored[songTagsKey(song)] ?: stored[songTagsKey(song, legacy = true)]).orEmpty() + fallback[fallbackMoodKey(song)].orEmpty())
         }
     }
 
     private fun tagIdentity(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
-    private fun songTagsKey(song: Song) = "songtags3:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
+    private fun songTagsKey(song: Song, legacy: Boolean = false) = "songtags${if (legacy) 2 else 3}:${song.id}:${tagIdentity(song.primaryArtist)}:${tagIdentity(song.title)}"
     private val trackTagsLock = Mutex()
     private val fallbackMoodLock = Mutex()
     private val MOOD_TTL = 7 * 24 * 60 * 60 * 1000L
@@ -733,7 +733,10 @@ class MetaRepository(private val http: OkHttpClient, private val dao: MetaDao,
             val title = tagIdentity(song.title)
             val artist = tagIdentity(song.primaryArtist)
             val matches = result.filter { recording ->
-                tagIdentity(recording.str("title").orEmpty()) == title &&
+                val length = recording.str("length")?.toLongOrNull()
+                val similarLength = length == null || song.durationSec <= 0 ||
+                    kotlin.math.abs(length - song.durationSec * 1000L) <= maxOf(15_000L, song.durationSec * 150L)
+                similarLength && tagIdentity(recording.str("title").orEmpty()) == title &&
                     (recording.field("artist-credit") as? JsonArray).orEmpty().any { credit ->
                         listOf(credit.str("name"), credit.field("artist").str("name")).filterNotNull().any { tagIdentity(it) == artist }
                     }
