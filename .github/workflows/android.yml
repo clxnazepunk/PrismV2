@@ -50,6 +50,9 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Build the Android photo rendering test
+        run: ./gradlew --no-daemon --stacktrace :app:assembleDebugAndroidTest -PsideBySide=dev
+
       - name: Launch Prism Dev on Android 35
         timeout-minutes: 10
         run: |
@@ -115,6 +118,10 @@ jobs:
           if grep -Fq 'Process: com.prism.music.dev,' "$RUNNER_TEMP/prism-crash.log"; then exit 1; fi
           "$adb" shell pidof com.prism.music.dev
           "$adb" shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity).*com\.prism\.music\.dev/com\.prism\.music\.(MainActivity|PrismActivity)'
+          "$adb" install app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          "$adb" shell am instrument -w -e class com.prism.music.ArtistPhotoAdjustmentAppTest \
+            com.prism.music.dev.test/com.prism.music.PrismTestRunner | tee "$RUNNER_TEMP/prism-photo-test.log"
+          grep -Fq 'OK (1 test)' "$RUNNER_TEMP/prism-photo-test.log"
 
   tests:
     name: Android unit tests

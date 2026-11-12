@@ -95,7 +95,9 @@ class ArtistPhotoPickerTest {
             assertFalse("Photo callback returned an import failure", error)
             val saved = covers.custom(covers.artistKey("first"))!!
             assertTrue(File(Uri.parse(saved).path!!).isFile)
-            val imported = android.graphics.BitmapFactory.decodeFile(Uri.parse(saved).path)
+            val imported = android.graphics.ImageDecoder.decodeBitmap(
+                android.graphics.ImageDecoder.createSource(File(Uri.parse(saved).path!!)),
+            )
             assertEquals(20, imported.width)
             assertEquals(10, imported.height)
             imported.recycle()

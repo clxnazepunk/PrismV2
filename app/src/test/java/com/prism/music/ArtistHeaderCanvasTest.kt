@@ -19,10 +19,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import com.prism.music.data.artists.ArtistImageLayout
-import com.prism.music.data.artists.ArtistPhotoFrame
-import com.prism.music.ui.screens.ArtistFramedPhoto
-import com.prism.music.ui.theme.LocalUi
-import com.prism.music.ui.theme.PrismUi
 import com.prism.music.ui.screens.ArtistProfileMark
 import com.prism.music.data.artists.ArtistImageRole
 import java.io.File
@@ -39,44 +35,6 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class ArtistHeaderCanvasTest {
     @get:Rule val compose = androidx.compose.ui.test.junit4.v2.createComposeRule()
-
-    @Test fun artistPhotoPreviewAndHeaderRenderTheSameNormalizedCrop() {
-        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
-        val bitmap = Bitmap.createBitmap(160, 80, Bitmap.Config.ARGB_8888)
-        bitmap.eraseColor(android.graphics.Color.RED)
-        android.graphics.Canvas(bitmap).drawRect(80f, 0f, 160f, 80f,
-            android.graphics.Paint().apply { color = android.graphics.Color.GREEN })
-        val file = File(context.cacheDir, "artist-photo-frame.png")
-        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-        bitmap.recycle()
-        val source = android.net.Uri.fromFile(file).toString()
-        var frame by mutableStateOf(ArtistPhotoFrame(x = -1f))
-        var previewLoaded by mutableStateOf(false)
-        var headerLoaded by mutableStateOf(false)
-        compose.setContent {
-            CompositionLocalProvider(LocalDensity provides Density(1f), LocalUi provides PrismUi(reduceMotion = true)) {
-                Column {
-                    ArtistFramedPhoto(source, frame, Modifier.size(64.dp).background(Color.Blue).testTag("photo-preview"),
-                        onImageSize = { previewLoaded = true })
-                    ArtistFramedPhoto(source, frame, Modifier.size(128.dp).background(Color.Blue).testTag("photo-header"),
-                        onImageSize = { headerLoaded = true })
-                }
-            }
-        }
-        compose.waitUntil(10_000) {
-            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
-            previewLoaded && headerLoaded
-        }
-        fun sample(tag: String): Color {
-            val pixels = compose.onNodeWithTag(tag).captureToImage().toPixelMap()
-            return pixels[pixels.width / 2, pixels.height / 8]
-        }
-        assertTrue(sample("photo-preview").green > 0.9f)
-        assertTrue(sample("photo-header").green > 0.9f)
-        compose.runOnIdle { frame = ArtistPhotoFrame(fill = false) }
-        assertTrue(sample("photo-preview").blue > 0.9f)
-        assertTrue(sample("photo-header").blue > 0.9f)
-    }
 
     @Test fun lowResolutionRoundSignatureExtendsAboveItsOldSlotAndStaysWithinPage() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
