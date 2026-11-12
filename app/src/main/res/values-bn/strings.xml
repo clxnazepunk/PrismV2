@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">প্রথমে সরান</string>
     <string name="artist_move_earlier">আগে সরান</string>
     <string name="artist_move_later">পরে সরান</string>
+    <string name="discovery_no_repeat_artists">শিল্পীর পুনরাবৃত্তি নয়</string>
+    <string name="discovery_language">ভাষার সংবেদনশীলতা</string>
+    <string name="artist_themes">শিল্পীর থিম</string>
+    <string name="moods_unavailable">মুডের উৎস সাময়িকভাবে অনুপলব্ধ।</string>
 </resources>

@@ -46,6 +46,29 @@ class SongCreditTextTest {
         } finally { java.util.Locale.setDefault(previous) }
     }
 
+    @Test fun localizedCreditAcceptsNonBreakingAndNarrowSpaces() {
+        val original = "Canción (con\u00a0Ana\u202fy\u202fLuis)"
+        val song = Song("id", original, listOf(ArtistRef("Lead"), ArtistRef("Ana"), ArtistRef("Luis")))
+        assertEquals("Canción (feat.\u00a0Ana\u202fy\u202fLuis)", song.displayTitle)
+        assertEquals("Lead feat. Ana, Luis", song.displayArtists)
+        assertEquals(original, song.title)
+    }
+
+    @Test fun multipleFeaturedArtistsAndGenuineConAreDistinguishedInBothLocales() {
+        val original = java.util.Locale.getDefault()
+        try {
+            for (locale in listOf(java.util.Locale.ENGLISH, java.util.Locale.forLanguageTag("es-MX"))) {
+                java.util.Locale.setDefault(locale)
+                val title = "Bailando con mi sombra (con A, B y C) - Remaster"
+                val song = Song("id", title, listOf(ArtistRef("Lead"), ArtistRef("A"), ArtistRef("B"), ArtistRef("C")))
+                assertEquals("Bailando con mi sombra (feat. A, B y C) - Remaster", song.displayTitle)
+                assertEquals("Lead feat. A, B, C", song.displayArtists)
+                assertEquals(title, song.title)
+                assertEquals("La vida con A", song.copy(title = "La vida con A").displayTitle)
+            }
+        } finally { java.util.Locale.setDefault(original) }
+    }
+
     @Test fun existingCreditsAndOrdinarySpanishTitlesArePreserved() {
         for (title in listOf("Track (feat. Guest)", "Con Altura", "Track (con calma)", "Track - con mi gente")) {
             assertEquals(title, Song("id", title, artists).displayTitle)

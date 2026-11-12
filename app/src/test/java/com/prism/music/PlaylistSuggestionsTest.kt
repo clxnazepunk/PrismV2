@@ -32,11 +32,32 @@ class PlaylistSuggestionsTest {
         assertEquals(setOf(rock, salsa), PlaylistSuggestions.discoverySeeds(existing, tags, 1).toSet())
     }
 
-    @Test fun addingReplacesOnlyTheChosenSlotAndRejectsDuplicates() {
+    @Test fun addingMovesOnlyTheReplacementToTheEndAndRejectsDuplicates() {
         val old = listOf(song("a"), song("b"), song("c"))
-        assertEquals(listOf(song("a"), song("fresh"), song("c")), PlaylistSuggestions.replaceSlot(old, "b", song("fresh")))
+        assertEquals(listOf(song("a"), song("c"), song("fresh")), PlaylistSuggestions.replaceSlot(old, "b", song("fresh")))
         assertEquals(old, PlaylistSuggestions.replaceSlot(old, "b", song("a")))
         assertEquals(listOf(song("a"), song("c")), PlaylistSuggestions.replaceSlot(old, "b", null))
+    }
+
+    @Test fun languageWeightsUseOnlyPlaylistAndArtistFilterUsesNamesAndIds() {
+        val lead = com.prism.music.data.model.ArtistRef("Lead", "id-a")
+        val playlist = listOf(song("es1"), song("es2"), song("en1")).map { it.copy(artists = listOf(lead)) }
+        val same = song("same").copy(artists = listOf(com.prism.music.data.model.ArtistRef("lead")))
+        val spanish = song("es")
+        val english = song("en")
+        val french = song("fr")
+        val candidates = listOf(same, spanish, english, french)
+        val languages = mapOf("es1" to "es", "es2" to "es", "en1" to "en", "es" to "es", "en" to "en", "fr" to "fr")
+        val tuning = com.prism.music.data.foryou.PlaylistDiscovery(noRepeatArtists = true, languageSensitivity = 0)
+        val low = PlaylistSuggestions.rank(playlist, candidates, emptyMap(), tuning, emptySet(), languages = languages,
+            occupied = listOf(song("unadded").copy(artists = listOf(com.prism.music.data.model.ArtistRef("Other")))))
+        assertEquals(listOf(spanish, english, french), low)
+        assertEquals(french, PlaylistSuggestions.rank(playlist, candidates, emptyMap(), tuning.copy(languageSensitivity = 2),
+            emptySet(), languages = languages).first())
+        assertEquals(spanish, PlaylistSuggestions.rank(playlist, candidates, mapOf("es1" to setOf("rock"), "es" to setOf("rock")),
+            tuning.copy(genre = 0, languageSensitivity = 2), emptySet(), languages = languages).first())
+        assertEquals(tuning, com.prism.music.data.foryou.PlaylistDiscovery.decode(tuning.encode()))
+        assertFalse(com.prism.music.data.foryou.PlaylistDiscovery.decode("1,1,50,1").noRepeatArtists)
     }
 
     @Test fun excludesExistingDuplicatesAndPrivateContentWithoutChangingOrder() {

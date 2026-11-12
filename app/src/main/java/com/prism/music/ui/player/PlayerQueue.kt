@@ -1,6 +1,7 @@
 package com.prism.music.ui.player
 
 import com.prism.music.R
+import com.prism.music.ui.components.displayTitle
 import com.prism.music.tr
 import com.prism.music.trp
 import androidx.compose.foundation.border
@@ -95,7 +96,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
     // A song taken out (swiped away or its ×, #149) can be put back for a few seconds.
     var undo by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
     LaunchedEffect(undo) { if (undo != null) { kotlinx.coroutines.delay(8_000); undo = null } }
-    val remove: (QueueEntry) -> Unit = { entry -> pc.removeForUndo(entry.index)?.let { undo = entry.song.title to it } }
+    val remove: (QueueEntry) -> Unit = { entry -> pc.removeForUndo(entry.index)?.let { undo = entry.song.displayTitle to it } }
 
     // A queue made for editing (R11, #159): hold a song to pick several and move or take them out together; each song's
     // ⋯ has the same for one; "Lock" keeps the order still (no drag handles, no swiping away) while you scroll.
@@ -503,7 +504,7 @@ private fun QueueRow(
             Spacer(Modifier.width(10.dp))
         }
         if (onMore != null && pick == null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onMore), contentAlignment = Alignment.Center) {
-            Icon(PrismIcons.More, tr(R.string.more_for, song.title), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.More, tr(R.string.more_for, song.displayTitle), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
         if (onRemove != null && removeButton) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onRemove), contentAlignment = Alignment.Center) {
             Icon(PrismIcons.Close, tr(R.string.remove), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))

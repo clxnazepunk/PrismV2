@@ -42,6 +42,39 @@ class ArtistIdentityStoreTest {
         } finally { dir.deleteRecursively() }
     }
 
+    @Test fun switchingThemesRestoresTheWholeArtistPresentationAfterReopen(): Unit = runBlocking {
+        val dir = directory()
+        try {
+            val store = ArtistIdentityStore(dir)
+            val a = store.install("id", ArtistImageRole.LOGO, svg, true)
+            val b = store.install("id", ArtistImageRole.LOGO, svg, true)
+            val s = store.install("id", ArtistImageRole.SIGNATURE, svg, true)
+            store.update("id") { it.copy(themes = listOf(ArtistTheme("one", "One", 5, a, s), ArtistTheme("two", "Two", 8, b)), activeThemeId = "one") }
+            val image = android.graphics.Bitmap.createBitmap(5, 5, android.graphics.Bitmap.Config.ARGB_8888)
+            val output = java.io.ByteArrayOutputStream()
+            image.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output)
+            image.recycle()
+            store.setThemePhoto("id", "one", output.toByteArray())
+            store.update("id") { it.cycleTheme() }
+            var entry = ArtistIdentityStore(dir).entries.value.getValue("id")
+            assertEquals(8, entry.activeTheme?.color)
+            assertEquals(b, entry.chosen(ArtistImageRole.LOGO))
+            assertNull(entry.chosen(ArtistImageRole.SIGNATURE))
+            assertNull(entry.activeTheme?.photograph)
+            store.update("id") { it.cycleTheme().cycle(ArtistImageRole.LOGO).reorderTheme("one", 1) }
+            entry = ArtistIdentityStore(dir).entries.value.getValue("id")
+            assertEquals(listOf("two", "one"), entry.themes.map { it.id })
+            assertEquals(5, entry.activeTheme?.color)
+            assertEquals(b, entry.chosen(ArtistImageRole.LOGO))
+            assertEquals(s, entry.chosen(ArtistImageRole.SIGNATURE))
+            assertNotNull(store.file(entry.activeTheme?.photograph))
+            store.deleteTheme("id", "one")
+            assertNull(store.entries.value.getValue("id").activeTheme)
+            assertNotNull(store.file(b))
+            assertNull(store.file(entry.activeTheme?.photograph))
+        } finally { dir.deleteRecursively() }
+    }
+
     @Test fun logoSignatureAndArtistsWithSimilarIdsStayIndependent(): Unit = runBlocking {
         val dir = directory()
         try {

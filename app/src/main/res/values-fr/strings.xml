@@ -5019,4 +5019,8 @@
     <string name="artist_make_first">Déplacer en premier</string>
     <string name="artist_move_earlier">Avancer</string>
     <string name="artist_move_later">Reculer</string>
+    <string name="discovery_no_repeat_artists">Ne pas répéter les artistes</string>
+    <string name="discovery_language">Sensibilité à la langue</string>
+    <string name="artist_themes">Thèmes de l’artiste</string>
+    <string name="moods_unavailable">Les sources d’ambiances sont temporairement indisponibles.</string>
 </resources>

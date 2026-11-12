@@ -59,6 +59,14 @@ class ArtistIdentities(private val context: Context) {
         } catch (e: CancellationException) { throw e } catch (_: Exception) { false }
     }
 
+    suspend fun importThemePhoto(id: String, themeId: String, uri: Uri): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val bytes = context.contentResolver.openInputStream(uri)?.use { bounded(it, ArtistIdentityStore.MAX_IMAGE_BYTES) } ?: return@withContext false
+            store.setThemePhoto(id, themeId, bytes)
+            true
+        } catch (e: CancellationException) { throw e } catch (_: Exception) { false }
+    }
+
     suspend fun refresh(page: ArtistPage, force: Boolean = false) = withContext(Dispatchers.IO) {
         // Private uploads' names/catalogues are not submitted to any public provider.
         if (!automatic.value || com.prism.music.data.innertube.Parser.isUploadArtist(page.id)) return@withContext

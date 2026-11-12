@@ -27,7 +27,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.useExistingImageAsPlaceholder
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import coil3.request.transformations
 import com.prism.music.R
 import com.prism.music.data.artists.*
@@ -61,22 +63,25 @@ internal fun ArtistIdentityName(page: ArtistPage, type: ArtistType, ready: Boole
     val scope = rememberCoroutineScope()
     fun cycle(role: ArtistImageRole): (() -> Unit)? =
         if (preview == null && entry.assets(role).size > 1) ({ scope.launch { identities.store.update(page.id) { it.cycle(role) } }; Unit }) else null
-    fun layout(role: ArtistImageRole) = preview?.takeIf { it.first == role }?.second ?: entry.layout(role)
+    fun layout(role: ArtistImageRole) = preview?.takeIf { it.first == role }?.second ?: entry.layout(role, identities.asset(page.id, role))
     val logo = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.LOGO)) }
     val signature = remember(entry, automatic, api) { identities.store.file(identities.asset(page.id, ArtistImageRole.SIGNATURE)) }
     var logoFailed by remember(logo) { mutableStateOf(false) }
     var signatureFailed by remember(signature) { mutableStateOf(false) }
-    var logoLoaded by remember(logo) { mutableStateOf(false) }
-    var signatureLoaded by remember(signature) { mutableStateOf(false) }
-    val selected = entry.display?.resolve(logo != null && !logoFailed, signature != null && !signatureFailed)
-        ?: ArtistDisplayChoice.automatic(logo != null && !logoFailed, signature != null && !signatureFailed)
+    var logoLoaded by remember(page.id) { mutableStateOf(false) }
+    var signatureLoaded by remember(page.id) { mutableStateOf(false) }
+    val hasLogo = logo != null && !logoFailed
+    val hasSignature = signature != null && !signatureFailed
+    val selected = if (entry.activeTheme != null) {
+        ArtistDisplayChoice(hasLogo, hasSignature, entry.display?.text == true).resolve(hasLogo, hasSignature)
+    } else entry.display?.resolve(hasLogo, hasSignature) ?: ArtistDisplayChoice.automatic(hasLogo, hasSignature)
     val shown = preview?.first?.let { selected.preview(it) } ?: selected
     Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         if (shown.logo && logo != null) ArtistProfileMark(ArtistImageRole.LOGO, logo, tr(R.string.artist_logo), layout(ArtistImageRole.LOGO), canvasHeight,
             onCycle = cycle(ArtistImageRole.LOGO), onEdit = onEdit, onSuccess = { logoLoaded = true }, onError = { logoFailed = true })
         if (shown.signature && signature != null) {
             ArtistProfileMark(ArtistImageRole.SIGNATURE, signature, tr(R.string.signature), layout(ArtistImageRole.SIGNATURE), canvasHeight,
-                onCycle = cycle(ArtistImageRole.SIGNATURE), tint = entry.localSignature == null && signature.extension == "svg",
+                onCycle = cycle(ArtistImageRole.SIGNATURE), tint = entry.activeTheme == null && entry.localSignature == null && signature.extension == "svg",
                 onEdit = onEdit, onSuccess = { signatureLoaded = true }, onError = { signatureFailed = true })
             if (entry.signatureCaption && signatureLoaded && !shown.text) Text(page.name,
                 style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
@@ -100,7 +105,7 @@ internal fun ArtistProfileMark(
 }
 
 /** Fit enlarges small originals too; zoom is visual, never an unbounded image decode. */
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class, coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 internal fun ArtistMark(
     file: File, label: String, layout: ArtistImageLayout, height: Dp,
@@ -109,24 +114,29 @@ internal fun ArtistMark(
 ) {
     val context = LocalContext.current
     val fit = layout.bounded()
+    val transition = if (com.prism.music.ui.theme.LocalUi.current.reduceMotion) 0 else 180
+    var alreadyLoaded by remember { mutableStateOf(false) }
     val canvasPixels = with(androidx.compose.ui.platform.LocalDensity.current) { canvasHeight.toPx() }
     Box(Modifier.fillMaxWidth().height(height).then(if (overflow) Modifier else Modifier.clipToBounds()).combinedClickable(onClick = onCycle ?: onEdit,
         onClickLabel = tr(if (onCycle == null) R.string.artist_adjust else R.string.artist_next_image),
         onLongClick = onCycle?.let { onEdit }, onLongClickLabel = if (onCycle != null) tr(R.string.artist_adjust) else null)) {
         AsyncImage(
-            ImageRequest.Builder(context).data(file).apply {
-                if (fit.hasEffects) {
-                    size(ArtistRasterSize(file, 1024))
-                    transformations(ArtistVisualEffects(fit))
-                } else size(1600, 800)
-            }.build(), label,
+            remember(file, fit, transition) {
+                ImageRequest.Builder(context).data(file).crossfade(if (alreadyLoaded) transition else 0)
+                    .useExistingImageAsPlaceholder(true).apply {
+                        if (fit.hasEffects) {
+                            size(ArtistRasterSize(file, 1024))
+                            transformations(ArtistVisualEffects(fit))
+                        } else size(1600, 800)
+                    }.build()
+            }, label,
             Modifier.fillMaxSize().graphicsLayer {
                 scaleX = fit.scale; scaleY = fit.scale
                 translationX = size.width * fit.x; translationY = (if (fit.headerCoordinates) canvasPixels else size.height) * fit.y
             },
             contentScale = ContentScale.Fit,
             colorFilter = if (tint && !fit.hasEffects) androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onSurface) else null,
-            onSuccess = { onSuccess() }, onError = { onError() },
+            onSuccess = { alreadyLoaded = true; onSuccess() }, onError = { onError() },
         )
     }
 }
@@ -290,9 +300,9 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
         }
         for (kind in ArtistImageRole.entries) {
             val label = tr(if (kind == ArtistImageRole.LOGO) R.string.artist_logo else R.string.signature)
-            val local = current.local(kind)
             val savedAssets = current.assets(kind)
             val shown = identities.asset(page.id, kind)
+            val local = savedAssets.firstOrNull { it.file == shown?.file }
             Text(label, style = MaterialTheme.typography.titleMedium)
             shown?.let { asset ->
                 identities.store.file(asset)?.let { file ->
@@ -325,7 +335,7 @@ internal fun ArtistIdentityControls(page: ArtistPage, type: ArtistType, headerWi
             }
             if (savedAssets.isNotEmpty()) LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 itemsIndexed(savedAssets, key = { _, asset -> asset.file }) { index, asset ->
-                    val selected = asset.file == local?.file
+                    val selected = asset.file == shown?.file
                     val description = tr(R.string.artist_saved_image, index + 1)
                     Surface(
                         modifier = Modifier.size(68.dp).semantics { this.selected = selected },

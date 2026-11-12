@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">انتقال به ابتدا</string>
     <string name="artist_move_earlier">انتقال به جلو</string>
     <string name="artist_move_later">انتقال به عقب</string>
+    <string name="discovery_no_repeat_artists">عدم تکرار هنرمندان</string>
+    <string name="discovery_language">حساسیت به زبان</string>
+    <string name="artist_themes">پوسته‌های هنرمند</string>
+    <string name="moods_unavailable">منابع حال‌وهوا موقتاً در دسترس نیستند.</string>
 </resources>

@@ -69,6 +69,51 @@ class ArtistHeaderCanvasTest {
         assertTrue("Image must stay inside the full page boundary", pixels[0, 0].red < 0.1f)
 
     }
+    @Test fun switchingTransparentMarksKeepsTheBackgroundOutsideTheArtwork() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        fun dot(name: String, color: Int): File {
+            val bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)
+            android.graphics.Canvas(bitmap).drawCircle(12f, 12f, 8f, android.graphics.Paint().apply { this.color = color })
+            return File(context.cacheDir, name).also { file ->
+                file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                bitmap.recycle()
+            }
+        }
+        val red = dot("theme-red.png", android.graphics.Color.RED)
+        val green = dot("theme-green.png", android.graphics.Color.GREEN)
+        var mark by mutableStateOf(red)
+        var loaded by mutableStateOf<File?>(null)
+        compose.setContent {
+            CompositionLocalProvider(LocalDensity provides Density(1f)) {
+                MaterialTheme {
+                    Box(Modifier.size(300.dp).background(Color.Blue).clipToBounds().testTag("theme-transition")) {
+                        val shown = mark
+                        ArtistProfileMark(ArtistImageRole.LOGO, shown, "", ArtistImageLayout(), 300.dp,
+                            onSuccess = { loaded = shown })
+                    }
+                }
+            }
+        }
+        fun await(file: File) = compose.waitUntil(10_000) {
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+            loaded == file
+        }
+        fun render() = compose.onNodeWithTag("theme-transition").captureToImage()
+        await(red)
+        compose.mainClock.advanceTimeBy(300)
+        assertTrue(render().toPixelMap()[150, 50].red > 0.8f)
+        compose.runOnIdle { mark = green }
+        await(green)
+        assertTrue(render().toPixelMap()[20, 50].blue > 0.9f)
+        // Coil's painter measures elapsed time with the monotonic system clock.
+        Thread.sleep(300)
+        compose.mainClock.advanceTimeBy(300)
+        val image = render()
+        assertTrue(image.toPixelMap()[150, 50].green > 0.8f)
+        val output = File("build/artist-header-previews").apply { mkdirs() }
+        File(output, "theme-transition.png").outputStream().use { image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
     @Test fun obsoleteBlendDoesNotAffectImportedSignature() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
         val bitmap = Bitmap.createBitmap(24, 24, Bitmap.Config.ARGB_8888)

@@ -5019,4 +5019,8 @@
     <string name="artist_make_first">Mover al principio</string>
     <string name="artist_move_earlier">Mover hacia delante</string>
     <string name="artist_move_later">Mover hacia atrás</string>
+    <string name="discovery_no_repeat_artists">No repetir artistas</string>
+    <string name="discovery_language">Sensibilidad al idioma</string>
+    <string name="artist_themes">Temas del artista</string>
+    <string name="moods_unavailable">Las fuentes de estados de ánimo no están disponibles temporalmente.</string>
 </resources>

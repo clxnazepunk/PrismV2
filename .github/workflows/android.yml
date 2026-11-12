@@ -50,6 +50,72 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Launch Prism Dev on Android 35
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          adb="$ANDROID_HOME/platform-tools/adb"
+          emulator="$ANDROID_HOME/emulator/emulator"
+          tools="$ANDROID_HOME/cmdline-tools/latest/bin"
+          image="system-images;android-35;google_apis;x86_64"
+          export ANDROID_USER_HOME="$RUNNER_TEMP/prism-android-user"
+          export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          unset ANDROID_SDK_HOME
+          mkdir -p "$ANDROID_AVD_HOME"
+          "$tools/sdkmanager" "platform-tools" "emulator" "$image"
+          "$tools/avdmanager" create avd --force --name prism-startup --package "$image" \
+            --device pixel_2 --path "$ANDROID_AVD_HOME/prism-startup.avd"
+          test -f "$ANDROID_AVD_HOME/prism-startup.avd/config.ini"
+          "$emulator" -list-avds | grep -Fx prism-startup
+          sudo chmod a+rw /dev/kvm
+          "$emulator" -avd prism-startup -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader > "$RUNNER_TEMP/prism-emulator.log" 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
+          if ! timeout 240 bash -c '
+            "$1" wait-for-device
+            until [[ $("$1" shell getprop sys.boot_completed | tr -d "\r") == 1 ]]; do sleep 2; done
+          ' _ "$adb"; then
+            tail -100 "$RUNNER_TEMP/prism-emulator.log"
+            exit 1
+          fi
+          "$adb" shell input keyevent 82
+          "$adb" install -g app/build/outputs/apk/debug/app-debug.apk
+          # The first-run welcome screen can open before any song row loads its credit formatter.
+          probe="$RUNNER_TEMP/prism-regex-probe"
+          mkdir -p "$probe"
+          cat > "$probe/PrismRegexProbe.java" <<'JAVA'
+          public final class PrismRegexProbe {
+              public static void main(String[] args) throws Exception {
+                  try {
+                      java.util.regex.Pattern.compile("(?U)\\s+");
+                      throw new AssertionError("Expected the old expression to fail on Android");
+                  } catch (java.util.regex.PatternSyntaxException expected) {
+                      System.out.println("Android reproduced the old regex failure");
+                  }
+                  ClassLoader app = new dalvik.system.PathClassLoader(args[0], ClassLoader.getSystemClassLoader());
+                  Class.forName("com.prism.music.ui.components.SongCreditTextKt", true, app);
+                  System.out.println("Song credit formatter initialized on Android");
+              }
+          }
+          JAVA
+          android_jar="$ANDROID_HOME/platforms/android-37.0/android.jar"
+          javac --release 8 -classpath "$android_jar" -d "$probe" "$probe/PrismRegexProbe.java"
+          "$ANDROID_HOME/build-tools/36.0.0/d8" --lib "$android_jar" --output "$probe/probe.jar" "$probe/PrismRegexProbe.class"
+          "$adb" push "$probe/probe.jar" /data/local/tmp/prism-regex-probe.jar
+          "$adb" shell chmod 444 /data/local/tmp/prism-regex-probe.jar
+          installed=$("$adb" shell pm path com.prism.music.dev | tr -d '\r')
+          "$adb" shell 'CLASSPATH=/data/local/tmp/prism-regex-probe.jar' app_process /system/bin PrismRegexProbe "${installed#package:}"
+          "$adb" logcat -b crash -c
+          component="com.prism.music.dev/com.prism.music.MainActivity"
+          "$adb" shell am start -W -n "$component" | tee "$RUNNER_TEMP/prism-launch.log"
+          grep -q 'Status: ok' "$RUNNER_TEMP/prism-launch.log"
+          sleep 12
+          "$adb" logcat -b crash -d | tee "$RUNNER_TEMP/prism-crash.log"
+          if grep -Fq 'Process: com.prism.music.dev,' "$RUNNER_TEMP/prism-crash.log"; then exit 1; fi
+          "$adb" shell pidof com.prism.music.dev
+          "$adb" shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity).*com\.prism\.music\.dev/com\.prism\.music\.(MainActivity|PrismActivity)'
+
   tests:
     name: Android unit tests
     runs-on: ubuntu-24.04
@@ -83,6 +149,7 @@ jobs:
             app/build/reports/tests/
             app/build/test-results/
             app/build/artist-header-previews/
+            app/build/backdrop-previews/
           if-no-files-found: warn
           retention-days: 14
 
@@ -141,7 +208,7 @@ jobs:
         run: '"${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;36.0.0"'
       - run: chmod +x gradlew
       - name: Check artists, backups, translations and playlists
-        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PlaylistRecommendationFooterTest*' --tests '*SongCreditTextTest*' --tests '*PrismLibraryTest*' --tests '*ArtistImageSourcesTest*' --tests '*ArtistIdentityStoreTest*' --tests '*ArtistDisplayTest*' --tests '*MusicTagsTest*' --tests '*MusicTagKeyFormTest*' --tests '*LastFmHotfixTest*' --tests '*ArtistVisualEffectsTest*' --tests '*ArtistHeaderCanvasTest*' --tests '*ArtistBackgroundTest*' --tests '*ArtistImageExportsTest*' --tests '*ArtistCustomizationLanguageTest*' --tests '*TranslationTables*' --tests '*ArtistTypographyConfigTest*' --tests '*ArtistPhotoPickerTest*' --tests '*ArtistIdentityBackupTest*' --tests '*BackupPartsTest*' --tests '*TranslationsTest*' --tests '*OfflineArtistsTest*' --tests '*SavedArtistProfilesTest*' --tests '*ArtistPersonalizationBackupTest*' --tests '*SongVersionsTest*' --tests '*AutoArtworkTest*' --tests '*I18nGuardTest*' --tests '*SettingsIndexTest*' --tests 'com.prism.music.LookTest.everySettingIsInALookOrSaidNotToBe' --tests 'com.prism.music.CrossfadeBarTest.anOptionOffUnlessTurnedOnAndOffInPerformanceMode'
+        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest -PsideBySide=dev --tests '*PlaylistSuggestionsTest*' --tests '*PlaylistRecommendationFooterTest*' --tests '*SongCreditTextTest*' --tests '*PrismLibraryTest*' --tests '*ArtistImageSourcesTest*' --tests '*ArtistIdentityStoreTest*' --tests '*ArtistDisplayTest*' --tests '*MusicTagsTest*' --tests '*MusicTagKeyFormTest*' --tests '*LastFmHotfixTest*' --tests '*ArtistVisualEffectsTest*' --tests '*ArtistHeaderCanvasTest*' --tests '*BackdropRenderTest*' --tests '*ArtistBackgroundTest*' --tests '*ArtistImageExportsTest*' --tests '*ArtistCustomizationLanguageTest*' --tests '*TranslationTables*' --tests '*ArtistTypographyConfigTest*' --tests '*ArtistPhotoPickerTest*' --tests '*ArtistIdentityBackupTest*' --tests '*BackupPartsTest*' --tests '*TranslationsTest*' --tests '*OfflineArtistsTest*' --tests '*SavedArtistProfilesTest*' --tests '*ArtistPersonalizationBackupTest*' --tests '*SongVersionsTest*' --tests '*AutoArtworkTest*' --tests '*I18nGuardTest*' --tests '*SettingsIndexTest*' --tests 'com.prism.music.LookTest.everySettingIsInALookOrSaidNotToBe' --tests 'com.prism.music.CrossfadeBarTest.anOptionOffUnlessTurnedOnAndOffInPerformanceMode'
       - name: Upload focused test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -151,5 +218,6 @@ jobs:
             app/build/reports/tests/
             app/build/test-results/
             app/build/artist-header-previews/
+            app/build/backdrop-previews/
           if-no-files-found: warn
           retention-days: 14

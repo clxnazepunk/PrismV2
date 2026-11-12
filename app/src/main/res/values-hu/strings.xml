@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">Mozgatás az elejére</string>
     <string name="artist_move_earlier">Mozgatás előrébb</string>
     <string name="artist_move_later">Mozgatás hátrébb</string>
+    <string name="discovery_no_repeat_artists">Előadók ismétlésének tiltása</string>
+    <string name="discovery_language">Nyelvi érzékenység</string>
+    <string name="artist_themes">Előadói témák</string>
+    <string name="moods_unavailable">A hangulatforrások átmenetileg nem elérhetők.</string>
 </resources>

@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">सबसे पहले ले जाएँ</string>
     <string name="artist_move_earlier">आगे ले जाएँ</string>
     <string name="artist_move_later">पीछे ले जाएँ</string>
+    <string name="discovery_no_repeat_artists">कलाकार न दोहराएँ</string>
+    <string name="discovery_language">भाषा संवेदनशीलता</string>
+    <string name="artist_themes">कलाकार की थीम</string>
+    <string name="moods_unavailable">मूड के स्रोत अस्थायी रूप से उपलब्ध नहीं हैं।</string>
 </resources>

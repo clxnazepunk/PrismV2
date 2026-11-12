@@ -4891,4 +4891,8 @@
     <string name="artist_make_first">先頭に移動</string>
     <string name="artist_move_earlier">前へ移動</string>
     <string name="artist_move_later">後ろへ移動</string>
+    <string name="discovery_no_repeat_artists">同じアーティストを除外</string>
+    <string name="discovery_language">言語の感度</string>
+    <string name="artist_themes">アーティストのテーマ</string>
+    <string name="moods_unavailable">ムードの取得元を一時的に利用できません。</string>
 </resources>

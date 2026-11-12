@@ -4891,4 +4891,8 @@
     <string name="artist_make_first">移至首位</string>
     <string name="artist_move_earlier">向前移</string>
     <string name="artist_move_later">向後移</string>
+    <string name="discovery_no_repeat_artists">不重複藝人</string>
+    <string name="discovery_language">語言敏感度</string>
+    <string name="artist_themes">藝人主題</string>
+    <string name="moods_unavailable">心情資料來源暫時無法使用。</string>
 </resources>

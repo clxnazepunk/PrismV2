@@ -4955,4 +4955,8 @@
     <string name="artist_make_first">سب سے پہلے منتقل کریں</string>
     <string name="artist_move_earlier">آگے منتقل کریں</string>
     <string name="artist_move_later">پیچھے منتقل کریں</string>
+    <string name="discovery_no_repeat_artists">فنکاروں کو نہ دہرائیں</string>
+    <string name="discovery_language">زبان کی حساسیت</string>
+    <string name="artist_themes">فنکار کی تھیمز</string>
+    <string name="moods_unavailable">موڈ کے ذرائع عارضی طور پر دستیاب نہیں۔</string>
 </resources>

@@ -478,6 +478,8 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.library), tr(R.string.discovery_artist)),
         SettingEntry(H, tr(R.string.library), tr(R.string.discovery_width)),
         SettingEntry(H, tr(R.string.library), tr(R.string.discovery_repetition)),
+        SettingEntry(H, tr(R.string.library), tr(R.string.discovery_no_repeat_artists)),
+        SettingEntry(H, tr(R.string.library), tr(R.string.discovery_language)),
         SettingEntry(H, tr(R.string.library), tr(R.string.album_names_in_downloads), tr(R.string.album_names_in_downloads_keywords)),
         SettingEntry(H, tr(R.string.library), tr(R.string.library_tiles), tr(R.string.liked_downloads_local_files_replay_podcasts)),
         SettingEntry(H, tr(R.string.artist_pages), tr(R.string.artist_you_title), tr(R.string.artist_you_detail)),
